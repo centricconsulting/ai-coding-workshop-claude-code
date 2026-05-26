@@ -38,9 +38,11 @@ Master advanced Claude Code capabilities: the permissions and safety model, work
 ### Universal Prerequisites
 
 - **Claude Code**: Installed via `npm install -g @anthropic-ai/claude-code` and authenticated
+- **Anthropic API Key**: From [console.anthropic.com](https://console.anthropic.com) — set as `ANTHROPIC_API_KEY` in your shell profile **before** opening any devcontainer
 - **Visual Studio Code** (optional but recommended): Latest version, with Claude Code extension
 - **Git**: Basic familiarity with git commands
-- **Anthropic Account**: For Claude Code authentication
+
+> **Devcontainer users**: The containers forward `ANTHROPIC_API_KEY` from your host automatically. Set it on your host first — see `.devcontainer/README.md` for details.
 
 ### 🔷 .NET Track
 

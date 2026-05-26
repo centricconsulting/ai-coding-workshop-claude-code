@@ -2,189 +2,158 @@
 
 This repository contains **3 devcontainer configurations** to support different workshop roles and technology stacks.
 
+---
+
+## ⚠️ Before You Open the Container: Set Your API Key
+
+Claude Code authenticates using your `ANTHROPIC_API_KEY`. The containers forward this variable from your host machine — **you must set it on your host before opening the devcontainer**, or Claude Code won't be able to connect.
+
+### Set the key on your host machine
+
+**macOS / Linux** — add to your shell profile (`~/.zshrc`, `~/.bashrc`, etc.):
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+```
+Then reload: `source ~/.zshrc` (or open a new terminal).
+
+**Windows (PowerShell)** — add to your PowerShell profile:
+```powershell
+$env:ANTHROPIC_API_KEY = "sk-ant-..."
+```
+
+> Get your API key from [console.anthropic.com](https://console.anthropic.com) under **API Keys**.
+
+### Verify before opening the container
+```bash
+echo $ANTHROPIC_API_KEY   # Should print your key (not empty)
+```
+
+Once the key is set on your host, the devcontainer picks it up automatically via `remoteEnv`. You won't need to set it again inside the container.
+
+---
+
 ## 🎯 Which Container Should I Use?
 
-When you open this repository in VS Code, you'll be prompted to select a devcontainer configuration. Choose based on your role:
+| Role | Container |
+|---|---|
+| Workshop participant — .NET track | `.devcontainer/dotnet-participant/` |
+| Workshop participant — Spring Boot track | `.devcontainer/springboot-participant/` |
+| Facilitator or content maintainer | `.devcontainer/maintainer/` |
 
 ---
 
-### 1️⃣ **Workshop Maintainer** (Full Toolchain)
+## Container Details
 
-**Location:** `.devcontainer/maintainer/`
-
-**Who should use this:**
-- Workshop authors and content creators
-- Facilitators preparing for dual-stack delivery
-- Contributors working on both .NET and Spring Boot examples
-- Anyone needing to build/test both implementations
-
-**What's included:**
-- ✅ .NET 9 SDK
-- ✅ Java 21 JDK (LTS)
-- ✅ Maven 3.9+ and Gradle 8+
-- ✅ Node.js 20 + Marp CLI (for presentations)
-- ✅ All VS Code extensions (C#, Java, Spring Boot, Markdown, Marp)
-- ✅ GitHub CLI
-
-**Builds:**
-- Both `TaskManager.sln` (.NET) and `src-springboot/` (Java)
-- All presentations and documentation
-- Full workshop materials
-
----
-
-### 2️⃣ **.NET Participant** (Streamlined)
+### .NET Participant
 
 **Location:** `.devcontainer/dotnet-participant/`
 
-**Who should use this:**
-- Workshop participants following the .NET track
-- Self-paced learners using C# examples
-- Developers working in .NET 9 environment
+**Includes:**
+- .NET 9 SDK
+- Node.js 20 + Claude Code CLI (`@anthropic-ai/claude-code`)
+- Claude Code VS Code extension
+- C# Dev Kit
+- GitHub CLI
 
-**What's included:**
-- ✅ .NET 9 SDK
-- ✅ C# Dev Kit extension
-- ✅ GitHub Copilot extensions
-- ✅ Minimal overhead for fast startup
-
-**Auto-activates:**
-- `.github/instructions/dotnet.instructions.md` (automatically loads when editing C# files)
-
-**Builds:**
-- `TaskManager.sln` (.NET solution only)
+**Builds on startup:** `TaskManager.sln`
 
 ---
 
-### 3️⃣ **Spring Boot Participant** (Streamlined)
+### Spring Boot Participant
 
 **Location:** `.devcontainer/springboot-participant/`
 
-**Who should use this:**
-- Workshop participants following the Spring Boot track
-- Enterprise Java teams modernizing from Mule ESB
-- Self-paced learners using Java examples
-- Developers working in Spring Boot 3.x environment
+**Includes:**
+- Java 21 JDK + Maven 3.9 + Gradle
+- Node.js 20 + Claude Code CLI (`@anthropic-ai/claude-code`)
+- Claude Code VS Code extension
+- Extension Pack for Java, Spring Boot Dashboard
+- GitHub CLI
 
-**What's included:**
-- ✅ Java 21 JDK (LTS)
-- ✅ Maven 3.9+ and Gradle 8+
-- ✅ Extension Pack for Java
-- ✅ Spring Boot Extension Pack
-- ✅ GitHub Copilot extensions
-- ✅ Minimal overhead for fast startup
-
-**Auto-activates:**
-- `.github/instructions/springboot.instructions.md` (automatically loads when editing files in src-springboot/)
-
-**Builds:**
-- `src-springboot/` (Spring Boot solution only)
+**Builds on startup:** `src-springboot/`
 
 ---
 
-## 🚀 How to Select
+### Maintainer (Full Toolchain)
 
-### First Time Opening the Repository
+**Location:** `.devcontainer/maintainer/`
 
-1. Open the repository in VS Code
-2. VS Code will detect multiple devcontainer configurations
-3. You'll see a prompt: **"Select a Dev Container configuration to use"**
-4. Choose based on the guidance above
+**Includes:**
+- .NET 9 SDK + Java 21 JDK + Maven + Gradle
+- Node.js 20 + Claude Code CLI + Marp CLI
+- Claude Code VS Code extension
+- All .NET and Java extensions
+- GitHub CLI
 
-### Switching Between Containers
-
-1. Press `F1` or `Ctrl+Shift+P` (Windows/Linux) / `Cmd+Shift+P` (Mac)
-2. Type: **"Dev Containers: Rebuild and Reopen in Container"**
-3. Select the new container configuration
-4. Wait for container rebuild (1-5 minutes depending on container)
+**Builds on startup:** Both `TaskManager.sln` and `src-springboot/`
 
 ---
 
 ## 📋 Container Comparison
 
-| Feature | Maintainer | .NET Participant | Spring Boot Participant |
-|---------|-----------|------------------|------------------------|
-| **.NET 9 SDK** | ✅ | ✅ | ❌ |
-| **Java 21 JDK** | ✅ | ❌ | ✅ |
-| **Maven/Gradle** | ✅ | ❌ | ✅ |
-| **Marp CLI** | ✅ | ❌ | ❌ |
-| **All Extensions** | ✅ | .NET only | Java only |
-| **Build Time** | ~3-5 min | ~1-2 min | ~2-3 min |
-| **Container Size** | ~5 GB | ~2 GB | ~3 GB |
-| **Copilot Instructions** | Both | .NET | Spring Boot |
+| Feature | .NET Participant | Spring Boot Participant | Maintainer |
+|---|---|---|---|
+| .NET 9 SDK | ✅ | ❌ | ✅ |
+| Java 21 + Maven | ❌ | ✅ | ✅ |
+| Claude Code CLI | ✅ | ✅ | ✅ |
+| Marp CLI | ❌ | ❌ | ✅ |
+| Build time | ~1–2 min | ~2–3 min | ~3–5 min |
 
 ---
 
-## 🛠️ Troubleshooting
+## 🚀 How to Open
 
-### "Which Container Should I Use?" Decision Tree
+1. Ensure `ANTHROPIC_API_KEY` is set on your host (see above)
+2. Open the repository in VS Code
+3. When prompted, select **"Reopen in Container"**
+4. Choose the configuration for your role
+5. Wait for the container to build (~1–5 min depending on container)
 
+### Switching containers
+
+`F1` → **"Dev Containers: Rebuild and Reopen in Container"** → select new configuration.
+
+---
+
+## Verifying Claude Code Inside the Container
+
+Once the container is running, open a terminal and verify:
+
+```bash
+claude --version          # Should print a version number
+echo $ANTHROPIC_API_KEY   # Should print your key
+claude --print "Say hello"  # Should get a response from Claude
 ```
-Are you creating workshop content or facilitating?
-├─ YES → Use Maintainer
-└─ NO → Are you following .NET or Spring Boot track?
-    ├─ .NET → Use .NET Participant
-    └─ Spring Boot → Use Spring Boot Participant
-```
 
-### Container Won't Build
-
-**Error:** "Failed to build devcontainer"
-
-**Solutions:**
-1. Ensure Docker Desktop is running
-2. Check available disk space (need 5+ GB free)
-3. Try rebuilding: `F1` → "Dev Containers: Rebuild Container"
-4. Clear Docker cache: `docker system prune -a`
-
-### Copilot Instructions Not Loading
-
-**Instructions now auto-load based on file context:**
-- `.github/instructions/dotnet.instructions.md` loads for `**/*.cs` files
-- `.github/instructions/springboot.instructions.md` loads for `src-springboot/**` files
-- No manual configuration needed - instructions activate automatically when you open files
-
-**If instructions aren't applying:**
-- Verify `.github/instructions/` directory exists
-- Check file has correct `applyTo:` frontmatter
-- Reload VS Code window: `F1` → "Developer: Reload Window"
-
-### Wrong Container Selected
-
-**To switch containers:**
-1. `F1` → "Dev Containers: Rebuild and Reopen in Container"
-2. Select correct configuration
-3. Wait for rebuild
+If `ANTHROPIC_API_KEY` is empty inside the container, it wasn't set on the host before the container started. Set it on the host and rebuild the container.
 
 ---
 
-## 📚 Next Steps
+## Troubleshooting
 
-### For .NET Participants
-1. Verify build: `dotnet build TaskManager.sln`
-2. Run tests: `dotnet test`
-3. Start with [Lab 1 (.NET)](../docs/labs/lab-01-tdd-with-copilot/dotnet.md)
+**`ANTHROPIC_API_KEY` is empty inside the container**
+- Set the variable on your host machine and rebuild the container
+- `remoteEnv` only forwards variables that exist at container start time
 
-### For Spring Boot Participants
-1. Verify build: `mvn clean install -f src-springboot/pom.xml`
-2. Run tests: `mvn test -f src-springboot/pom.xml`
-3. Start with [Lab 1 (Spring Boot)](../docs/labs/lab-01-tdd-with-copilot/springboot.md)
+**Container won't build**
+- Ensure Docker Desktop is running
+- Check available disk space (need 5+ GB free)
+- Try: `F1` → "Dev Containers: Rebuild Container"
+- Clear Docker cache: `docker system prune -a`
 
-### For Maintainers
-1. Verify both builds work
-2. Test presentations: `marp --version`
-3. Review [Facilitator Guide](../docs/FACILITATOR_GUIDE.md)
+**`claude: command not found`**
+- The `postCreateCommand` installs Claude Code via npm — wait for it to finish
+- Check the VS Code terminal output during container startup for npm errors
+- Manually install: `npm install -g @anthropic-ai/claude-code`
 
----
-
-## 🔗 Related Documentation
-
-- [Workshop README](../README.md) - Main workshop overview
-- [Local Setup Guide](../docs/LOCAL_SETUP.md) - **No Dev Container?** Manual setup for .NET and Spring Boot
-- [Pre-Workshop Checklist](../docs/PRE_WORKSHOP_CHECKLIST.md) - Setup requirements
-- [Pattern Translation Guide](../docs/guides/pattern-translation.md) - .NET ↔ Java mappings
-- [Facilitator Guide](../docs/FACILITATOR_GUIDE.md) - Delivery instructions
+**Claude Code authentication error despite key being set**
+- Verify the key is valid at [console.anthropic.com](https://console.anthropic.com)
+- Check the key starts with `sk-ant-`
+- Try re-exporting on the host and rebuilding the container
 
 ---
 
-**Questions or issues?** Open an issue in the workshop repository.
+## Related Documentation
+
+- [Workshop README](../README.md) — setup and getting started
+- [Lab 1: First Contact](../docs/labs/lab-01-first-contact.md) — first steps with Claude Code

@@ -32,13 +32,21 @@
 claude --version
 ```
 
-You should see a version number. If you get "command not found", install first:
-
-```bash
-npm install -g @anthropic-ai/claude-code
-```
+You should see a version number. If you get "command not found":
+- **In a devcontainer**: the `postCreateCommand` installs Claude Code — wait for the container startup to finish, or run `npm install -g @anthropic-ai/claude-code` manually
+- **Locally**: run `npm install -g @anthropic-ai/claude-code` then restart your terminal
 
 ### A.2 Authenticate
+
+**In a devcontainer**: authentication is handled via `ANTHROPIC_API_KEY` forwarded from your host machine. Verify it arrived:
+
+```bash
+echo $ANTHROPIC_API_KEY   # Should print your key — not empty
+```
+
+If empty, the key wasn't set on your host before the container started. See `.devcontainer/README.md` for how to fix it.
+
+**Locally (no devcontainer)**:
 
 ```bash
 claude

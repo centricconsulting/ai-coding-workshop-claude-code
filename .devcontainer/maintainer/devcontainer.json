@@ -69,6 +69,10 @@
         }
     },
 
+    "remoteEnv": {
+        "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
+    },
+
     "forwardPorts": [5000, 5001, 8080, 8443],
     "portsAttributes": {
         "5001": {
