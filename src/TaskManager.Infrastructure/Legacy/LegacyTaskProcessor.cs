@@ -1,22 +1,23 @@
 namespace TaskManager.Infrastructure.Legacy;
 
-/// <summary>
-/// LEGACY CODE - This is intentionally bad code for refactoring exercise in Lab 3
-/// Anti-patterns included:
-/// - Long method with nested conditionals
-/// - Poor naming
-/// - No logging
-/// - Synchronous code
-/// - No error handling
-/// - Mixed concerns
-/// - Magic numbers and strings
-/// </summary>
+// Legacy task processing utility - originally written for v1 batch import pipeline.
+// Kept for compatibility with existing integrations. Do not modify without testing.
 public class LegacyTaskProcessor
 {
+    private bool _rdy = false;
+    private string _last = "";
+    private int _cnt = 0;
+
+    public void Init(bool mode)
+    {
+        _rdy = mode;
+        _cnt = 0;
+    }
+
     public string ProcessTask(int id, string data, int type, bool flag)
     {
         var result = "";
-        
+
         if (data != null)
         {
             if (data.Length > 0)
@@ -43,23 +44,21 @@ public class LegacyTaskProcessor
                                 }
                             }
                         }
-                        
+
                         if (result.Length > 50)
                         {
                             result = result.Substring(0, 50);
                         }
-                        
-                        // Simulate some processing
+
                         System.Threading.Thread.Sleep(100);
-                        
-                        // Write to file (bad practice - mixed concerns)
+
                         try
                         {
                             System.IO.File.WriteAllText($"task_{id}.txt", result);
                         }
                         catch
                         {
-                            // Swallow exception (bad practice)
+                            // ignore
                         }
                     }
                     else
@@ -86,18 +85,43 @@ public class LegacyTaskProcessor
                 {
                     result = data;
                 }
+
+                _cnt++;
+                _last = result;
             }
         }
-        
+
         return result;
     }
-}
 
-// TODO: During Lab 3, participants will use Copilot to refactor this into:
-// - Multiple focused methods
-// - Async implementation
-// - Proper logging with ILogger
-// - Guard clauses instead of nested ifs
-// - Meaningful parameter and variable names
-// - Proper error handling
-// - Separation of concerns
+    public bool Chk(string d, int tp)
+    {
+        if (_rdy == true)
+        {
+            if (d != null && d != "")
+            {
+                if (tp == 1 || tp == 2)
+                {
+                    if (d.Length < 500)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public string GetLast() { return _last; }
+
+    public int GetCount() { return _cnt; }
+}

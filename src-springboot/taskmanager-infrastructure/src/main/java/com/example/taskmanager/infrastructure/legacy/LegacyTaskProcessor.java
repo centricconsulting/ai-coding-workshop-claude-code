@@ -6,19 +6,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/**
- * LEGACY CODE - This is intentionally bad code for refactoring exercise in Lab 3
- * Anti-patterns included:
- * - Long method with nested conditionals
- * - Poor naming
- * - No logging
- * - Synchronous / blocking code
- * - No error handling
- * - Mixed concerns
- * - Magic numbers and strings
- */
+// Legacy task processing utility - originally written for v1 batch import pipeline.
+// Kept for compatibility with existing integrations. Do not modify without testing.
 @Component
 public class LegacyTaskProcessor {
+
+    private boolean rdy = false;
+    private String last = "";
+    private int cnt = 0;
+
+    public void init(boolean mode) {
+        rdy = mode;
+        cnt = 0;
+    }
 
     public String processTask(int id, String data, int type, boolean flag) {
         var result = "";
@@ -43,18 +43,16 @@ public class LegacyTaskProcessor {
                             result = result.substring(0, 50);
                         }
 
-                        // Simulate some processing
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException e) {
-                            // Swallow exception (bad practice)
+                            // ignore
                         }
 
-                        // Write to file (bad practice - mixed concerns)
                         try {
                             Files.writeString(Path.of("task_" + id + ".txt"), result);
                         } catch (IOException e) {
-                            // Swallow exception (bad practice)
+                            // ignore
                         }
                     } else {
                         result = data.toUpperCase();
@@ -71,15 +69,34 @@ public class LegacyTaskProcessor {
                 } else {
                     result = data;
                 }
+
+                cnt++;
+                last = result;
             }
         }
 
         return result;
     }
-}
 
-// TODO: During Lab 3, participants will use Copilot to refactor this into:
-// - Multiple focused methods
-// - Async implementation (CompletableFuture or reactive)
-// - Proper logging with SLF4J Logger
-// - Guard clauses instead of nested ifs
+    public boolean chk(String d, int tp) {
+        if (rdy == true) {
+            if (d != null && !d.equals("")) {
+                if (tp == 1 || tp == 2) {
+                    if (d.length() < 500) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public String getLast() { return last; }
+
+    public int getCount() { return cnt; }
+}
