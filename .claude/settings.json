@@ -1,0 +1,61 @@
+{
+  "_comment": "This file is a TEACHING ARTIFACT for Lab 6. It demonstrates Claude Code hooks and permissions. Participants study and modify it during the workshop.",
+
+  "permissions": {
+    "allow": [
+      "Bash(dotnet:*)",
+      "Bash(mvn:*)",
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)"
+    ],
+    "deny": [
+      "Bash(git push*)",
+      "Bash(git reset --hard*)",
+      "Bash(rm -rf*)",
+      "Bash(dotnet ef*)",
+      "Bash(mvn flyway*)"
+    ]
+  },
+
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[hook] About to run: $CLAUDE_TOOL_INPUT' >> /tmp/claude-audit.log"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[hook] File written: $CLAUDE_TOOL_INPUT_FILE_PATH' >> /tmp/claude-audit.log"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[hook] File edited: $CLAUDE_TOOL_INPUT_FILE_PATH' >> /tmp/claude-audit.log"
+          }
+        ]
+      }
+    ]
+  }
+}
