@@ -184,27 +184,37 @@ Presentations use [Marp](https://marp.app/) format. View in VS Code with the [Ma
 
 ## Getting Started
 
-1. **Clone this repository**:
+1. **Fork this repository** on GitHub (click **Fork** in the top-right corner).
+
+   > Forking is required — not optional. Labs 7 (GitHub MCP), 9 (headless/CI), and the capstone all work against your own remote. You'll push commits, trigger workflows, and query your fork's issues during the workshop.
+
+2. **Clone your fork**:
 
    ```bash
-   git clone https://github.com/centricconsulting/ai-coding-workshop-claude-code.git
-   cd ai-coding-workshop-claude-code
+   git clone https://github.com/YOUR-GITHUB-USERNAME/ai-code-workshop-claude-code.git
+   cd ai-code-workshop-claude-code
    ```
 
-2. **Create your personal branch**:
+3. **Add the upstream remote** (so you can pull workshop updates):
+
+   ```bash
+   git remote add upstream https://github.com/centricconsulting/ai-code-workshop-claude-code.git
+   ```
+
+4. **Create your working branch**:
 
    ```bash
    git checkout -b workshop/your-name
    ```
 
-3. **Verify Claude Code**:
+5. **Verify Claude Code**:
 
    ```bash
    claude --version
    claude   # Opens Claude Code — try asking "what is this project?"
    ```
 
-4. **Verify your stack**:
+6. **Verify your stack**:
 
    ```bash
    # .NET
@@ -214,7 +224,7 @@ Presentations use [Marp](https://marp.app/) format. View in VS Code with the [Ma
    cd src-springboot && mvn clean test
    ```
 
-5. **Ready!** Follow your facilitator or start with [Lab 1](docs/labs/lab-01-first-contact.md).
+7. **Ready!** Follow your facilitator or start with [Lab 1](docs/labs/lab-01-first-contact.md).
 
 ---
 

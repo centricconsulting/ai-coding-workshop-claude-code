@@ -17,7 +17,10 @@
 
 - Claude Code installed: `npm install -g @anthropic-ai/claude-code`
 - Authenticated: `claude` → follow login prompt
-- Repository cloned and personal branch created
+- Repository **forked** on GitHub and cloned from your fork
+- Personal branch created: `git checkout -b workshop/your-name`
+
+> **Why fork?** Later labs (GitHub MCP in Lab 7, CI workflows in Lab 9) require a remote you can push to and query. The fork is the foundation — set it up now.
 
 ---
 
@@ -56,7 +59,7 @@ Type `/exit` to leave, then continue below.
 
 ### B.1 Open Claude Code in the Workshop Repository
 
-Navigate to the repository root and start Claude Code:
+Navigate to your fork's clone and start Claude Code:
 
 ```bash
 cd ai-code-workshop-claude-code

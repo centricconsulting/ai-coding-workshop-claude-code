@@ -170,7 +170,8 @@ claude --continue   # Resume last session
 
 - **Claude Code installed**: `npm install -g @anthropic-ai/claude-code`
 - **Authenticated**: `claude` → follow login flow
-- **Repository cloned**: `git clone …`
+- **Repository forked** on GitHub, then cloned from the fork
+- **Upstream remote added**: `git remote add upstream https://github.com/centricconsulting/…`
 - **Personal branch**: `git checkout -b workshop/your-name`
 
 ## Verify your stack
