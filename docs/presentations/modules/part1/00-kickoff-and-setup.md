@@ -157,7 +157,6 @@ claude --continue   # Resume last session
 | Command | Purpose |
 |---|---|
 | `/help` | List all commands |
-| `/status` | Context usage, session info |
 | `/compact` | Compress history (use at 60%+ context) |
 | `/review` | Pre-commit code review |
 | `/clear` | Fresh session |
