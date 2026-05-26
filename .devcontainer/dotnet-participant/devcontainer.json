@@ -1,37 +1,33 @@
 // .NET Participant DevContainer - Streamlined for Workshop Participants
 // For participants following the .NET track
 {
-    "name": "AI Workshop - .NET Participant",
+    "name": "Claude Code Workshop - .NET Participant",
     "image": "mcr.microsoft.com/devcontainers/dotnet:9.0-bookworm",
-    
+
     "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "20"
+        },
         "ghcr.io/devcontainers/features/github-cli:1": {
             "version": "latest"
         }
     },
-    
-    // Use 'postCreateCommand' to run commands after the container is created
-    "postCreateCommand": "dotnet build TaskManager.sln && dotnet dev-certs https --trust",
-    
-    // Configure tool-specific properties
+
+    "postCreateCommand": "npm install -g @anthropic-ai/claude-code && dotnet build TaskManager.sln && dotnet dev-certs https --trust",
+
     "customizations": {
         "vscode": {
             "extensions": [
-                "GitHub.copilot",
-                "GitHub.copilot-chat",
-                "humao.rest-client",
+                "anthropics.claude-code",
                 "ms-dotnettools.csdevkit",
+                "humao.rest-client",
                 "bierner.markdown-mermaid",
                 "marp-team.marp-vscode",
                 "yzhang.markdown-all-in-one"
-            ],
-            "settings": {
-                "github.copilot.advanced": {}
-            }
+            ]
         }
     },
-    
-    // Forward ports for .NET apps
+
     "forwardPorts": [5000, 5001],
     "portsAttributes": {
         "5001": {

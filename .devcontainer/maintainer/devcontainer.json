@@ -1,9 +1,9 @@
 // Workshop Maintainer DevContainer - Full Toolchain
 // For workshop authors and maintainers working with BOTH .NET and Spring Boot
 {
-    "name": "AI Workshop - Maintainer (Full Toolchain)",
+    "name": "Claude Code Workshop - Maintainer (Full Toolchain)",
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
-    
+
     "features": {
         "ghcr.io/devcontainers/features/dotnet:1": {
             "version": "9.0",
@@ -28,22 +28,19 @@
             "version": "latest"
         }
     },
-    
-    // Use 'postCreateCommand' to run commands after the container is created
-    "postCreateCommand": "dotnet build TaskManager.sln && mvn clean install -f src-springboot/pom.xml -DskipTests && dotnet dev-certs https --trust && npm install -g @marp-team/marp-cli",
-    
-    // Configure tool-specific properties
+
+    "postCreateCommand": "npm install -g @anthropic-ai/claude-code @marp-team/marp-cli && dotnet build TaskManager.sln && mvn clean install -f src-springboot/pom.xml -DskipTests && dotnet dev-certs https --trust",
+
     "customizations": {
         "vscode": {
             "extensions": [
-                // GitHub Copilot
-                "GitHub.copilot",
-                "GitHub.copilot-chat",
-                
+                // Claude Code
+                "anthropics.claude-code",
+
                 // .NET Development
                 "ms-dotnettools.csdevkit",
                 "ms-dotnettools.csharp",
-                
+
                 // Java Development
                 "vscjava.vscode-java-pack",
                 "vscjava.vscode-spring-boot-dashboard",
@@ -51,17 +48,16 @@
                 "vscjava.vscode-spring-initializr",
                 "vscjava.vscode-maven",
                 "vscjava.vscode-gradle",
-                
+
                 // API Testing
                 "humao.rest-client",
-                
+
                 // Documentation & Presentations
                 "bierner.markdown-mermaid",
                 "marp-team.marp-vscode",
                 "yzhang.markdown-all-in-one"
             ],
             "settings": {
-                "github.copilot.advanced": {},
                 "java.configuration.runtimes": [
                     {
                         "name": "JavaSE-21",
@@ -72,8 +68,7 @@
             }
         }
     },
-    
-    // Forward ports for both .NET and Spring Boot apps
+
     "forwardPorts": [5000, 5001, 8080, 8443],
     "portsAttributes": {
         "5001": {
