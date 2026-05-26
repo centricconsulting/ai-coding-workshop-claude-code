@@ -9,7 +9,8 @@
             "version": "20"
         },
         "ghcr.io/devcontainers/features/github-cli:1": {
-            "version": "latest"
+            "version": "latest",
+            "installDirectlyFromGitHubRelease": "false"
         }
     },
 
