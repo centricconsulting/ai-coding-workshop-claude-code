@@ -13,16 +13,13 @@
             "mavenVersion": "3.9",
             "gradleVersion": "8.5"
         },
-        "ghcr.io/devcontainers/features/node:1": {
-            "version": "20"
-        },
         "ghcr.io/devcontainers/features/github-cli:1": {
             "version": "latest",
             "installDirectlyFromGitHubRelease": "false"
         }
     },
 
-    "postCreateCommand": "npm install -g @anthropic-ai/claude-code && mvn clean install -f src-springboot/pom.xml -DskipTests",
+    "postCreateCommand": ". ${NVM_DIR:-/usr/local/share/nvm}/nvm.sh && nvm install 20 && npm install -g @anthropic-ai/claude-code && mvn clean install -f src-springboot/pom.xml -DskipTests",
 
     "customizations": {
         "vscode": {
