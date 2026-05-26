@@ -116,13 +116,7 @@ Extract any code blocks longer than 5–6 lines into well-named private methods.
 
 ### 3.1 Context Management During Long Tasks
 
-After 3 phases of refactoring, check your context:
-
-```
-/status
-```
-
-You'll see the current context usage as a percentage. If it's above 60–70%, use `/compact` before continuing:
+After 3 phases of refactoring, check how long your session has been running. If the conversation feels long or Claude Code seems to be losing track of earlier context, use `/compact` before continuing:
 
 ```
 /compact
@@ -191,8 +185,8 @@ As tasks get larger, context management becomes a skill:
 
 | Signal | Action |
 |---|---|
-| `/status` shows >60% context used | Run `/compact` |
-| Claude Code seems to "forget" earlier context | Run `/compact` or start a new focused task |
+| Session has grown long and Claude Code seems to "forget" earlier context | Run `/compact` |
+| Claude Code is repeating questions it already answered | Run `/compact` or start a new focused task |
 | Task spans >10 files | Consider splitting into sub-tasks |
 | Claude Code is repeating itself | Run `/clear` and re-describe the remaining work |
 

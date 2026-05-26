@@ -1,4 +1,4 @@
-﻿using FakeItEasy;
+using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using TaskManager.Application.Services;
 using TaskManager.Domain.Repositories;
@@ -7,16 +7,17 @@ using TaskManager.Domain.Tasks;
 namespace TaskManager.UnitTests;
 
 /// <summary>
-/// Unit tests for TaskService - Lab 2 & Lab 4
-/// 
+/// Unit tests for TaskService — Labs 2 &amp; 3
+///
 /// LAB 2 INSTRUCTIONS:
-/// Use Copilot to implement the TaskService.AddTaskAsync method and its tests.
-/// 
-/// LAB 4 INSTRUCTIONS: 
-/// Use Copilot to generate additional unit tests covering edge cases.
-/// 
+/// Use Claude Code to implement the TaskService.AddTaskAsync method and its tests.
+/// Follow the TDD cycle: interface → tests → implementation.
+///
+/// LAB 3 INSTRUCTIONS:
+/// Use Claude Code to generate additional unit tests covering edge cases.
+///
 /// Example prompts:
-/// - "Implement the AddTaskAsync method with validation and logging"
+/// - "Implement AddTaskAsync with validation and logging following src/CLAUDE.md conventions"
 /// - "Generate unit tests for happy path and validation scenarios"
 /// - "Add tests for null parameters and empty strings"
 /// </summary>
@@ -28,63 +29,58 @@ public class TaskServiceTests
 
     public TaskServiceTests()
     {
-        // Setup mocks using FakeItEasy
         _mockRepository = A.Fake<ITaskRepository>();
         _mockLogger = A.Fake<ILogger<TaskService>>();
         _taskService = new TaskService(_mockRepository, _mockLogger);
     }
 
-    // TODO: Lab 2 - Participants will implement this test with Copilot
-    [Fact]
+    [Fact(Skip = "Lab 2: Implement this test with Claude Code — follow the TDD cycle in lab-02")]
     public System.Threading.Tasks.Task AddTaskAsync_WithValidData_ShouldReturnTaskId()
     {
         // Arrange
         // TODO: Set up test data and mock expectations
-        
+
         // Act
         // TODO: Call TaskService.AddTaskAsync
-        
+
         // Assert
         // TODO: Verify the result and mock interactions
-        
-        throw new NotImplementedException("Lab 2: Implement this test with Copilot assistance");
+
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
-    // TODO: Lab 2 - Participants will implement this test with Copilot
-    [Fact]
+    [Fact(Skip = "Lab 2: Implement this test with Claude Code — follow the TDD cycle in lab-02")]
     public System.Threading.Tasks.Task AddTaskAsync_WithNullTitle_ShouldThrowArgumentException()
     {
         // TODO: Test validation for null title
-        throw new NotImplementedException("Lab 2: Implement this test with Copilot assistance");
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
-    // TODO: Lab 4 - Participants will generate additional tests with Copilot
-    [Fact]
+    [Fact(Skip = "Lab 3: Generate this test with Claude Code — follow the TDD cycle in lab-03")]
     public System.Threading.Tasks.Task AddTaskAsync_WithEmptyDescription_ShouldThrowArgumentException()
     {
-        // TODO: Lab 4 - Generate this test with Copilot
-        throw new NotImplementedException("Lab 4: Generate this test with Copilot assistance");
+        // TODO: Lab 3 — generate with Claude Code
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
-    // TODO: Lab 4 - Participants will generate more comprehensive tests
-    [Fact]
+    [Fact(Skip = "Lab 3: Generate this test with Claude Code — follow the TDD cycle in lab-03")]
     public System.Threading.Tasks.Task GetTaskAsync_WithExistingId_ShouldReturnTask()
     {
-        // TODO: Lab 4 - Generate this test with Copilot
-        throw new NotImplementedException("Lab 4: Generate this test with Copilot assistance");
+        // TODO: Lab 3 — generate with Claude Code
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
-    [Fact]
+    [Fact(Skip = "Lab 3: Generate this test with Claude Code — follow the TDD cycle in lab-03")]
     public System.Threading.Tasks.Task GetTaskAsync_WithNonExistentId_ShouldReturnNull()
     {
-        // TODO: Lab 4 - Generate this test with Copilot
-        throw new NotImplementedException("Lab 4: Generate this test with Copilot assistance");
+        // TODO: Lab 3 — generate with Claude Code
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
-    [Fact]
+    [Fact(Skip = "Lab 3: Generate this test with Claude Code — follow the TDD cycle in lab-03")]
     public System.Threading.Tasks.Task UpdateTaskStatusAsync_WithValidData_ShouldUpdateSuccessfully()
     {
-        // TODO: Lab 4 - Generate this test with Copilot
-        throw new NotImplementedException("Lab 4: Generate this test with Copilot assistance");
+        // TODO: Lab 3 — generate with Claude Code
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 }

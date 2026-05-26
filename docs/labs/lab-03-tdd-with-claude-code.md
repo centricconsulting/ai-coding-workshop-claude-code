@@ -195,12 +195,6 @@ This is the **safety net** of TDD — you can refactor confidently because the t
 
 Before committing, review everything Claude Code created.
 
-```
-/diff
-```
-
-Or from the terminal:
-
 ```bash
 git diff
 ```

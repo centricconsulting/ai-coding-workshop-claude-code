@@ -161,9 +161,7 @@ Apply to Real Projects!
 | Command | When to Use |
 |---|---|
 | `/help` | List all slash commands |
-| `/status` | Check context usage and session info |
-| `/cost` | See session cost so far |
-| `/compact` | Compress conversation history (use at >60% context) |
+| `/compact` | Compress conversation history when sessions grow long |
 | `/clear` | Start a fresh session |
 | `/review` | Run a structured code review on current changes |
 | `/exit` | Exit Claude Code |

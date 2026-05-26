@@ -83,19 +83,19 @@ claude --continue --print "Now suggest 3 improvements to the domain model based 
 
 The second command has the context of the first — Claude Code remembers what it read.
 
-### B.2 `--resume`
+### B.2 `--resume` and `--name`
 
-`--resume <session-id>` resumes a specific named session:
+Use `--name` to give a session a display name, then `--resume` to return to it:
 
 ```bash
 # Start a named session
-claude --print "Analyze the test coverage in the .NET project." --session my-analysis
+claude --name my-analysis --print "Analyze the test coverage in the .NET project."
 
-# Resume it later
+# Resume it later by name
 claude --resume my-analysis --print "Now do the same analysis for the Spring Boot project."
 ```
 
-Session IDs are visible in `/status` during an interactive session or logged if you configure audit hooks.
+Session names are set with `--name` and resumed with `--resume <name>`. If you run `--resume` without arguments, Claude Code shows an interactive picker of recent sessions.
 
 ### B.3 When to Use Session Persistence
 
@@ -282,7 +282,7 @@ claude --print --output-format text "your prompt"
 
 **Session not found with `--resume`**
 
-Session IDs must be exact. Use `--session <name>` when starting, then `--resume <name>` later. Check the audit log if you're unsure of the session name.
+Use `--name <name>` when starting the session, then `--resume <name>` later. Names must match exactly. Run `claude --resume` without arguments to see an interactive list of recent sessions.
 
 **CI pipeline times out**
 

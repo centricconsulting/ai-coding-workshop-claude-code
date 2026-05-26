@@ -43,7 +43,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '[hook] File written: $CLAUDE_TOOL_INPUT_FILE_PATH' >> /tmp/claude-audit.log"
+            "command": "echo '[hook] File written at '$(date) >> /tmp/claude-audit.log"
           }
         ]
       },
@@ -52,7 +52,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '[hook] File edited: $CLAUDE_TOOL_INPUT_FILE_PATH' >> /tmp/claude-audit.log"
+            "command": "echo '[hook] File edited at '$(date) >> /tmp/claude-audit.log"
           }
         ]
       }

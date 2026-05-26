@@ -85,12 +85,12 @@ npm install -g @modelcontextprotocol/server-filesystem
 
 ### B.2 Add MCP Configuration
 
-Claude Code MCP servers are configured in `~/.claude/claude_desktop_config.json` (macOS/Linux) or via the project-level `.claude/mcp.json`.
+Claude Code MCP servers are configured in `.mcp.json` at the project root (shared with the team via version control) or in `~/.claude.json` for user-scoped servers.
 
 Create a project-level MCP config:
 
 ```
-Create .claude/mcp.json that configures the @modelcontextprotocol/server-filesystem MCP server. Allow it to read from the current project directory (use the absolute path to this repo). Show me the configuration before writing.
+Create .mcp.json that configures the @modelcontextprotocol/server-filesystem MCP server. Allow it to read from the current project directory (use the absolute path to this repo). Show me the configuration before writing.
 ```
 
 The file should look like:
@@ -140,7 +140,7 @@ export GITHUB_PERSONAL_ACCESS_TOKEN=your_token_here
 ### C.2 Configure the GitHub MCP Server
 
 ```
-Add the GitHub MCP server to .claude/mcp.json. Use the package @modelcontextprotocol/server-github. It needs the GITHUB_PERSONAL_ACCESS_TOKEN environment variable.
+Add the GitHub MCP server to .mcp.json. Use the package @modelcontextprotocol/server-github. It needs the GITHUB_PERSONAL_ACCESS_TOKEN environment variable.
 ```
 
 Restart Claude Code.
@@ -228,7 +228,7 @@ Using GitHub MCP, find the 5 most recent open issues in this repository. Estimat
 **"MCP server not found"**
 
 - Verify the package is installed: `npx @modelcontextprotocol/server-filesystem --version`
-- Check `.claude/mcp.json` is valid JSON
+- Check `.mcp.json` is valid JSON
 - Restart Claude Code after adding MCP config
 
 **"Tools not available"**

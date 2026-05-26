@@ -112,22 +112,22 @@ Try each of these:
 Lists all available slash commands with descriptions.
 
 ```
-/status
-```
-
-Shows current session information: model, context usage, token count.
-
-```
-/cost
-```
-
-Shows the cost of the current session so far.
-
-```
 /clear
 ```
 
 Clears conversation history and starts fresh. Use this when starting a new unrelated task.
+
+```
+/compact
+```
+
+Compresses conversation history to free up context. Use proactively when sessions grow long.
+
+```
+/review
+```
+
+Runs a structured code review on your current changes.
 
 ### C.2 Keyboard Shortcuts
 
@@ -136,8 +136,8 @@ Clears conversation history and starts fresh. Use this when starting a new unrel
 | Submit prompt | `Enter` |
 | New line in prompt | `Shift+Enter` |
 | Previous prompts | `↑` / `↓` |
-| Interrupt mid-response | `Ctrl+C` |
-| Exit Claude Code | `/exit` or `Ctrl+D` |
+| Interrupt mid-response | `Escape` |
+| Exit Claude Code | `/exit` or `Ctrl+C` (at empty prompt) |
 
 ### C.3 Understanding the Output Format
 
@@ -205,7 +205,7 @@ The key insight: **Claude Code's output is actions, not suggestions.** You revie
 - [ ] You authenticated and ran at least one conversation
 - [ ] Claude Code accurately described the project architecture from reading the codebase
 - [ ] You saw at least one permission prompt and understand what it means
-- [ ] You can use `/help`, `/status`, `/cost`, and `/clear`
+- [ ] You can use `/help`, `/compact`, `/review`, and `/clear`
 
 ---
 
@@ -236,7 +236,7 @@ Notice that Claude Code will read files from both directories before responding.
 
 **No tool calls visible**
 - Tool calls appear inline; you may need to scroll up
-- Try `/status` to confirm the session is active
+- Try `/help` to confirm the session is active and see available commands
 
 ---
 

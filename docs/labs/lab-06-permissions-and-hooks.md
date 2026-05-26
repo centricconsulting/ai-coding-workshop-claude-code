@@ -148,19 +148,19 @@ A common team use case: automatically format code after Claude Code writes a fil
 Add a PostToolUse hook on the Write tool that runs `dotnet format` after any C# file is written:
 
 ```
-Add a PostToolUse hook to .claude/settings.json. It should match the Write tool and run: if the file path ends in .cs, run "dotnet format src/TaskManager.sln --include $CLAUDE_TOOL_INPUT_FILE_PATH". Show me what you'd add before writing the file.
+Add a PostToolUse hook to .claude/settings.json. It should match the Write tool and run dotnet format on any .cs file that was just written. The hook command receives a JSON blob on stdin describing the tool call — use that to get the file path. Show me what you'd add before writing the file.
 ```
 
 Review the proposed hook. Confirm and write.
 
-> **Note**: Hook commands receive context via environment variables. `$CLAUDE_TOOL_INPUT_FILE_PATH` contains the path of the file just written. See the Claude Code documentation for the full list of available hook variables.
+> **Note**: Hook commands receive a JSON blob on stdin with details about the tool call (tool name, input parameters, output). Parse stdin in your hook command to access the file path or other tool inputs. See the [Claude Code hooks documentation](https://docs.anthropic.com/en/docs/claude-code/hooks) for the full input schema.
 
 ### C.4 Write a Test-Run Hook
 
 Add a PostToolUse hook that runs the relevant tests whenever a test file is written:
 
 ```
-Add another PostToolUse hook that matches Write tool calls where the file path contains "UnitTests". When triggered, it should run: dotnet test tests/TaskManager.UnitTests/ --no-build
+Add another PostToolUse hook that matches Write tool calls where the tool input path contains "UnitTests". When triggered, it should run: dotnet test tests/TaskManager.UnitTests/ --no-build
 ```
 
 Now every time Claude Code writes a test file, the tests run automatically. You see failures immediately without having to prompt for them.
