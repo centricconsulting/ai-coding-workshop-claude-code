@@ -18,8 +18,7 @@ The workshop was just restructured from 1-day/6-hours to 2-days/6-hours-each, ad
 
 - [x] **2. Same stale path in `docs/labs/lab-13-headless-automation.md`** (line 35, `--print` example) — fixed.
 
-- [ ] **3. Decide on `.devcontainer/maintainer/devcontainer-lock.json`**
-  Modified in the working tree, unrelated to this session's work (was already dirty before we started). Commit it, revert it, or find out why it keeps changing — shouldn't ride along in the restructure commit either way.
+- [x] **3. `.devcontainer/maintainer/devcontainer-lock.json`** — committed. It was just out of sync with `devcontainer.json`'s earlier `node:1` removal (f39eaa3), not an unexplained drift; mirrors the fix already applied to the springboot-participant lock file.
 
 ---
 
