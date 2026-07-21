@@ -14,11 +14,9 @@ The workshop was just restructured from 1-day/6-hours to 2-days/6-hours-each, ad
 
 ## P0 — Bugs found, block push
 
-- [ ] **1. Stale `LegacyTaskProcessor` path in `docs/labs/lab-05-refactoring-and-context.md`** (line 45, .NET prompt)
-  Says `src/TaskManager.Domain/LegacyTaskProcessor.cs`. Actual path is `src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs` (confirmed via `src/CLAUDE.md` and the filesystem). This is pre-existing content, unchanged by the restructure — the new Lab 4 and Lab 6 both use the correct path, so this was already wrong before today.
+- [x] **1. Stale `LegacyTaskProcessor` path in `docs/labs/lab-05-refactoring-and-context.md`** (line 45, .NET prompt) — fixed to `src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs`.
 
-- [ ] **2. Same stale path in `docs/labs/lab-13-headless-automation.md`** (line 35, `--print` example)
-  `claude --print "What are the top 3 issues in src/TaskManager.Domain/LegacyTaskProcessor.cs?"` — same fix.
+- [x] **2. Same stale path in `docs/labs/lab-13-headless-automation.md`** (line 35, `--print` example) — fixed.
 
 - [ ] **3. Decide on `.devcontainer/maintainer/devcontainer-lock.json`**
   Modified in the working tree, unrelated to this session's work (was already dirty before we started). Commit it, revert it, or find out why it keeps changing — shouldn't ride along in the restructure commit either way.
@@ -70,6 +68,10 @@ The workshop was just restructured from 1-day/6-hours to 2-days/6-hours-each, ad
 - [x] Schedule-table duration arithmetic agrees across README, labs/README, presentations/index
 - [x] Zero "Copilot" references anywhere in the repo (`.md`/`.cs`/`.java`)
 - [x] Peripheral files (`CLAUDE.md` x3, `.claude/settings.json`, test stubs, agent-governance guide, checklists) all updated to match new lab numbers
+
+## Done (this session)
+
+- [x] **README `## Schedule` reworked to foreground modules, not labs.** Each row now leads with **Module N**, notes the paired lab as `(+ Lab N)`, and an intro line clarifies the duration shown is the combined module+slide-deck-plus-lab block — with a pointer to `docs/presentations/index.md` for slide-only durations. Module numbers used match each file's global H1 number, which is identical to its paired lab number for every module except the two Day 1 intro modules (Kickoff, Features Tour) and the two wrap-ups, none of which have a lab of their own. Worth a quick recheck against item 9 (facilitator timing) once that's done, since this table is the most likely one to drift if durations change.
 
 ---
 

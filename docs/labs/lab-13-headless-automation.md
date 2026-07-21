@@ -32,7 +32,7 @@ Everything you've done in the workshop has been interactive — a human in the l
 ### A.1 Basic Usage
 
 ```bash
-claude --print "What are the top 3 issues in src/TaskManager.Domain/LegacyTaskProcessor.cs?"
+claude --print "What are the top 3 issues in src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs?"
 ```
 
 No interactive session opens. Claude Code reads the file, analyzes it, prints the result to stdout, and exits.

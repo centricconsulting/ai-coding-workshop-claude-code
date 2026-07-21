@@ -42,7 +42,7 @@ claude
 #### 🔷 .NET Prompt
 
 ```
-Read src/TaskManager.Domain/LegacyTaskProcessor.cs and give me a code review. Identify: code smells, Object Calisthenics violations, naming issues, missing tests, and any correctness bugs. Don't change anything yet.
+Read src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and give me a code review. Identify: code smells, Object Calisthenics violations, naming issues, missing tests, and any correctness bugs. Don't change anything yet.
 ```
 
 #### 🟩 Spring Boot Prompt
