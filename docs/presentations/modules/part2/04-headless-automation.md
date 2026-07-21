@@ -5,7 +5,7 @@ paginate: true
 backgroundColor: #fff
 ---
 
-# Module 09: Headless & Automation Mode
+# Module 13: Headless & Automation Mode
 
 ## Claude Code Without a Human in the Loop
 
@@ -16,7 +16,7 @@ backgroundColor: #fff
 Everything you've done in this workshop has been **interactive** —
 a human at the terminal, reading output, deciding what to do next.
 
-**Lab 9 removes the human.**
+**Lab 13 removes the human.**
 
 Claude Code accepts a prompt, does the work, prints the result, and exits.
 No session. No REPL. No waiting.
@@ -175,7 +175,7 @@ Essential practices:
    "deny": ["Write(*)", "Edit(*)", "Bash(*)"]
    ```
 
-3. **Audit logs are mandatory** — the hook from Lab 6 belongs in CI.
+3. **Audit logs are mandatory** — the hook from Lab 9 belongs in CI.
 
 ---
 
@@ -196,7 +196,7 @@ Scope the task tightly enough that no clarification is needed.
 
 ---
 
-# Lab 9 Preview
+# Lab 13 Preview
 
 ## What You'll Do
 
@@ -214,9 +214,9 @@ Everything you've learned in this workshop applies — just without the REPL.
 
 ---
 
-# Lab 9: Headless & Automation Mode
+# Lab 13: Headless & Automation Mode
 
-👉 Open [docs/labs/lab-09-headless-automation.md](../../../labs/lab-09-headless-automation.md)
+👉 Open [docs/labs/lab-13-headless-automation.md](../../../labs/lab-13-headless-automation.md)
 
 **Goal for the next 25 minutes:**
 - Run at least one `--print` command successfully
@@ -229,4 +229,4 @@ Headless mode requires it — there's no browser auth fallback.
 ---
 
 <!-- Navigation -->
-[← 02 Sub-Agents](02-sub-agents.md) | **Part 2 Module 03** | [Next: 04 Capstone →](04-capstone-team-config.md)
+[← 12 Sub-Agents](03-sub-agents.md) | **Day 2 Module 13** | [Next: 14 Output Styles →](05-output-styles.md)

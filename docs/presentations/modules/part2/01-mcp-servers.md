@@ -5,7 +5,7 @@ paginate: true
 backgroundColor: #fff
 ---
 
-# Module 07: MCP Servers
+# Module 10: MCP Servers
 
 ## Adding New Tool Capabilities to Claude Code
 
@@ -13,9 +13,9 @@ backgroundColor: #fff
 
 # Where We Are
 
-You can now control what Claude Code is allowed to do (Lab 6).
+You can now control what Claude Code is allowed to do (Lab 9).
 
-**Lab 7 is about what Claude Code can *reach*.**
+**Lab 10 is about what Claude Code can *reach*.**
 
 Hooks let Claude Code trigger side effects on tool calls.
 MCP lets Claude Code call entirely new tools — ones that don't ship with Claude Code.
@@ -188,7 +188,7 @@ Before building or configuring MCP, ask:
 
 ---
 
-# Lab 7 Preview
+# Lab 10 Preview
 
 ## What You'll Do
 
@@ -206,9 +206,9 @@ without giving it unconstrained shell access.
 
 ---
 
-# Lab 7: MCP Servers
+# Lab 10: MCP Servers
 
-👉 Open [docs/labs/lab-07-mcp-servers.md](../../../labs/lab-07-mcp-servers.md)
+👉 Open [docs/labs/lab-10-mcp-servers.md](../../../labs/lab-10-mcp-servers.md)
 
 **Goal for the next 30 minutes:**
 - At least one MCP server configured and verified
@@ -221,4 +221,4 @@ and observe the GitHub MCP from a facilitator demo.
 ---
 
 <!-- Navigation -->
-[← 00 Permissions & Hooks](00-permissions-and-hooks.md) | **Part 2 Module 01** | [Next: 02 Sub-Agents →](02-sub-agents.md)
+[← 09 Permissions & Hooks](00-permissions-and-hooks.md) | **Day 2 Module 10** | [Next: 11 Skills →](02-skills.md)

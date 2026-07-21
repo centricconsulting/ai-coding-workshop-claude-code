@@ -180,15 +180,8 @@ Explain framework-specific things, not language basics.
 
 ---
 
-# CLAUDE.md vs. GitHub Copilot Instructions
+# The CLAUDE.md Hierarchy, Applied
 
-**Copilot approach:**
-```
-.github/copilot-instructions.md      ← project-wide
-.github/instructions/*.instructions.md  ← file-pattern scoped
-```
-
-**Claude Code approach:**
 ```
 project-root/CLAUDE.md               ← project-wide
 src/CLAUDE.md                        ← directory-scoped
@@ -196,8 +189,8 @@ tests/CLAUDE.md                      ← directory-scoped
 ~/.claude/CLAUDE.md                  ← personal/global
 ```
 
-The concepts are parallel. The key difference: Claude Code's hierarchy
-is **directory-depth based**, giving very fine-grained control.
+The hierarchy is **directory-depth based** — more specific files win,
+giving very fine-grained control over what Claude Code knows where.
 
 ---
 
@@ -231,4 +224,4 @@ See what it produces. Then add it back and repeat.
 ---
 
 <!-- Navigation -->
-[← 01 Features Tour](01-claude-code-features-tour.md) | **Part 1 Module 02** | [Next: TDD →](03-tdd-with-claude-code.md)
+[← 01 Features Tour](01-claude-code-features-tour.md) | **Day 1 Module 02** | [Next: TDD →](03-tdd-with-claude-code.md)

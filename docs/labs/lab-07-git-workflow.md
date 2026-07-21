@@ -1,7 +1,7 @@
-# Lab 5: Git Workflow & PR Preparation
+# Lab 7: Git Workflow & PR Preparation
 
 **Duration**: 15–20 minutes
-**Part**: 1 of 2 (Fundamentals)
+**Day**: 1 of 2 (Fundamentals)
 
 **Learning Objectives**:
 - Use Claude Code's `/review` command for pre-commit code review
@@ -9,14 +9,14 @@
 - Produce a complete PR description from session context
 - Understand when to trust Claude Code's git operations and when to verify
 
-> **Compare to Copilot**: Copilot's `@workspace` can generate PR descriptions and commit messages from chat. Claude Code's `/review` runs a structured code review pass against your actual diff — not just the conversation.
+> **Note**: Claude Code's `/review` runs a structured code review pass against your actual diff — not just the conversation.
 
 ---
 
 ## Prerequisites
 
-- Completed Labs 1–4
-- Uncommitted changes from Labs 3 and 4 on your personal branch
+- Completed Labs 1–6
+- Uncommitted changes from Labs 3, 5, and 6 on your personal branch
 
 ---
 
@@ -176,10 +176,4 @@ Read git log --oneline origin/main..HEAD and generate a CHANGELOG entry followin
 
 ---
 
-**End of Part 1**
-
----
-
-**Next Part**: [Part 2 — Advanced Claude Code](lab-06-permissions-and-hooks.md)
-
-**Part 2 begins with**: [Lab 6: Permissions, Safety & Hooks](lab-06-permissions-and-hooks.md)
+**Next**: [Lab 8: Security Review Workflows](lab-08-security-review-workflows.md)

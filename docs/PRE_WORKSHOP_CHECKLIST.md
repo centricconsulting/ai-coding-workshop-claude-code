@@ -17,7 +17,7 @@ If you get stuck, ask in the workshop Slack channel or email the facilitator. Do
   git clone git@github.com:YOUR-USERNAME/ai-coding-workshop-claude-code.git
   ```
 
-> **Why a fork?** Labs 7, 9, and 10 need a GitHub remote you can push to and query via the GitHub MCP server.
+> **Why a fork?** Labs 10, 13, and 15 need a GitHub remote you can push to and query via the GitHub MCP server.
 
 ---
 

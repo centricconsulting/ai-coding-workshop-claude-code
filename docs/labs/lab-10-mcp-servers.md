@@ -1,7 +1,7 @@
-# Lab 7: MCP Servers
+# Lab 10: MCP Servers
 
 **Duration**: 30–35 minutes
-**Part**: 2 of 2 (Advanced)
+**Day**: 2 of 2 (Advanced)
 
 **Learning Objectives**:
 - Understand what MCP (Model Context Protocol) is and why it exists
@@ -26,7 +26,7 @@ MCP (Model Context Protocol) is an open standard that lets Claude Code communica
 
 ## Prerequisites
 
-- Completed Labs 1–6
+- Completed Labs 1–9
 - Node.js 18+ (for the `@modelcontextprotocol` packages)
 - A GitHub personal access token with `repo` scope (for Part C)
 
@@ -245,4 +245,4 @@ Using GitHub MCP, find the 5 most recent open issues in this repository. Estimat
 
 ---
 
-**Next**: [Lab 8: Sub-Agents & Parallel Workflows](lab-08-sub-agents.md)
+**Next**: [Lab 11: Skills](lab-11-skills.md)

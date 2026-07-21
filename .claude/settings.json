@@ -1,5 +1,5 @@
 {
-  "_comment": "This file is a TEACHING ARTIFACT for Lab 6. It demonstrates Claude Code hooks and permissions. Participants study and modify it during the workshop.",
+  "_comment": "This file is a TEACHING ARTIFACT for Lab 9. It demonstrates Claude Code hooks and permissions. Participants study and modify it during the workshop.",
 
   "permissions": {
     "allow": [

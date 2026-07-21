@@ -177,7 +177,7 @@ Maintain a shared internal template repository with a baseline `settings.json` a
 Internal MCP servers (Jira, Confluence, internal APIs) should be hosted centrally rather than run as local processes. Teams configure `.mcp.json` to point at the shared server URL rather than running `npx` locally.
 
 **Audit logs**
-The audit hook from Lab 6 becomes more important at scale. Route audit logs to a central collector (Splunk, Datadog) for visibility into what Claude Code is doing across the organization.
+The audit hook from Lab 9 becomes more important at scale. Route audit logs to a central collector (Splunk, Datadog) for visibility into what Claude Code is doing across the organization.
 
 **Configuration drift detection**
 Add a CI step that validates `.claude/settings.json` against a schema and checks that required deny rules are present. A missing `"Bash(rm -rf*)"` deny rule in a team's config is a risk worth catching in CI.
@@ -186,7 +186,7 @@ Add a CI step that validates `.claude/settings.json` against a schema and checks
 
 ## Related Resources
 
-- [Lab 10: Capstone — Design a Team Configuration](../labs/lab-10-capstone-team-config.md)
+- [Lab 15: Capstone — Design a Team Configuration](../labs/lab-15-capstone-team-config.md)
 - [Claude Code Hooks documentation](https://docs.anthropic.com/en/docs/claude-code/hooks)
 - [MCP documentation](https://docs.anthropic.com/en/docs/claude-code/mcp)
 - [Claude Code Settings reference](https://docs.anthropic.com/en/docs/claude-code/settings)

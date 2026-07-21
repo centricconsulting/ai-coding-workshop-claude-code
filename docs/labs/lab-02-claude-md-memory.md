@@ -1,15 +1,12 @@
 # Lab 2: CLAUDE.md & Project Memory
 
 **Duration**: 30–35 minutes
-**Part**: 1 of 2 (Fundamentals)
+**Day**: 1 of 2 (Fundamentals)
 
 **Learning Objectives**:
 - Understand the CLAUDE.md hierarchy: project / subdirectory / user
 - Know what belongs in CLAUDE.md vs. what doesn't
 - Write a CLAUDE.md that measurably improves Claude Code's output
-- Understand how CLAUDE.md differs from GitHub Copilot Instructions
-
-> **Compare to Copilot**: Copilot uses `.github/instructions/` files with `applyTo` glob patterns — context that loads based on the file being edited. CLAUDE.md is project-level memory that Claude Code reads at session start and references throughout the conversation, regardless of which file is currently open.
 
 ---
 
@@ -207,17 +204,9 @@ You won't use this file in the remaining labs, but it's a good habit to start.
 
 ---
 
-## Reflection: CLAUDE.md vs Copilot Instructions
+## Reflection: Why a Hierarchy?
 
-| | Copilot Instructions (`.github/instructions/`) | Claude Code CLAUDE.md |
-|---|---|---|
-| **When loaded** | When a matching file is opened | At session start, for all tasks |
-| **Scope** | Per-file-type via `applyTo:` glob | Per-directory and below |
-| **User-level** | Not supported (repo-only) | `~/.claude/CLAUDE.md` |
-| **Format** | Markdown with YAML frontmatter | Plain markdown |
-| **Effect** | Influences inline completions + chat | Influences all Claude Code actions |
-
-The deeper difference: Copilot Instructions tune *suggestions*. CLAUDE.md tunes an *agent's judgment* across everything it does — file reads, writes, commands, and reasoning.
+CLAUDE.md's directory-based hierarchy tunes an *agent's judgment* across everything it does — file reads, writes, commands, and reasoning — not just what gets suggested at the cursor. A project-wide file sets baseline conventions; a subdirectory file narrows or overrides them for that part of the codebase.
 
 ---
 

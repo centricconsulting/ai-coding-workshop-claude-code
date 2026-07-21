@@ -225,7 +225,7 @@ code --install-extension marp-team.marp-vscode
 
 ## Step 8: Fork and Clone
 
-The workshop requires a **fork** (not just a clone) because Labs 7, 9, and 10 need a GitHub remote you control.
+The workshop requires a **fork** (not just a clone) because Labs 10, 13, and 15 need a GitHub remote you control.
 
 1. Go to [github.com/centricconsulting/ai-coding-workshop-claude-code](https://github.com/centricconsulting/ai-coding-workshop-claude-code)
 2. Click **Fork** → create under your account

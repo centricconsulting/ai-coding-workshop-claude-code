@@ -5,7 +5,7 @@ paginate: true
 backgroundColor: #fff
 ---
 
-# Module 10: Capstone — Team Configuration
+# Module 15: Capstone — Team Configuration
 
 ## Designing Claude Code for an Entire Team
 
@@ -20,20 +20,25 @@ You've built the full Claude Code skill set:
 | Agentic model, first contact | 1 |
 | CLAUDE.md project memory | 2 |
 | TDD | 3 |
-| Phased refactoring | 4 |
-| Git workflow integration | 5 |
-| Permissions & hooks | 6 |
-| MCP servers | 7 |
-| Sub-agents & parallelism | 8 |
-| Headless & automation | 9 |
+| Plan Mode & extended thinking | 4 |
+| Phased refactoring | 5 |
+| Checkpoints & rewind | 6 |
+| Git workflow integration | 7 |
+| Security review workflows | 8 |
+| Permissions & hooks | 9 |
+| MCP servers | 10 |
+| Skills | 11 |
+| Sub-agents & parallelism | 12 |
+| Headless & automation | 13 |
+| Output styles & personas | 14 |
 
-**Lab 10: put it all together for a real team.**
+**Lab 15: put it all together for a real team.**
 
 ---
 
 # The Capstone Is Different
 
-In a Copilot workshop, the capstone is "build an agent" —
+With a completion-based tool, the equivalent capstone might be "build an agent" —
 a discrete tool you invoke by name for a specific workflow.
 
 **Here, the capstone is "design a configuration."**
@@ -176,9 +181,9 @@ Write a one-page team guide:
 
 ---
 
-# Configuration vs. Agent Design
+# Configuration vs. Discrete Agents
 
-**Copilot agents**: discrete, task-specific tools invoked by name.
+**Discrete agents**: task-specific tools invoked by name.
 Build them when you need a repeatable, specialized workflow.
 
 **Claude Code configuration**: ambient, shapes every interaction.
@@ -186,16 +191,16 @@ Design it when you want consistent behavior across an entire team.
 
 Both encode team standards. Different models, different leverage points.
 
-Copilot agent: *"Run this tool to do X."*
+Discrete agent: *"Run this tool to do X."*
 Claude Code config: *"Claude Code already knows how to do X correctly here."*
 
 ---
 
-# Lab 10: Capstone
+# Lab 15: Capstone
 
-👉 Open [docs/labs/lab-10-capstone-team-config.md](../../../labs/lab-10-capstone-team-config.md)
+👉 Open [docs/labs/lab-15-capstone-team-config.md](../../../labs/lab-15-capstone-team-config.md)
 
-**Goal for the next 45 minutes:**
+**Goal for the next 65 minutes:**
 - Root CLAUDE.md drafted and tested with a real prompt
 - `src/` CLAUDE.md with stack-specific conventions
 - `.claude/settings.json` with allow/deny rules and at least 2 hooks
@@ -216,16 +221,19 @@ Foundations          Platform Layer         Automation
 ─────────────        ──────────────         ──────────
 First contact        Permissions & hooks    Headless --print
 CLAUDE.md            MCP servers            CI integration
-TDD                  Sub-agents             Nightly reports
-Phased refactoring   Context management     Pre-commit hooks
+TDD                  Skills                 Nightly reports
+Plan Mode            Sub-agents             Pre-commit hooks
+Phased refactoring   Context management
+Checkpoints & rewind Output styles
 Git workflow         Team configuration
+Security review
 ```
 
 **The highest-leverage next step:**
 Apply the CLAUDE.md and hooks patterns to your real project this week.
-The configuration from Lab 10 is the starting point.
+The configuration from Lab 15 is the starting point.
 
 ---
 
 <!-- Navigation -->
-[← 03 Headless & Automation](03-headless-automation.md) | **Part 2 Module 04** | Workshop Complete
+[← 14 Output Styles](05-output-styles.md) | **Day 2 Module 15** | Workshop Complete

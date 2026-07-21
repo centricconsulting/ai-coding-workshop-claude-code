@@ -1,7 +1,7 @@
-# Lab 6: Permissions, Safety & Hooks
+# Lab 9: Permissions, Safety & Hooks
 
 **Duration**: 25–30 minutes
-**Part**: 2 of 2 (Advanced)
+**Day**: 2 of 2 (Advanced)
 
 **Learning Objectives**:
 - Understand Claude Code's permissions model and why it exists
@@ -13,13 +13,13 @@
 
 ## Overview
 
-Claude Code's permissions model is a safety boundary between "Claude Code can suggest this" and "Claude Code can execute this." In Part 1 you experienced permission prompts firsthand. In this lab you'll take deliberate control of that boundary.
+Claude Code's permissions model is a safety boundary between "Claude Code can suggest this" and "Claude Code can execute this." In Day 1 you experienced permission prompts firsthand. In this lab you'll take deliberate control of that boundary.
 
 ---
 
 ## Prerequisites
 
-- Completed Part 1 (Labs 1–5)
+- Completed Day 1 (Labs 1–8)
 - Familiar with the permission prompts from Lab 1
 
 ---
@@ -235,4 +235,4 @@ Add stderr redirection to see errors:
 
 ---
 
-**Next**: [Lab 7: MCP Servers](lab-07-mcp-servers.md)
+**Next**: [Lab 10: MCP Servers](lab-10-mcp-servers.md)

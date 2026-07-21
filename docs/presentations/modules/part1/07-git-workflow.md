@@ -5,7 +5,7 @@ paginate: true
 backgroundColor: #fff
 ---
 
-# Module 05: Git Workflow & PR Preparation
+# Module 07: Git Workflow & PR Preparation
 
 ## `/review` as a Quality Gate, Not a Post-Hoc Check
 
@@ -14,11 +14,12 @@ backgroundColor: #fff
 # Where We Are
 
 You've implemented `NotificationService` (Lab 3) and refactored
-`LegacyTaskProcessor` through at least Phase 2 (Lab 4).
+`LegacyTaskProcessor` through at least Phase 2 (Lab 5), with a
+checkpoint safety net from Lab 6.
 
 You have uncommitted or recently-committed changes.
 
-**Lab 5 is about what you do before and after the code is done:**
+**Lab 7 is about what you do before and after the code is done:**
 - Code review before committing
 - Commit message generation
 - PR description from session context
@@ -136,9 +137,9 @@ you've context-switched away from the code.
 
 This workshop uses a **fork** (not just a branch) because:
 
-- Labs 7, 9, and 10 require a GitHub remote you control
+- Labs 10, 13, and 15 require a GitHub remote you control
 - The GitHub MCP server needs to query your fork's issues
-- CI patterns in Lab 9 need to push to your fork
+- CI patterns in Lab 13 need to push to your fork
 
 ```bash
 # Your fork
@@ -149,7 +150,7 @@ origin   git@github.com:your-name/ai-coding-workshop-claude-code.git
 upstream git@github.com:centricconsulting/ai-coding-workshop-claude-code.git
 ```
 
-**If you haven't forked yet, do it before Lab 7.**
+**If you haven't forked yet, do it before Lab 10.**
 
 ---
 
@@ -177,11 +178,11 @@ git push origin workshop/your-name
 
 ---
 
-# Lab 5 Preview
+# Lab 7 Preview
 
 ## What You'll Do
 
-1. Stage your changes from Labs 3 and 4
+1. Stage your changes from Labs 3, 5, and 6
 2. Run `/review` — read the output, fix at least one issue
 3. Ask Claude Code to generate a commit message
 4. Commit
@@ -195,9 +196,9 @@ Then stage and run it again. See if the output changes.
 
 ---
 
-# Lab 5: Git Workflow & PR Preparation
+# Lab 7: Git Workflow & PR Preparation
 
-👉 Open [docs/labs/lab-05-git-workflow.md](../../../labs/lab-05-git-workflow.md)
+👉 Open [docs/labs/lab-07-git-workflow.md](../../../labs/lab-07-git-workflow.md)
 
 **Goal for the next 15 minutes:**
 - `/review` run at least once on real changes
@@ -205,26 +206,21 @@ Then stage and run it again. See if the output changes.
 - PR description drafted
 
 **This lab is shorter** — it's skill practice, not new concepts.
-If you finish early, go back and extend Labs 3 or 4.
+If you finish early, go back and extend Labs 3 or 5.
 
 ---
 
-# Part 1 Complete
+# Up Next: Security Review
 
-After Lab 5, you have the fundamentals:
+`/review` is a general quality gate. The next lab goes deeper on
+one category it only glances at — security.
 
-| Skill | Where You Practiced It |
-|---|---|
-| Agentic model | Lab 1 |
-| CLAUDE.md project memory | Lab 2 |
-| TDD with Claude Code | Lab 3 |
-| Phased refactoring + context | Lab 4 |
-| Git workflow integration | Lab 5 |
+👉 [Lab 8: Security Review Workflows](../../../labs/lab-08-security-review-workflows.md)
 
-**Part 2** covers the platform layer: permissions, hooks, MCP, sub-agents,
-headless mode, and team configuration.
+Then Day 1 wraps up before we pick up Day 2 with permissions,
+MCP, skills, sub-agents, headless mode, and team configuration.
 
 ---
 
 <!-- Navigation -->
-[← 04 Refactoring](04-refactoring-and-context.md) | **Part 1 Module 05** | [Next: Part 1 Wrap-Up →](06-wrapup-part1.md)
+[← 06 Checkpoints & Rewind](06-checkpoints-and-rewind.md) | **Day 1 Module 07** | [Next: Security Review →](08-security-review.md)

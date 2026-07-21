@@ -1,7 +1,7 @@
-# Lab 10: Capstone — Design a Team Claude Code Configuration
+# Lab 15: Capstone — Design a Team Claude Code Configuration
 
 **Duration**: 45–50 minutes
-**Part**: 2 of 2 (Advanced)
+**Day**: 2 of 2 (Advanced)
 
 **Learning Objectives**:
 - Design a complete team Claude Code configuration from scratch
@@ -13,7 +13,7 @@
 
 ## Overview
 
-The Copilot workshop capstone (Lab 10) was "build your own agent." The Claude Code capstone is different: you design a *team configuration* — the CLAUDE.md files, `.claude/settings.json`, and MCP setup that encodes your team's standards so Claude Code works well for everyone without constant re-prompting.
+This capstone is different from a "build your own agent" exercise. You design a *team configuration* — the CLAUDE.md files, `.claude/settings.json`, and MCP setup that encodes your team's standards so Claude Code works well for everyone without constant re-prompting.
 
 This is the highest-leverage Claude Code skill: a well-designed team configuration multiplies the value of Claude Code across every developer on the team.
 
@@ -21,7 +21,7 @@ This is the highest-leverage Claude Code skill: a well-designed team configurati
 
 ## Prerequisites
 
-- Completed Labs 1–9
+- Completed Labs 1–14
 - Familiarity with your team's actual development workflow (from work, not this workshop)
 
 ---
@@ -207,10 +207,10 @@ Discuss with your partner or the group:
 
 ## Reflection: Configuration vs. Agent Design
 
-In the Copilot workshop, the capstone was "build an agent" — a piece of software that encodes a specific workflow. Here the capstone is "design a configuration" — a set of files that make Claude Code behave well for an entire team.
+In a completion-based tool, the equivalent capstone might be "build an agent" — a piece of software that encodes a specific workflow. Here the capstone is "design a configuration" — a set of files that make Claude Code behave well for an entire team.
 
 The difference reflects the tools' different models:
-- **Copilot agents** are discrete, task-specific tools you invoke by name
+- **Discrete agents** (the completion-tool approach) are task-specific tools you invoke by name
 - **Claude Code configuration** is ambient — it shapes every interaction without requiring deliberate invocation
 
 Both approaches encode team standards. But Claude Code's approach is more like *training an employee* with good defaults and guardrails, rather than *building a specialized tool* for a specific task.

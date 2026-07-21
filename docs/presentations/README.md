@@ -22,13 +22,13 @@ See the export section below.
 
 ## Exporting Presentations
 
-### Export all Part 1 slides to PDF
+### Export all Day 1 slides to PDF
 
 ```bash
 npx @marp-team/marp-cli docs/presentations/modules/part1/*.md --pdf --output-dir docs/presentations/pdf/part1
 ```
 
-### Export all Part 2 slides to PDF
+### Export all Day 2 slides to PDF
 
 ```bash
 npx @marp-team/marp-cli docs/presentations/modules/part2/*.md --pdf --output-dir docs/presentations/pdf/part2
@@ -54,7 +54,7 @@ npx @marp-team/marp-cli docs/presentations/modules/part1/02-claude-md-memory.md 
 
 See [index.md](index.md) for the full list of modules, durations, and delivery patterns (full-day, two-session, lunch & learn).
 
-### Part 1: Fundamentals
+### Day 1: Fundamentals
 
 | File | Title | Duration |
 |---|---|---|
@@ -62,19 +62,24 @@ See [index.md](index.md) for the full list of modules, durations, and delivery p
 | [01-claude-code-features-tour.md](modules/part1/01-claude-code-features-tour.md) | Claude Code Features Tour | 15 min |
 | [02-claude-md-memory.md](modules/part1/02-claude-md-memory.md) | CLAUDE.md & Project Memory | 20 min |
 | [03-tdd-with-claude-code.md](modules/part1/03-tdd-with-claude-code.md) | TDD with Claude Code | 20 min |
-| [04-refactoring-and-context.md](modules/part1/04-refactoring-and-context.md) | Refactoring & Context Management | 15 min |
-| [05-git-workflow.md](modules/part1/05-git-workflow.md) | Git Workflow & PR Preparation | 10 min |
-| [06-wrapup-part1.md](modules/part1/06-wrapup-part1.md) | Wrap-Up & Part 2 Preview | 10 min |
+| [04-plan-mode-extended-thinking.md](modules/part1/04-plan-mode-extended-thinking.md) | Plan Mode & Extended Thinking | 20 min |
+| [05-refactoring-and-context.md](modules/part1/05-refactoring-and-context.md) | Refactoring & Context Management | 15 min |
+| [06-checkpoints-and-rewind.md](modules/part1/06-checkpoints-and-rewind.md) | Checkpoints & Rewind | 15 min |
+| [07-git-workflow.md](modules/part1/07-git-workflow.md) | Git Workflow & PR Preparation | 10 min |
+| [08-security-review.md](modules/part1/08-security-review.md) | Security Review Workflows | 15 min |
+| [09-wrapup-day1.md](modules/part1/09-wrapup-day1.md) | Day 1 Wrap-Up & Day 2 Preview | 15 min |
 
-### Part 2: Advanced
+### Day 2: Advanced
 
 | File | Title | Duration |
 |---|---|---|
 | [00-permissions-and-hooks.md](modules/part2/00-permissions-and-hooks.md) | Permissions, Safety & Hooks | 25 min |
 | [01-mcp-servers.md](modules/part2/01-mcp-servers.md) | MCP Servers | 20 min |
-| [02-sub-agents.md](modules/part2/02-sub-agents.md) | Sub-Agents & Parallel Workflows | 20 min |
-| [03-headless-automation.md](modules/part2/03-headless-automation.md) | Headless & Automation | 15 min |
-| [04-capstone-team-config.md](modules/part2/04-capstone-team-config.md) | Capstone — Team Configuration | 15 min |
+| [02-skills.md](modules/part2/02-skills.md) | Skills | 20 min |
+| [03-sub-agents.md](modules/part2/03-sub-agents.md) | Sub-Agents & Parallel Workflows | 20 min |
+| [04-headless-automation.md](modules/part2/04-headless-automation.md) | Headless & Automation | 15 min |
+| [05-output-styles.md](modules/part2/05-output-styles.md) | Output Styles & Custom Personas | 15 min |
+| [06-capstone-team-config.md](modules/part2/06-capstone-team-config.md) | Capstone — Team Configuration | 15 min |
 
 ---
 
@@ -120,8 +125,8 @@ Presenter notes (visible only in presenter view) use the HTML comment syntax:
 Slide content here.
 
 <!-- 
-Presenter note: mention the comparison to GitHub Copilot here.
-Expected question: "Can I use both tools?"
+Presenter note: pause here for questions before moving on.
+Expected question: "Does this work with my existing editor setup?"
 -->
 ```
 

@@ -17,7 +17,7 @@ public static class EndpointExtensions
             .WithName("HealthCheck")
             .WithOpenApi();
 
-        // TODO: Lab 3 - Participants will use Copilot to generate these task endpoints:
+        // TODO: Lab 3 - Participants will use Claude Code to generate these task endpoints:
         
         // Get task by ID
         // app.MapGet("/tasks/{id:guid}", GetTaskByIdAsync)
@@ -42,30 +42,30 @@ public static class EndpointExtensions
         return app;
     }
 
-    // TODO: Lab 3 - Participants will use Copilot to generate these endpoint handlers:
+    // TODO: Lab 3 - Participants will use Claude Code to generate these endpoint handlers:
     
     // private static async Task<IResult> GetTaskByIdAsync(Guid id, TaskService taskService)
     // {
-    //     // Copilot will implement this
+    //     // Claude Code will implement this
     // }
     
     // private static async Task<IResult> CreateTaskAsync(CreateTaskRequest request, TaskService taskService)
     // {
-    //     // Copilot will implement this
+    //     // Claude Code will implement this
     // }
     
     // private static async Task<IResult> UpdateTaskStatusAsync(Guid id, UpdateStatusRequest request, TaskService taskService)
     // {
-    //     // Copilot will implement this
+    //     // Claude Code will implement this
     // }
     
     // private static async Task<IResult> GetActiveTasksAsync(TaskService taskService)
     // {
-    //     // Copilot will implement this
+    //     // Claude Code will implement this
     // }
 }
 
-// TODO: Lab 3 - Participants will use Copilot to generate these request/response models:
+// TODO: Lab 3 - Participants will use Claude Code to generate these request/response models:
 // public record CreateTaskRequest(string Title, string Description);
 // public record UpdateStatusRequest(int Status);
 // public record TaskResponse(Guid Id, string Title, string Description, int Status, DateTime CreatedAt, DateTime UpdatedAt);

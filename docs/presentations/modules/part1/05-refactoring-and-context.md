@@ -5,7 +5,7 @@ paginate: true
 backgroundColor: #fff
 ---
 
-# Module 04: Refactoring & Context Management
+# Module 05: Refactoring & Context Management
 
 ## Large Tasks Need Phases and Checkpoints
 
@@ -212,9 +212,9 @@ The logic is identical. The structure is readable. Tests still pass.
 
 ---
 
-# The Lab 4 Target
+# The Lab 5 Target
 
-By the end of Lab 4, `LegacyTaskProcessor` should:
+By the end of Lab 5, `LegacyTaskProcessor` should:
 
 - Have descriptive parameter names (`data` → `input`, `tp` → `taskType`)
 - Replace magic numbers with a `ProcessType` enum (or equivalent)
@@ -228,11 +228,11 @@ Complete Phase 1 and Phase 2 cleanly. Phase 3 is the extension.
 
 ---
 
-# Lab 4 Preview
+# Lab 5 Preview
 
 ## What You'll Do
 
-1. Write characterization tests for `LegacyTaskProcessor` (Phase 1)
+1. Write characterization tests for `LegacyTaskProcessor` (Phase 1) — starting from the plan you drafted in Lab 4
 2. Commit — tests all pass
 3. Ask Claude Code to rename params and extract methods — no logic changes (Phase 2)
 4. Confirm tests still pass
@@ -243,11 +243,11 @@ Complete Phase 1 and Phase 2 cleanly. Phase 3 is the extension.
 
 ---
 
-# Lab 4: Refactoring & Context Management
+# Lab 5: Refactoring & Context Management
 
-👉 Open [docs/labs/lab-04-refactoring-and-context.md](../../../labs/lab-04-refactoring-and-context.md)
+👉 Open [docs/labs/lab-05-refactoring-and-context.md](../../../labs/lab-05-refactoring-and-context.md)
 
-**Goal for the next 45 minutes:**
+**Goal for the next 60 minutes:**
 - Characterization tests committed and passing
 - At least one rename/extract phase completed
 - `/compact` used at least once
@@ -255,4 +255,4 @@ Complete Phase 1 and Phase 2 cleanly. Phase 3 is the extension.
 ---
 
 <!-- Navigation -->
-[← 03 TDD](03-tdd-with-claude-code.md) | **Part 1 Module 04** | [Next: Git Workflow →](05-git-workflow.md)
+[← 04 Plan Mode & Extended Thinking](04-plan-mode-extended-thinking.md) | **Day 1 Module 05** | [Next: Checkpoints & Rewind →](06-checkpoints-and-rewind.md)

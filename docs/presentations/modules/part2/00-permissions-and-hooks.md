@@ -5,7 +5,7 @@ paginate: true
 backgroundColor: #fff
 ---
 
-# Module 06: Permissions, Safety & Hooks
+# Module 09: Permissions, Safety & Hooks
 
 ## Taking Deliberate Control of Claude Code's Boundaries
 
@@ -13,11 +13,11 @@ backgroundColor: #fff
 
 # Where We Are
 
-You've completed Part 1: first contact, CLAUDE.md, TDD, refactoring, and git workflow.
+You've completed Day 1: first contact, CLAUDE.md, TDD, plan mode, refactoring, checkpoints & rewind, git workflow, and security review.
 
-In Part 1, you *experienced* permission prompts — Claude Code pausing to ask before running a command.
+In Day 1, you *experienced* permission prompts — Claude Code pausing to ask before running a command.
 
-**Part 2 starts here: you stop experiencing permissions and start *designing* them.**
+**Day 2 starts here: you stop experiencing permissions and start *designing* them.**
 
 ---
 
@@ -194,7 +194,7 @@ unless you specifically want them to gate Claude Code's progress.
 
 ---
 
-# Lab 6 Preview
+# Lab 9 Preview
 
 ## What You'll Do
 
@@ -212,9 +212,9 @@ not random interruptions, but the boundary you designed.
 
 ---
 
-# Lab 6: Permissions, Safety & Hooks
+# Lab 9: Permissions, Safety & Hooks
 
-👉 Open [docs/labs/lab-06-permissions-and-hooks.md](../../../labs/lab-06-permissions-and-hooks.md)
+👉 Open [docs/labs/lab-09-permissions-and-hooks.md](../../../labs/lab-09-permissions-and-hooks.md)
 
 **Goal for the next 25 minutes:**
 - Understand what's already configured and why
@@ -227,4 +227,4 @@ and see them fire automatically.
 ---
 
 <!-- Navigation -->
-[← Part 1 Complete](../part1/05-git-workflow.md) | **Part 2 Module 00** | [Next: 01 MCP Servers →](01-mcp-servers.md)
+[← Day 1 Wrap-Up](../part1/09-wrapup-day1.md) | **Day 2 Module 09** | [Next: 10 MCP Servers →](01-mcp-servers.md)

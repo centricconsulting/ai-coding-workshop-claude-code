@@ -1,7 +1,7 @@
-# Lab 8: Sub-Agents & Parallel Workflows
+# Lab 12: Sub-Agents & Parallel Workflows
 
 **Duration**: 30–35 minutes
-**Part**: 2 of 2 (Advanced)
+**Day**: 2 of 2 (Advanced)
 
 **Learning Objectives**:
 - Understand when Claude Code uses sub-agents internally
@@ -21,7 +21,7 @@ Understanding how sub-agents work helps you structure prompts to unlock this par
 
 ## Prerequisites
 
-- Completed Labs 1–7
+- Completed Labs 1–11
 
 ---
 
@@ -214,4 +214,4 @@ This is expected — sub-agents and new sessions start fresh. Always pass the Ph
 
 ---
 
-**Next**: [Lab 9: Headless & Automation Mode](lab-09-headless-automation.md)
+**Next**: [Lab 13: Headless & Automation Mode](lab-13-headless-automation.md)

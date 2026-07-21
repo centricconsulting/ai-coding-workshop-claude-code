@@ -20,7 +20,7 @@ public static class ServiceExtensions
         // Register application services
         services.AddScoped<TaskService>();
         
-        // TODO: Lab 3 - Add any additional services Copilot generates
+        // TODO: Lab 3 - Add any additional services Claude Code generates
         
         return services;
     }

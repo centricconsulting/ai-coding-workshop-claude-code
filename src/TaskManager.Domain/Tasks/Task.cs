@@ -28,7 +28,7 @@ public sealed class Task
     public static Task Create(string title, string description)
     {
         // TODO: Add validation (title not null/empty, description not null)
-        // This is where Copilot will help participants implement validation
+        // This is where Claude Code will help participants implement validation
         
         return new Task(
             TaskId.New(),

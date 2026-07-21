@@ -13,7 +13,7 @@ namespace TaskManager.Api;
 /// - OpenTelemetry observability (tracing to console)
 /// 
 /// LAB 3 INSTRUCTIONS:
-/// Use Copilot to scaffold minimal API endpoints in the EndpointExtensions class:
+/// Use Claude Code to scaffold minimal API endpoints in the EndpointExtensions class:
 /// 1. GET /tasks/{id} - Get task by ID
 /// 2. POST /tasks - Create new task  
 /// 3. PUT /tasks/{id}/status - Update task status

@@ -227,9 +227,9 @@ Does it test what you intended? Is the assertion meaningful?
 - All tests named with the workshop convention
 - You ran the tests yourself at least once and saw the red → green transition
 
-**Bilingual note:** Labs 3 and 4 have separate .NET and Spring Boot walkthroughs. Use the section for your stack.
+**Bilingual note:** Labs 3 and 5 have separate .NET and Spring Boot walkthroughs. Use the section for your stack.
 
 ---
 
 <!-- Navigation -->
-[← 02 CLAUDE.md](02-claude-md-memory.md) | **Part 1 Module 03** | [Next: Refactoring & Context →](04-refactoring-and-context.md)
+[← 02 CLAUDE.md](02-claude-md-memory.md) | **Day 1 Module 03** | [Next: Plan Mode & Extended Thinking →](04-plan-mode-extended-thinking.md)

@@ -9,7 +9,7 @@ backgroundColor: #fff
 
 ## AI-Assisted Development with an Agentic Pair Programmer
 
-**Duration:** 3 Hours (Part 1 of 2)
+**Duration:** 6 Hours (Day 1 of 2)
 **Format:** Instructor-led, hands-on
 **Tool:** Claude Code CLI by Anthropic
 
@@ -32,7 +32,7 @@ backgroundColor: #fff
 
 ## Claude Code is an agent, not an autocomplete
 
-**Completion-based tools** (GitHub Copilot, etc.):
+**Completion-based tools**:
 > You select text → ask a question → receive a suggestion → accept or reject
 
 **Claude Code:**
@@ -204,18 +204,14 @@ Watch how it reads multiple files before answering — not guessing from a promp
 
 # What Makes This Workshop Different
 
-## From the GitHub Copilot workshop
+## Compared to Completion-Based Tools
 
-> If you took the Copilot workshop: you'll build the same NotificationService and refactor the same LegacyTaskProcessor — but the *how* is entirely different.
-
-| Copilot Workshop | Claude Code Workshop |
+| Completion-Based Tools | Claude Code Workshop |
 |---|---|
 | Tool-per-action | Task-per-outcome |
-| `.github/instructions/` | `CLAUDE.md` |
+| Per-file-pattern instruction files | `CLAUDE.md` |
 | Custom agents | Hooks + MCP |
 | Bilingual split | Language-agnostic config |
-
-Watch for **"Compare to Copilot"** callouts throughout the labs.
 
 ---
 
@@ -223,7 +219,7 @@ Watch for **"Compare to Copilot"** callouts throughout the labs.
 
 ## Lab 1: First Contact
 
-👉 Open [docs/labs/lab-01-first-contact.md](../../labs/lab-01-first-contact.md)
+👉 Open [docs/labs/lab-01-first-contact.md](../../../labs/lab-01-first-contact.md)
 
 **Goal for the next 20 minutes:**
 - Claude Code is installed and authenticated
@@ -233,4 +229,4 @@ Watch for **"Compare to Copilot"** callouts throughout the labs.
 ---
 
 <!-- Navigation -->
-**Part 1 Module 00** | [Next: Features Tour →](01-claude-code-features-tour.md)
+**Day 1 Module 00** | [Next: Features Tour →](01-claude-code-features-tour.md)

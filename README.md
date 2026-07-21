@@ -8,17 +8,17 @@ Unlike completion-based tools, Claude Code is an agent that reads your codebase,
 
 **Choose Your Technology Stack:** This workshop supports both **🔷 .NET** and **🟩 Spring Boot** implementations.
 
-**This workshop is split into two parts:**
+**This workshop runs over two days:**
 
-### Part 1: Fundamentals (3 hours)
+### Day 1: Fundamentals (6 hours)
 
-Learn to work with Claude Code as a development partner — setting up project memory with CLAUDE.md, applying TDD, generating and refactoring code, and integrating Claude Code into your git workflow. Works with either **.NET 9** or **Spring Boot 3.x**.
+Learn to work with Claude Code as a development partner — setting up project memory with CLAUDE.md, applying TDD, planning large tasks with Plan Mode, refactoring code with a checkpoint safety net, and integrating Claude Code into your git workflow with a dedicated security review gate. Works with either **.NET 9** or **Spring Boot 3.x**.
 
-### Part 2: Advanced Claude Code (3 hours)
+### Day 2: Advanced Claude Code (6 hours)
 
-Master advanced Claude Code capabilities: the permissions and safety model, workflow automation with hooks, extending Claude Code with MCP servers, understanding sub-agents and parallel work, and headless/automation mode for CI pipelines.
+Master advanced Claude Code capabilities: the permissions and safety model, extending Claude Code with MCP servers and Skills, understanding sub-agents and parallel work, headless/automation mode for CI pipelines, output styles, and designing a complete team configuration.
 
-**Full workshop duration:** 6 hours (deliverable as separate sessions)
+**Full workshop duration:** 12 hours across two days
 
 **What makes this workshop unique:**
 - **Agentic-first mental model** — teaches the trust-and-verify workflow, not just "how to prompt"
@@ -27,9 +27,6 @@ Master advanced Claude Code capabilities: the permissions and safety model, work
 - **MCP server integration** — extending Claude Code with GitHub, filesystem, and custom tools
 - **Safety by design** — permissions model, reviewing diffs, scoping tasks appropriately
 - **Bilingual support** — same concepts, your technology stack (.NET or Spring Boot)
-- **Compare to Copilot callouts** — for participants familiar with the GitHub Copilot workshop
-
-> **Coming from the GitHub Copilot workshop?** You'll use the same TaskManager codebase. Watch for **"Compare to Copilot"** callouts throughout the labs — they highlight where Claude Code's agentic model changes the workflow.
 
 ---
 
@@ -73,57 +70,66 @@ mvn --version
 
 ## Learning Objectives
 
-### Part 1: Fundamentals
+### Day 1: Fundamentals
 
-By the end of Part 1, participants will be able to:
+By the end of Day 1, participants will be able to:
 
 - **Explain the agentic model** — how Claude Code differs from completion-based assistants
 - **Configure CLAUDE.md** at project and subdirectory levels to encode team standards
 - **Apply TDD with Claude Code** using the full Red-Green-Refactor cycle
+- **Plan large tasks in Plan Mode** before any files change, and use extended thinking when it's worth the cost
 - **Perform multi-file refactoring** safely, reviewing diffs before accepting changes
+- **Recover from a bad edit** using checkpoints and rewind, without touching git
 - **Manage context** with `/compact`, session continuity, and scoped tasks
 - **Integrate with git** — conventional commits, PR descriptions, `/review`
+- **Run a dedicated security review** with `/security-review` before code goes out as a PR
 
-### Part 2: Advanced Claude Code
+### Day 2: Advanced Claude Code
 
-By the end of Part 2, participants will be able to:
+By the end of Day 2, participants will be able to:
 
 - **Navigate the permissions model** — allow/deny tool use, understand safety boundaries
 - **Automate workflows with hooks** — pre/post-tool hooks in `.claude/settings.json`
 - **Configure MCP servers** — extend Claude Code with GitHub MCP, filesystem MCP, and custom tools
+- **Package reusable procedures as Skills** — SKILL.md, progressive disclosure, when to use a skill vs. MCP vs. CLAUDE.md
 - **Understand sub-agents** — when Claude Code uses parallel agents and how to scope complex tasks
 - **Use headless/automation mode** — `--print`, `--continue`, CI pipeline integration
+- **Customize how Claude Code communicates** with output styles
 - **Design team CLAUDE.md configurations** — encode standards so Claude Code works well without re-prompting
 
 ---
 
 ## Schedule
 
-### Part 1: Fundamentals (3 hours)
+### Day 1: Fundamentals (6 hours)
 
 | Section | Duration |
 |---|---|
-| 0. Kickoff & Setup | 15 min |
-| 0.5 Claude Code Features Tour | 15 min |
+| Day 1 Kickoff & Setup | 15 min |
+| Claude Code Features Tour | 15 min |
 | **Lab 1**: First Contact — CLI basics & the agent model | 20 min |
 | **Lab 2**: CLAUDE.md & Project Memory | 30 min |
-| **Lab 3**: TDD with Claude Code | 45 min |
-| **Lab 4**: Multi-File Refactoring & Context Management | 45 min |
-| **Lab 5**: Git Workflow & PR Preparation | 15 min |
-| Wrap-Up & Discussion | 15 min |
+| **Lab 3**: TDD with Claude Code | 60 min |
+| **Lab 4**: Plan Mode & Extended Thinking | 20 min |
+| **Lab 5**: Multi-File Refactoring & Context Management | 60 min |
+| **Lab 6**: Checkpoints & Rewind | 20 min |
+| **Lab 7**: Git Workflow & PR Preparation | 15 min |
+| **Lab 8**: Security Review Workflows | 30 min |
+| Day 1 Wrap-Up & Discussion | 20 min |
 
-### Part 2: Advanced Claude Code (3 hours)
+### Day 2: Advanced Claude Code (6 hours)
 
 | Section | Duration |
 |---|---|
-| 0. Kickoff & Context Reset | 10 min |
-| **Lab 6**: Permissions, Safety & Hooks | 25 min |
-| **Lab 7**: MCP Servers | 30 min |
-| Break | 10 min |
-| **Lab 8**: Sub-Agents & Complex Workflows | 30 min |
-| **Lab 9**: Headless & Automation Mode | 25 min |
-| **Lab 10**: Capstone — Design a Team Claude Code Configuration | 45 min |
-| Wrap-Up & Next Steps | 10 min |
+| Day 2 Kickoff & Recap | 15 min |
+| **Lab 9**: Permissions, Safety & Hooks | 25 min |
+| **Lab 10**: MCP Servers | 35 min |
+| **Lab 11**: Skills | 30 min |
+| **Lab 12**: Sub-Agents & Complex Workflows | 35 min |
+| **Lab 13**: Headless & Automation Mode | 25 min |
+| **Lab 14**: Output Styles & Custom Personas | 20 min |
+| **Lab 15**: Capstone — Design a Team Claude Code Configuration | 65 min |
+| Day 2 Wrap-Up & Next Steps | 15 min |
 
 ---
 
@@ -131,28 +137,33 @@ By the end of Part 2, participants will be able to:
 
 ### Lab Guides
 
-#### Part 1: Fundamentals (Labs 1–5)
+#### Day 1: Fundamentals (Labs 1–8)
 
 - **[Lab 1: First Contact](docs/labs/lab-01-first-contact.md)** (20 min) — Install, authenticate, first run, slash commands, permission prompts
 - **[Lab 2: CLAUDE.md & Project Memory](docs/labs/lab-02-claude-md-memory.md)** (30 min) — Project/subdir/user hierarchy, encoding team standards
-- **[Lab 3: TDD with Claude Code](docs/labs/lab-03-tdd-with-claude-code.md)** (45 min) — Full Red-Green-Refactor cycle, multi-file writes, diff review
-- **[Lab 4: Multi-File Refactoring](docs/labs/lab-04-refactoring-and-context.md)** (45 min) — Legacy code, context management, `/compact`
-- **[Lab 5: Git Workflow & PR Preparation](docs/labs/lab-05-git-workflow.md)** (15 min) — Conventional commits, `/review`, PR descriptions
+- **[Lab 3: TDD with Claude Code](docs/labs/lab-03-tdd-with-claude-code.md)** (60 min) — Full Red-Green-Refactor cycle, multi-file writes, diff review
+- **[Lab 4: Plan Mode & Extended Thinking](docs/labs/lab-04-plan-mode-and-extended-thinking.md)** (20 min) — Read-only planning, `think`/`ultrathink` triggers
+- **[Lab 5: Multi-File Refactoring](docs/labs/lab-05-refactoring-and-context.md)** (60 min) — Legacy code, context management, `/compact`
+- **[Lab 6: Checkpoints & Rewind](docs/labs/lab-06-checkpoints-and-rewind.md)** (20 min) — Session-level undo, separate from git
+- **[Lab 7: Git Workflow & PR Preparation](docs/labs/lab-07-git-workflow.md)** (15 min) — Conventional commits, `/review`, PR descriptions
+- **[Lab 8: Security Review Workflows](docs/labs/lab-08-security-review-workflows.md)** (30 min) — `/security-review`, a project-specific security command
 
-#### Part 2: Advanced Claude Code (Labs 6–10)
+#### Day 2: Advanced Claude Code (Labs 9–15)
 
-- **[Lab 6: Permissions, Safety & Hooks](docs/labs/lab-06-permissions-and-hooks.md)** (25 min) — Permissions model, `.claude/settings.json`, hooks
-- **[Lab 7: MCP Servers](docs/labs/lab-07-mcp-servers.md)** (30 min) — Configure and use MCP servers with Claude Code
-- **[Lab 8: Sub-Agents & Parallel Workflows](docs/labs/lab-08-sub-agents.md)** (30 min) — Complex multi-step tasks, agent scoping
-- **[Lab 9: Headless & Automation Mode](docs/labs/lab-09-headless-automation.md)** (25 min) — CLI flags, piping, CI integration
-- **[Lab 10: Capstone — Team Configuration](docs/labs/lab-10-capstone-team-config.md)** (45 min) — End-to-end CLAUDE.md + hooks + MCP design
+- **[Lab 9: Permissions, Safety & Hooks](docs/labs/lab-09-permissions-and-hooks.md)** (25 min) — Permissions model, `.claude/settings.json`, hooks
+- **[Lab 10: MCP Servers](docs/labs/lab-10-mcp-servers.md)** (35 min) — Configure and use MCP servers with Claude Code
+- **[Lab 11: Skills](docs/labs/lab-11-skills.md)** (30 min) — SKILL.md, progressive disclosure, building the repo's first skill
+- **[Lab 12: Sub-Agents & Parallel Workflows](docs/labs/lab-12-sub-agents.md)** (35 min) — Complex multi-step tasks, agent scoping
+- **[Lab 13: Headless & Automation Mode](docs/labs/lab-13-headless-automation.md)** (25 min) — CLI flags, piping, CI integration
+- **[Lab 14: Output Styles & Custom Personas](docs/labs/lab-14-output-styles-and-personas.md)** (20 min) — Persistent tone/behavior customization
+- **[Lab 15: Capstone — Team Configuration](docs/labs/lab-15-capstone-team-config.md)** (65 min) — End-to-end CLAUDE.md + hooks + MCP + skills design
 
 ### Presentation Decks
 
 Presentations use [Marp](https://marp.app/) format. View in VS Code with the [Marp extension](https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode).
 
-- **[Part 1 Modules](docs/presentations/modules/part1/)** — 7 standalone modules
-- **[Part 2 Modules](docs/presentations/modules/part2/)** — 5 standalone modules
+- **[Day 1 Modules](docs/presentations/modules/part1/)** — 10 standalone modules
+- **[Day 2 Modules](docs/presentations/modules/part2/)** — 7 standalone modules
 - **[Presentations Catalog](docs/presentations/index.md)** — delivery patterns and timing
 
 ### Participant Guides
@@ -194,7 +205,7 @@ Presentations use [Marp](https://marp.app/) format. View in VS Code with the [Ma
 
 1. **Fork this repository** on GitHub (click **Fork** in the top-right corner).
 
-   > Forking is required — not optional. Labs 7 (GitHub MCP), 9 (headless/CI), and the capstone all work against your own remote. You'll push commits, trigger workflows, and query your fork's issues during the workshop.
+   > Forking is required — not optional. Labs 10 (GitHub MCP), 13 (headless/CI), and 15 (the capstone) all work against your own remote. You'll push commits, trigger workflows, and query your fork's issues during the workshop.
 
 2. **Clone your fork**:
 
@@ -233,21 +244,6 @@ Presentations use [Marp](https://marp.app/) format. View in VS Code with the [Ma
    ```
 
 7. **Ready!** Follow your facilitator or start with [Lab 1](docs/labs/lab-01-first-contact.md).
-
----
-
-## Key Differences from GitHub Copilot
-
-> **Skip this section** if you're new to AI coding tools.
-
-| | GitHub Copilot | Claude Code |
-|---|---|---|
-| **Model** | Completion + chat | Agentic (reads, writes, runs commands) |
-| **Context** | `#file`, `@workspace`, selections | `CLAUDE.md`, full repo read |
-| **Customization** | `.github/instructions/`, agents | `CLAUDE.md`, hooks, MCP |
-| **Interaction** | IDE-first | Terminal-first (IDE integration available) |
-| **Multi-file** | Edits mode | Native — plans and executes |
-| **Safety** | Suggestions only | Permissions model + diff review |
 
 ---
 

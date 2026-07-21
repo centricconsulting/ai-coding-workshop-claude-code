@@ -13,7 +13,7 @@ public static class LoggingExtensions
         // Logging is already configured by default in WebApplication.CreateBuilder()
         // This extension is here for consistency and future enhancements
         
-        // TODO: Lab 3 - Participants can use Copilot to enhance logging configuration
+        // TODO: Lab 3 - Participants can use Claude Code to enhance logging configuration
         // Example: Add custom log levels, structured logging, or external providers
         
         return services;

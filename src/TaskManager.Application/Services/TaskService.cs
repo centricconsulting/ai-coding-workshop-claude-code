@@ -27,7 +27,7 @@ public sealed class TaskService
 
     /// <summary>
     /// Add a new task to the system
-    /// TODO: This method will be implemented during Lab 2 with Copilot assistance
+    /// TODO: This method will be implemented during Lab 2 with Claude Code assistance
     /// 
     /// Note: Includes OpenTelemetry activity for observability demonstration
     /// </summary>

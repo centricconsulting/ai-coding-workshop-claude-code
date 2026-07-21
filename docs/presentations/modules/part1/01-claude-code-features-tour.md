@@ -125,7 +125,7 @@ claude --print "List all TODO comments in src/"
 No session opens. Claude Code reads, processes, prints to stdout, exits.
 
 **Useful for:** scripts, CI pipelines, pre-commit hooks, nightly reports.
-*(Covered in Part 2, Lab 9)*
+*(Covered in Day 2, Lab 13)*
 
 ---
 
@@ -194,14 +194,17 @@ You can work in either stack for all labs. The concepts are identical.
 
 ---
 
-# What's Coming in Part 1
+# What's Coming in Day 1
 
 | Module | Key Concept |
 |---|---|
 | **02 CLAUDE.md** | Project memory — teach Claude Code once |
 | **03 TDD** | Tests as a feedback loop |
-| **04 Refactoring** | Large tasks need phases and checkpoints |
-| **05 Git Workflow** | `/review` as a quality gate |
+| **04 Plan Mode** | Plan large tasks before executing them |
+| **05 Refactoring** | Large tasks need phases and checkpoints |
+| **06 Checkpoints & Rewind** | Recover from a bad edit without touching git |
+| **07 Git Workflow** | `/review` as a quality gate |
+| **08 Security Review** | A deeper gate before every PR |
 
 After Lab 1, you'll have hands-on time with all of these.
 
@@ -224,4 +227,4 @@ Watch Claude Code read files before it answers.
 ---
 
 <!-- Navigation -->
-[← 00 Kickoff](00-kickoff-and-setup.md) | **Part 1 Module 01** | [Next: CLAUDE.md & Memory →](02-claude-md-memory.md)
+[← 00 Kickoff](00-kickoff-and-setup.md) | **Day 1 Module 01** | [Next: CLAUDE.md & Memory →](02-claude-md-memory.md)

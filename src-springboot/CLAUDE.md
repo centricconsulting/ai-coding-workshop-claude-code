@@ -54,7 +54,7 @@ mvn clean package                       # Build JAR
 - `src/main/java/.../application/tasks/queries/` — query handlers
 - `src/main/java/.../infrastructure/repositories/` — in-memory implementations
 - `src/main/java/.../web/TaskController.java` — REST endpoints
-- `src/main/java/.../infrastructure/legacy/LegacyTaskProcessor.java` — intentionally messy, used for Lab 4
+- `src/main/java/.../infrastructure/legacy/LegacyTaskProcessor.java` — intentionally messy, used for Lab 5
 
 ## What NOT to Do
 

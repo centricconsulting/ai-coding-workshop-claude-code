@@ -44,7 +44,7 @@ public static class OpenTelemetryExtensions
                     .AddConsoleExporter();       // Export traces to console for learning
             });
         
-        // TODO: Lab 3 - Participants can use Copilot to add additional instrumentation
+        // TODO: Lab 3 - Participants can use Claude Code to add additional instrumentation
         // Example: .AddHttpClientInstrumentation(), .AddSqlClientInstrumentation()
         
         return services;

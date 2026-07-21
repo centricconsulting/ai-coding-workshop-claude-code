@@ -5,7 +5,7 @@ paginate: true
 backgroundColor: #fff
 ---
 
-# Module 08: Sub-Agents & Parallel Workflows
+# Module 12: Sub-Agents & Parallel Workflows
 
 ## Structuring Tasks to Unlock Parallelism
 
@@ -13,9 +13,9 @@ backgroundColor: #fff
 
 # Where We Are
 
-You've extended Claude Code with permissions, hooks, and MCP.
+You've extended Claude Code with permissions, hooks, MCP, and skills.
 
-**Lab 8 is about how Claude Code itself works internally** —
+**Lab 12 is about how Claude Code itself works internally** —
 and how your prompt structure determines whether it works fast or slow.
 
 ---
@@ -172,7 +172,7 @@ The patterns aren't mutually exclusive — a phase 1 session might internally us
 
 ---
 
-# Lab 8 Preview
+# Lab 12 Preview
 
 ## What You'll Do
 
@@ -189,9 +189,9 @@ You control *whether your task structure allows it.*
 
 ---
 
-# Lab 8: Sub-Agents & Parallel Workflows
+# Lab 12: Sub-Agents & Parallel Workflows
 
-👉 Open [docs/labs/lab-08-sub-agents.md](../../../labs/lab-08-sub-agents.md)
+👉 Open [docs/labs/lab-12-sub-agents.md](../../../labs/lab-12-sub-agents.md)
 
 **Goal for the next 30 minutes:**
 - Observe parallel sub-agent execution in at least one task
@@ -204,4 +204,4 @@ It won't show up in the text response.
 ---
 
 <!-- Navigation -->
-[← 01 MCP Servers](01-mcp-servers.md) | **Part 2 Module 02** | [Next: 03 Headless & Automation →](03-headless-automation.md)
+[← 11 Skills](02-skills.md) | **Day 2 Module 12** | [Next: 13 Headless & Automation →](04-headless-automation.md)

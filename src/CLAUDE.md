@@ -54,7 +54,7 @@ dotnet run --project src/TaskManager.Api
 - `src/TaskManager.Application/Tasks/Queries/` — CQRS query handlers
 - `src/TaskManager.Infrastructure/Repositories/` — in-memory implementations
 - `src/TaskManager.Api/Program.cs` — DI registration and endpoint mapping
-- `src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs` — intentionally messy, used for Lab 4
+- `src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs` — intentionally messy, used for Lab 5
 
 ## What NOT to Do
 

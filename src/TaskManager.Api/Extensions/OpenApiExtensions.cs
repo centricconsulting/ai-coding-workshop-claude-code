@@ -12,7 +12,7 @@ public static class OpenApiExtensions
     {
         services.AddOpenApi();
         
-        // TODO: Lab 3 - Participants can use Copilot to enhance OpenAPI configuration
+        // TODO: Lab 3 - Participants can use Claude Code to enhance OpenAPI configuration
         // Example: Add custom OpenAPI info, security definitions, etc.
         
         return services;

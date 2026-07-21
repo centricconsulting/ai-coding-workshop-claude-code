@@ -1,7 +1,7 @@
-# Lab 9: Headless & Automation Mode
+# Lab 13: Headless & Automation Mode
 
 **Duration**: 25–30 minutes
-**Part**: 2 of 2 (Advanced)
+**Day**: 2 of 2 (Advanced)
 
 **Learning Objectives**:
 - Run Claude Code non-interactively with `--print`
@@ -20,7 +20,7 @@ Everything you've done in the workshop has been interactive — a human in the l
 
 ## Prerequisites
 
-- Completed Labs 1–8
+- Completed Labs 1–12
 - Comfortable with basic shell scripting and pipes
 
 ---
@@ -240,7 +240,7 @@ Headless mode removes the human-in-the-loop — which means the safety responsib
    "deny": ["Write(*)", "Edit(*)", "Bash(*)" ]
    ```
 
-4. **Audit logs are mandatory in CI** — the hook from Lab 6 belongs in your CI `.claude/settings.json`.
+4. **Audit logs are mandatory in CI** — the hook from Lab 9 belongs in your CI `.claude/settings.json`.
 
 5. **Test headless scripts locally first** — `--print` with `--dry-run` (if available) before wiring to CI.
 
@@ -293,4 +293,4 @@ Headless Claude Code tasks should complete in under 2 minutes for most code task
 
 ---
 
-**Next**: [Lab 10: Capstone — Design a Team Claude Code Configuration](lab-10-capstone-team-config.md)
+**Next**: [Lab 14: Output Styles & Custom Personas](lab-14-output-styles-and-personas.md)

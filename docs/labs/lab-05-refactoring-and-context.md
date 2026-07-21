@@ -1,7 +1,7 @@
-# Lab 4: Multi-File Refactoring & Context Management
+# Lab 5: Multi-File Refactoring & Context Management
 
 **Duration**: 45–50 minutes
-**Part**: 1 of 2 (Fundamentals)
+**Day**: 1 of 2 (Fundamentals)
 
 **Learning Objectives**:
 - Use Claude Code to refactor legacy code across multiple files
@@ -9,7 +9,7 @@
 - Practice the diff-review workflow for large changes
 - Recognize when a task is too large for a single conversation
 
-> **Compare to Copilot**: Copilot's Edit mode handles multi-file changes with explicit file selection. Claude Code discovers which files need to change by reading the codebase — you don't have to tell it which files to open.
+> **Note**: Claude Code discovers which files need to change by reading the codebase — you don't have to tell it which files to open.
 
 ---
 
@@ -25,8 +25,9 @@ The `LegacyTaskProcessor` class exists in both stacks. It's intentionally proble
 
 ## Prerequisites
 
-- Completed Labs 1–3
+- Completed Labs 1–4
 - Personal branch with Lab 3 work committed
+- The phased refactor plan from Lab 4 (Plan Mode) — this lab executes it
 
 ---
 
@@ -243,4 +244,4 @@ Run dotnet build / mvn compile and fix any compilation errors.
 
 ---
 
-**Next**: [Lab 5: Git Workflow & PR Preparation](lab-05-git-workflow.md)
+**Next**: [Lab 6: Checkpoints & Rewind](lab-06-checkpoints-and-rewind.md)

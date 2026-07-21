@@ -1,23 +1,19 @@
 # Lab 3: TDD with Claude Code
 
 **Duration**: 45–50 minutes
-**Part**: 1 of 2 (Fundamentals)
+**Day**: 1 of 2 (Fundamentals)
 
 **Learning Objectives**:
 - Apply the full Red-Green-Refactor TDD cycle using Claude Code
-- Understand how Claude Code writes files vs. how Copilot suggests completions
+- Understand how Claude Code writes files directly, rather than suggesting completions to accept one at a time
 - Review multi-file diffs before accepting changes
 - Run tests from within Claude Code and iterate on failures
-
-> **Compare to Copilot**: In Lab 1 of the Copilot workshop, you drove TDD step-by-step with explicit prompts per step. With Claude Code, you describe the desired behavior and let it plan the TDD cycle — but you still review and control each phase.
 
 ---
 
 ## Overview
 
-You'll build a `NotificationService` — the same service from the Copilot workshop Lab 1. This lets participants who have done that workshop make a direct comparison of the workflows.
-
-The service sends task notifications via email and SMS.
+You'll build a `NotificationService` that sends task notifications via email and SMS.
 
 ### Choose Your Stack
 
@@ -214,8 +210,8 @@ Summarize the changes you made in this session as a conventional commit message.
 
 ## Reflection: TDD Workflow Comparison
 
-### Copilot TDD Workflow (Lab 1)
-1. Open file → Copilot Chat → `/explain` → type interface manually
+### Completion-Based TDD Workflow
+1. Open file → chat with the assistant → `/explain` → type interface manually
 2. Open test file → prompt for each test method → accept suggestions
 3. Open impl file → prompt for implementation → accept suggestions
 4. Run tests yourself → fix manually or re-prompt
@@ -275,4 +271,4 @@ Use `/clear` to start a fresh session — CLAUDE.md context loads at startup. If
 
 ---
 
-**Next**: [Lab 4: Multi-File Refactoring & Context Management](lab-04-refactoring-and-context.md)
+**Next**: [Lab 4: Plan Mode & Extended Thinking](lab-04-plan-mode-and-extended-thinking.md)

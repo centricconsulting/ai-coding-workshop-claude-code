@@ -1,7 +1,7 @@
 # Lab 1: First Contact — Claude Code CLI & the Agent Model
 
 **Duration**: 20–25 minutes
-**Part**: 1 of 2 (Fundamentals)
+**Day**: 1 of 2 (Fundamentals)
 
 **Learning Objectives**:
 - Install and authenticate Claude Code
@@ -9,7 +9,7 @@
 - Navigate the terminal UI: slash commands, permission prompts, session management
 - Ask Claude Code to explore a codebase you've never described
 
-> **Compare to Copilot**: In the Copilot workshop, Lab 1 started with writing code immediately. Here, Lab 1 starts with *understanding the tool* — because Claude Code's agentic nature means you need to understand what it can do (and what it will ask permission for) before you hand it a task.
+> **Note**: This lab starts with *understanding the tool*, not writing code — because Claude Code's agentic nature means you need to understand what it can do (and what it will ask permission for) before you hand it a task.
 
 ---
 
@@ -20,7 +20,7 @@
 - Repository **forked** on GitHub and cloned from your fork
 - Personal branch created: `git checkout -b workshop/your-name`
 
-> **Why fork?** Later labs (GitHub MCP in Lab 7, CI workflows in Lab 9) require a remote you can push to and query. The fork is the foundation — set it up now.
+> **Why fork?** Later labs (GitHub MCP in Lab 10, CI workflows in Lab 13) require a remote you can push to and query. The fork is the foundation — set it up now.
 
 ---
 
@@ -149,7 +149,7 @@ When Claude Code takes an action, you see:
 ● Writing file: src/TaskManager.Application/Services/NotificationService.cs
 ```
 
-These are **tool calls** — real actions Claude Code takes on your filesystem or in your terminal. You control which of these are allowed (Part 2, Lab 6).
+These are **tool calls** — real actions Claude Code takes on your filesystem or in your terminal. You control which of these are allowed (Day 2, Lab 9).
 
 ---
 
@@ -179,7 +179,7 @@ Claude Code:
 3. Ran `dotnet test`
 4. Parsed the output and gave you a human-readable summary
 
-This is fundamentally different from Copilot — Claude Code **executed code on your machine** and reasoned about the results.
+This is fundamentally different from a completion-based tool — Claude Code **executed code on your machine** and reasoned about the results.
 
 ---
 
@@ -187,7 +187,7 @@ This is fundamentally different from Copilot — Claude Code **executed code on 
 
 Before moving to Lab 2, take a moment to understand the mental model shift:
 
-| | Completion-based (Copilot) | Agentic (Claude Code) |
+| | Completion-based | Agentic (Claude Code) |
 |---|---|---|
 | **What it sees** | Your current file + nearby context | Any file it reads; your whole repo |
 | **What it can do** | Suggest code at cursor | Read files, write files, run commands |
@@ -232,7 +232,7 @@ Notice that Claude Code will read files from both directories before responding.
 
 **"Permission denied" on dotnet/mvn**
 - Claude Code's permissions model prevents running commands you haven't approved
-- Type `a` to always allow the command, or add it to `.claude/settings.json` (Lab 6)
+- Type `a` to always allow the command, or add it to `.claude/settings.json` (Lab 9)
 
 **No tool calls visible**
 - Tool calls appear inline; you may need to scroll up
