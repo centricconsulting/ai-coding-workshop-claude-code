@@ -152,8 +152,14 @@ By the end of Part 2, participants will be able to:
 Presentations use [Marp](https://marp.app/) format. View in VS Code with the [Marp extension](https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode).
 
 - **[Part 1 Modules](docs/presentations/modules/part1/)** — 7 standalone modules
-- **[Part 2 Modules](docs/presentations/modules/part2/)** — 8 standalone modules
+- **[Part 2 Modules](docs/presentations/modules/part2/)** — 5 standalone modules
 - **[Presentations Catalog](docs/presentations/index.md)** — delivery patterns and timing
+
+### Participant Guides
+
+- **[Local Setup Guide](docs/LOCAL_SETUP.md)** — For participants who cannot use devcontainers
+- **[Pre-Workshop Checklist](docs/PRE_WORKSHOP_CHECKLIST.md)** — Everything to complete before the session
+- **[Agent Governance Guide](docs/guides/agent-governance.md)** — Managing Claude Code config at enterprise/team scale
 
 ### Reference Configuration
 

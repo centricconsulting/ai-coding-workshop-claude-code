@@ -24,14 +24,11 @@ Presentations use [Marp](https://marp.app/) format. View with the [Marp VS Code 
 
 | Module | File | Duration | Labs Covered |
 |---|---|---|---|
-| 00 Welcome & Part 1 Recap | [00-welcome-recap.md](modules/part2/00-welcome-recap.md) | 10 min | — |
-| 01 Permissions & Safety | [01-permissions-safety.md](modules/part2/01-permissions-safety.md) | 15 min | Lab 6 |
-| 02 Hooks for Automation | [02-hooks-automation.md](modules/part2/02-hooks-automation.md) | 10 min | Lab 6 |
-| 03 MCP Servers | [03-mcp-servers.md](modules/part2/03-mcp-servers.md) | 15 min | Lab 7 |
-| 04 Sub-Agents & Parallelism | [04-sub-agents.md](modules/part2/04-sub-agents.md) | 15 min | Lab 8 |
-| 05 Headless & Automation | [05-headless-automation.md](modules/part2/05-headless-automation.md) | 10 min | Lab 9 |
-| 06 Capstone & Governance | [06-capstone-governance.md](modules/part2/06-capstone-governance.md) | 10 min | Lab 10 |
-| 07 Wrap-Up & Next Steps | [07-wrapup-next-steps.md](modules/part2/07-wrapup-next-steps.md) | 10 min | — |
+| 00 Permissions, Safety & Hooks | [00-permissions-and-hooks.md](modules/part2/00-permissions-and-hooks.md) | 25 min | Lab 6 |
+| 01 MCP Servers | [01-mcp-servers.md](modules/part2/01-mcp-servers.md) | 20 min | Lab 7 |
+| 02 Sub-Agents & Parallel Workflows | [02-sub-agents.md](modules/part2/02-sub-agents.md) | 20 min | Lab 8 |
+| 03 Headless & Automation | [03-headless-automation.md](modules/part2/03-headless-automation.md) | 15 min | Lab 9 |
+| 04 Capstone — Team Configuration | [04-capstone-team-config.md](modules/part2/04-capstone-team-config.md) | 15 min | Lab 10 |
 
 **Part 2 Total**: ~3 hours including lab time
 

@@ -64,18 +64,17 @@ See [index.md](index.md) for the full list of modules, durations, and delivery p
 | [03-tdd-with-claude-code.md](modules/part1/03-tdd-with-claude-code.md) | TDD with Claude Code | 20 min |
 | [04-refactoring-and-context.md](modules/part1/04-refactoring-and-context.md) | Refactoring & Context Management | 15 min |
 | [05-git-workflow.md](modules/part1/05-git-workflow.md) | Git Workflow & PR Preparation | 10 min |
+| [06-wrapup-part1.md](modules/part1/06-wrapup-part1.md) | Wrap-Up & Part 2 Preview | 10 min |
 
-### Part 2: Advanced (coming soon)
+### Part 2: Advanced
 
 | File | Title | Duration |
 |---|---|---|
-| `00-welcome-recap.md` | Welcome & Part 1 Recap | 10 min |
-| `01-permissions-safety.md` | Permissions & Safety | 15 min |
-| `02-hooks-automation.md` | Hooks for Automation | 10 min |
-| `03-mcp-servers.md` | MCP Servers | 15 min |
-| `04-sub-agents.md` | Sub-Agents & Parallelism | 15 min |
-| `05-headless-automation.md` | Headless & Automation | 10 min |
-| `06-capstone-governance.md` | Capstone & Governance | 10 min |
+| [00-permissions-and-hooks.md](modules/part2/00-permissions-and-hooks.md) | Permissions, Safety & Hooks | 25 min |
+| [01-mcp-servers.md](modules/part2/01-mcp-servers.md) | MCP Servers | 20 min |
+| [02-sub-agents.md](modules/part2/02-sub-agents.md) | Sub-Agents & Parallel Workflows | 20 min |
+| [03-headless-automation.md](modules/part2/03-headless-automation.md) | Headless & Automation | 15 min |
+| [04-capstone-team-config.md](modules/part2/04-capstone-team-config.md) | Capstone — Team Configuration | 15 min |
 
 ---
 
