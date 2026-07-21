@@ -101,35 +101,39 @@ By the end of Day 2, participants will be able to:
 
 ## Schedule
 
+Each numbered module below is a slide deck *and* its matching hands-on lab, delivered back-to-back as one time block — the duration shown is the combined total, not just the slides. See the [Presentations Catalog](docs/presentations/index.md) if you want the slide-only durations broken out separately.
+
 ### Day 1: Fundamentals (6 hours)
 
-| Section | Duration |
+| Module | Duration |
 |---|---|
-| Day 1 Kickoff & Setup | 15 min |
+| Kickoff & Setup | 15 min |
 | Claude Code Features Tour | 15 min |
-| **Lab 1**: First Contact — CLI basics & the agent model | 20 min |
-| **Lab 2**: CLAUDE.md & Project Memory | 30 min |
-| **Lab 3**: TDD with Claude Code | 60 min |
-| **Lab 4**: Plan Mode & Extended Thinking | 20 min |
-| **Lab 5**: Multi-File Refactoring & Context Management | 60 min |
-| **Lab 6**: Checkpoints & Rewind | 20 min |
-| **Lab 7**: Git Workflow & PR Preparation | 15 min |
-| **Lab 8**: Security Review Workflows | 30 min |
+| Lab 1: First Contact — CLI basics & the agent model *(no dedicated module; follows the intro above)* | 20 min |
+| **Module 2**: CLAUDE.md & Project Memory *(+ Lab 2)* | 30 min |
+| **Module 3**: TDD with Claude Code *(+ Lab 3)* | 60 min |
+| **Module 4**: Plan Mode & Extended Thinking *(+ Lab 4)* | 20 min |
+| **Module 5**: Multi-File Refactoring & Context Management *(+ Lab 5)* | 60 min |
+| **Module 6**: Checkpoints & Rewind *(+ Lab 6)* | 20 min |
+| **Module 7**: Git Workflow & PR Preparation *(+ Lab 7)* | 15 min |
+| **Module 8**: Security Review Workflows *(+ Lab 8)* | 30 min |
 | Day 1 Wrap-Up & Discussion | 20 min |
 
 ### Day 2: Advanced Claude Code (6 hours)
 
-| Section | Duration |
+| Module | Duration |
 |---|---|
 | Day 2 Kickoff & Recap | 15 min |
-| **Lab 9**: Permissions, Safety & Hooks | 25 min |
-| **Lab 10**: MCP Servers | 35 min |
-| **Lab 11**: Skills | 30 min |
-| **Lab 12**: Sub-Agents & Complex Workflows | 35 min |
-| **Lab 13**: Headless & Automation Mode | 25 min |
-| **Lab 14**: Output Styles & Custom Personas | 20 min |
-| **Lab 15**: Capstone — Design a Team Claude Code Configuration | 65 min |
+| **Module 9**: Permissions, Safety & Hooks *(+ Lab 9)* | 25 min |
+| **Module 10**: MCP Servers *(+ Lab 10)* | 35 min |
+| **Module 11**: Skills *(+ Lab 11)* | 30 min |
+| **Module 12**: Sub-Agents & Parallel Workflows *(+ Lab 12)* | 35 min |
+| **Module 13**: Headless & Automation Mode *(+ Lab 13)* | 25 min |
+| **Module 14**: Output Styles & Custom Personas *(+ Lab 14)* | 20 min |
+| **Module 15**: Capstone — Team Configuration *(+ Lab 15)* | 65 min |
 | Day 2 Wrap-Up & Next Steps | 15 min |
+
+Module numbers here match each module's lab number exactly (Module 9 pairs with Lab 9, Module 15 with Lab 15, and so on) — the only exception is Lab 1, which has no dedicated module of its own and follows directly after the Day 1 intro.
 
 ---
 
