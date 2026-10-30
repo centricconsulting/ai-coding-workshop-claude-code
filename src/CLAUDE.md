@@ -20,7 +20,7 @@ Dependencies flow **inward only**: Api → Application → Domain. Infrastructur
 
 ## C# Conventions
 
-- File-scoped namespaces: `namespace TaskManager.Domain.Entities;`
+- File-scoped namespaces: `namespace TaskManager.Domain.Tasks;`
 - Sealed classes by default unless designed for inheritance
 - Guard clauses (no `else` branches): throw or return early
 - `async`/`await` throughout — no `.Result` or `.Wait()`
@@ -49,11 +49,11 @@ dotnet run --project src/TaskManager.Api
 
 ## Key Files
 
-- `src/TaskManager.Domain/Entities/Task.cs` — core aggregate
-- `src/TaskManager.Application/Tasks/Commands/` — CQRS command handlers
-- `src/TaskManager.Application/Tasks/Queries/` — CQRS query handlers
+- `src/TaskManager.Domain/Tasks/Task.cs` — core aggregate (`TaskId`, `TaskStatus` alongside)
+- `src/TaskManager.Domain/Repositories/ITaskRepository.cs` — repository interface
+- `src/TaskManager.Application/Services/TaskService.cs` — application service (commands/handlers are added during labs)
 - `src/TaskManager.Infrastructure/Repositories/` — in-memory implementations
-- `src/TaskManager.Api/Program.cs` — DI registration and endpoint mapping
+- `src/TaskManager.Api/Program.cs` + `Extensions/EndpointExtensions.cs` — DI registration and endpoint mapping
 - `src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs` — intentionally messy, used for Lab 5
 
 ## What NOT to Do
@@ -61,4 +61,4 @@ dotnet run --project src/TaskManager.Api
 - Do not add `[ApiController]` or `ControllerBase` — this project uses Minimal APIs
 - Do not use `var` for non-obvious types
 - Do not use `null!` suppress — fix the nullability properly
-- Do not add `using` statements for namespaces already in global usings (`GlobalUsings.cs`)
+- Do not add `using` statements for namespaces already covered by implicit usings (`<ImplicitUsings>enable</ImplicitUsings>`)
