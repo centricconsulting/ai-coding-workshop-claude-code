@@ -8,15 +8,20 @@
         "ghcr.io/devcontainers/features/github-cli:1": {
             "version": "latest",
             "installDirectlyFromGitHubRelease": "false"
+        },
+        // Node.js is only needed for npx-based MCP servers in Lab 10 (Claude Code uses the native installer)
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
         }
     },
 
-    "postCreateCommand": ". ${NVM_DIR:-/usr/local/share/nvm}/nvm.sh && nvm install 20 && npm install -g @anthropic-ai/claude-code && dotnet build TaskManager.sln && dotnet dev-certs https --trust",
+    // Claude Code native installer -> ~/.local/bin/claude (auto-updates; no Node.js needed)
+    "postCreateCommand": "curl -fsSL https://claude.ai/install.sh | bash && dotnet build TaskManager.sln && dotnet dev-certs https --trust",
 
     "customizations": {
         "vscode": {
             "extensions": [
-                "anthropics.claude-code",
+                "anthropic.claude-code",
                 "ms-dotnettools.csdevkit",
                 "humao.rest-client",
                 "bierner.markdown-mermaid",
@@ -26,8 +31,14 @@
         }
     },
 
+    // Put the native installer's bin dir on PATH and forward Claude Code credentials from the host.
+    // Set ONE of these on the host before opening the container (or run `claude` and use /login inside it):
+    //   ANTHROPIC_API_KEY       - Claude Console API key
+    //   CLAUDE_CODE_OAUTH_TOKEN - Claude subscription token from `claude setup-token`
     "remoteEnv": {
-        "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
+        "PATH": "/home/vscode/.local/bin:${containerEnv:PATH}",
+        "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
+        "CLAUDE_CODE_OAUTH_TOKEN": "${localEnv:CLAUDE_CODE_OAUTH_TOKEN}"
     },
 
     "forwardPorts": [5000, 5001],
