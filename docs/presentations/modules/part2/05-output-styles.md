@@ -54,7 +54,23 @@ Back to default:
 /output-style default
 ```
 
-Like CLAUDE.md, Skills, and settings.json — versioned with the repo, shared with the team by default.
+Or `/config` → **Output style**. Choice saved as `outputStyle` in `.claude/settings.local.json`; applies from your next message.
+
+Also: `~/.claude/output-styles/` (personal), managed policy, or a plugin's `output-styles/`.
+
+---
+
+# Built-In Styles
+
+| Style | What changes |
+|---|---|
+| **Default** | Standard software-engineering behavior |
+| **Proactive** | Starts work right away; assumes instead of asking about routine decisions |
+| **Concise** | Result first — no preamble, narration, or recap |
+| **Explanatory** | Adds `★ Insight` blocks explaining the *why* |
+| **Learning** | Insights + leaves `TODO(human)` pieces for you to write |
+
+Try a built-in before writing your own — it may already be what you need.
 
 ---
 
@@ -77,6 +93,7 @@ Good fit when the *same tone* should apply across many prompts and many sessions
 ---
 name: code-reviewer
 description: Terse, blunt senior-reviewer persona for code review passes.
+keep-coding-instructions: true
 ---
 
 You are a blunt senior engineer doing a code review. Rules:
@@ -87,6 +104,9 @@ You are a blunt senior engineer doing a code review. Rules:
 - No hedging language ("might", "could potentially")
 - If the code is fine, say so in one sentence and stop
 ```
+
+`keep-coding-instructions: true` keeps Claude Code's engineering instructions (default `false` replaces them).
+Restart Claude Code after creating a style file — styles load at startup.
 
 Concrete rules beat vague ones — "no sentence over 15 words" changes behavior; "try to be concise" often doesn't.
 
@@ -100,7 +120,8 @@ Output styles raise a governance question Skills don't: this is a *default perso
 |---|---|
 | Should the team share one default style? | A CI-log style: probably yes — consistency matters for scripts |
 | Should everyone use the same review persona? | Maybe not — reviewers have different styles for good reason |
-| Where does a shared style live? | `.claude/output-styles/` (project) vs. `~/.claude/` (personal) |
+| Where does a shared style live? | `.claude/output-styles/` (project) vs. `~/.claude/output-styles/` (personal) vs. a team plugin |
+| Make it available, or activate it? | Committing the file = available; committing `outputStyle` in `.claude/settings.json` = everyone's default |
 | Who decides the default? | Same ownership question as CLAUDE.md and settings.json |
 
 ---
@@ -115,10 +136,10 @@ By the end of Module 14, you have the **complete customization toolkit**:
 | Hooks | Side effects on tool calls |
 | MCP | What Claude Code can reach |
 | Skills | Procedures on standby |
-| Sub-Agents | How work gets parallelized/isolated |
+| Subagents | How work gets parallelized/isolated |
 | Output Styles | How Claude Code communicates |
 
-**Lab 15 (Capstone): design all six, together, as one team configuration.**
+**Lab 15 (Capstone): design all six together as one team configuration — and package it as a plugin.**
 
 ---
 
@@ -126,7 +147,7 @@ By the end of Module 14, you have the **complete customization toolkit**:
 
 ## What You'll Do
 
-1. Run a baseline prompt under default behavior
+1. Run a baseline prompt under default behavior; try a built-in style
 2. Create `.claude/output-styles/code-reviewer.md` — a terse, blunt persona
 3. Activate it with `/output-style code-reviewer`
 4. Re-run the same prompt and compare responses side by side

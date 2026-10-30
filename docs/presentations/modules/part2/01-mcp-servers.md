@@ -58,28 +58,28 @@ Any tool that implements the MCP spec works with Claude Code.
 
 # What MCP Servers Provide
 
-MCP servers expose two types of capabilities:
+MCP servers expose three kinds of capabilities:
 
-**Tools** — actions Claude Code can invoke:
+**Tools** — actions Claude Code can invoke (named `mcp__<server>__<tool>`):
 - `search_issues` (GitHub MCP)
-- `write_file` (Filesystem MCP)
+- `list_directory` (Filesystem MCP)
 - `run_query` (Database MCP)
 
-**Resources** — readable data Claude Code can reference:
-- Repository contents
-- Documentation pages
-- Schema definitions
+**Resources** — readable data you `@`-mention, like files:
+- `@github:issue://123`, `@docs:file://api/authentication`
 
-Claude Code lists available MCP tools at startup and uses them natively.
+**Prompts** — reusable commands that show up under `/`:
+- `/mcp__github__pr_review 456`
 
 ---
 
-# MCP vs. Hooks vs. CLAUDE.md
+# MCP vs. Hooks vs. CLAUDE.md vs. Skills
 
 | Mechanism | Best For |
 |---|---|
-| **CLAUDE.md** | Context, conventions, project knowledge |
-| **Hooks** | Side effects on tool calls (format, audit, test) |
+| **CLAUDE.md / rules** | Context, conventions, project knowledge |
+| **Skills** | Reusable procedures Claude can follow |
+| **Hooks** | Deterministic side effects on tool calls (format, audit, block) |
 | **MCP** | New tool capabilities (query GitHub, read Slack, access DB) |
 
 Use MCP when the capability is **external** and benefits from **typed, structured interaction**.
@@ -88,50 +88,100 @@ Use a hook when you just need to run a shell command as a side effect.
 
 ---
 
-# Configuring MCP Servers
+# Adding MCP Servers: `claude mcp add`
 
-MCP servers are configured in `.mcp.json` at the project root
-(shared with the team via version control):
+```bash
+# Remote server over HTTP (recommended for hosted servers)
+claude mcp add --transport http <name> <url> [--header "Key: value"]
+
+# Local stdio server — everything after -- is the launch command
+claude mcp add <name> [--env KEY=value] -- <command> [args...]
+
+# Manage
+claude mcp list | get <name> | remove <name>
+```
+
+Inside a session: **`/mcp`** shows status (✔/✘), tools, OAuth sign-in, and reconnect.
+
+SSE transport is **deprecated** — use `--transport http`.
+
+---
+
+# Scopes: Who Gets the Server?
+
+| Scope | Flag | Stored in | Shared? |
+|---|---|---|---|
+| **Local** (default) | `--scope local` | `~/.claude.json` (per project) | No |
+| **Project** | `--scope project` | `.mcp.json` at repo root | **Yes** (git) |
+| **User** | `--scope user` | `~/.claude.json` | No — all your projects |
+
+```bash
+claude mcp add --scope project filesystem \
+  -- npx -y @modelcontextprotocol/server-filesystem .
+```
+
+Project servers from `.mcp.json` require a **one-time approval** per developer.
+
+---
+
+# `.mcp.json` — Team-Shared Config
 
 ```json
 {
   "mcpServers": {
     "filesystem": {
+      "type": "stdio",
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/path/to/your/project"
-      ]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem",
+               "${CLAUDE_PROJECT_DIR:-.}"]
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer ${GITHUB_MCP_PAT}" }
     }
   }
 }
 ```
 
-Restart Claude Code after changing `.mcp.json` — servers start at launch.
+`${VAR}` / `${VAR:-default}` expansion keeps secrets and machine paths **out of git**.
 
 ---
 
 # The GitHub MCP Server
 
-Gives Claude Code direct access to GitHub repos, issues, and PRs:
+⚠️ `@modelcontextprotocol/server-github` (npm) is **archived**.
+Use GitHub's official server — hosted, or via Docker:
 
-```json
-{
-  "mcpServers": {
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
-      }
-    }
-  }
-}
+```bash
+# Hosted (recommended) — fine-grained PAT in a header
+claude mcp add --transport http github https://api.githubcopilot.com/mcp/ \
+  --header "Authorization: Bearer $GITHUB_MCP_PAT"
+
+# Or local via Docker (stdio)
+claude mcp add github --env GITHUB_PERSONAL_ACCESS_TOKEN=$GITHUB_MCP_PAT \
+  -- docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN ghcr.io/github/github-mcp-server
 ```
 
 Now Claude Code can search issues, read PRs, and list repositories —
 without you copying and pasting anything from the browser.
+
+---
+
+# Tool Search: Many Servers, Small Context
+
+- MCP tool definitions are **deferred by default** — only names load at startup
+- Claude looks up full schemas on demand when it needs a tool
+- Adding more servers has minimal context cost — check with `/context`
+
+**Permissions still apply:**
+
+```json
+"permissions": {
+  "allow": ["mcp__github__search_issues"],
+  "deny":  ["mcp__github__merge_pull_request"]
+}
+```
 
 ---
 
@@ -166,10 +216,11 @@ Claude Code does the GitHub query and the code analysis in one task.
 
 ```typescript
 tools/list → { tools: [{ name, description, inputSchema }] }
-tools/call → { toolName, arguments } → { content: [...] }
+tools/call → { name, arguments } → { content: [...] }
 ```
 
-TypeScript and Python SDKs available from Anthropic.
+Official SDKs (TypeScript, Python, C#, Java, …) at modelcontextprotocol.io.
+Scaffold one with the `mcp-server-dev` plugin from `claude-plugins-official`.
 
 ---
 
@@ -182,9 +233,10 @@ Before building or configuring MCP, ask:
 | Is the tool typed and reusable? | MCP server |
 | Is it a one-off shell call? | Hook or `Bash(*)` allow |
 | Is it just context/docs? | CLAUDE.md or resource |
-| Does it need auth/credentials? | MCP (handles env vars cleanly) |
-| Is the external system shared by the whole team? | `.mcp.json` (project-level) |
-| Is it personal (e.g., your Jira token)? | `~/.claude.json` (user-level) |
+| Is it a repeatable procedure, not a new capability? | Skill |
+| Does it need auth/credentials? | MCP (headers / `--env` / OAuth via `/mcp`) |
+| Is the external system shared by the whole team? | `--scope project` → `.mcp.json` |
+| Is it personal (e.g., your Jira token)? | `--scope local` or `--scope user` → `~/.claude.json` |
 
 ---
 
@@ -193,11 +245,12 @@ Before building or configuring MCP, ask:
 ## What You'll Do
 
 1. Understand how MCP differs from hooks
-2. Configure the filesystem MCP server via `.mcp.json`
-3. Restart Claude Code and list the available MCP tools
-4. Configure the GitHub MCP server (if you have a token)
+2. Add the filesystem MCP server with `claude mcp add --scope project` → `.mcp.json`
+3. Approve it and inspect tools with `/mcp`
+4. Connect GitHub's official MCP server (if you have a token)
 5. Use the GitHub MCP in a real workflow: query issues, cross-reference code
-6. Discuss: when would you build a custom MCP server?
+6. Explore `@` resources and `/mcp__…` prompts
+7. Discuss: when would you build a custom MCP server?
 
 ## The Key Insight
 

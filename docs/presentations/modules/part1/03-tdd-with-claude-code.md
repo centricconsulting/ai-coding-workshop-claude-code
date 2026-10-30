@@ -184,32 +184,84 @@ You need to think about the cases worth naming.
 ```csharp
 // FakeItEasy for mocks — fast, isolated
 var repo = A.Fake<ITaskRepository>();
-A.CallTo(() => repo.GetByIdAsync(taskId)).Returns(null);
+A.CallTo(() => repo.FindByIdAsync(taskId, A<CancellationToken>._))
+    .Returns((DomainTask?)null);
 ```
 
-**Integration tests** (stub files in `tests/`):
+**Integration tests** (.NET stubs in `tests/TaskManager.IntegrationTests/`; Spring uses MockMvc):
 ```csharp
-// WebApplicationFactory — full stack, slower
-var client = _factory.CreateClient();
-var response = await client.PostAsJsonAsync("/tasks", command);
+// Full HTTP stack — slower, catches wiring bugs
+var response = await client.PostAsJsonAsync("/tasks", request);
 ```
 
-The workshop has both. Lab 3 focuses on unit tests.
-Integration test stubs are pre-written for later use.
+Lab 3 focuses on unit tests (+ MockMvc on Spring).
+The .NET `POST/GET/PUT /tasks` integration stubs are **Lab 5** — characterization tests before refactoring.
+
+---
+
+# From Requirements to Code
+
+Part 1 hands you an interface. Real work starts with a **user story**.
+
+```
+As a user, I want to manage tasks with priorities and due dates
+so that I can focus on what's important and meet deadlines.
+```
+
+1. **`/plan`** — decompose into backlog items (no edits until you approve)
+2. **Domain** — `Priority` value object, `DueDate` on `Task` — tests first
+3. **Application** — `CreateTaskCommand` → `TaskService` — tests first
+4. **API** — `POST /tasks` (curl on .NET, MockMvc on Spring)
+5. **ADR** — record *why* in `docs/adr/0001-task-priority-model.md`
+
+---
+
+# Plan Mode for Decomposition
+
+```
+/plan Break this user story into 4–6 backlog items that each fit
+in a small PR. Acceptance criteria, layers touched, dependencies.
+The only file to write is docs/backlog/task-priorities.md.
+```
+
+- Claude reads the domain and API code — **edits are blocked**
+- You review one plan, push back ("split Item 3"), then approve
+- The backlog file becomes context for later sessions
+
+Lab 4 covers plan mode in depth — here it's just a tool.
+
+---
+
+# Architecture Decision Records
+
+Tests capture *what*. Code captures *how*. **ADRs capture why.**
+
+```markdown
+# ADR 0001: Model task priority as a value object
+Status: Accepted
+Context:    Priority needs validation, ordering, and a clear error...
+Decision:   Sealed record with FromName(); string at the API boundary
+Consequences: + Invalid states unrepresentable  − Mapping at the edges
+Alternatives: plain enum, raw string
+```
+
+Then one line in `CLAUDE.md`: *"Read relevant ADRs in docs/adr/ before changing domain models."*
 
 ---
 
 # Lab 3 Preview
 
-## What You'll Do
-
-Implement `NotificationService` using TDD:
+## Part 1 — Implement `NotificationService` using TDD:
 
 1. Ask Claude Code to write a failing test for the first case
 2. Confirm it fails (`dotnet test` or `mvn test`)
 3. Ask for the minimal implementation to make it pass
 4. Confirm it passes
 5. Repeat for each behavior
+
+## Part 2 — Requirements → Code
+
+User story → backlog (plan mode) → `Priority` + `DueDate` → create-task endpoint → ADR
 
 ## The Key Discipline
 
@@ -222,14 +274,17 @@ Does it test what you intended? Is the assertion meaningful?
 
 👉 Open [docs/labs/lab-03-tdd-with-claude-code.md](../../../labs/lab-03-tdd-with-claude-code.md)
 
-**Goal for the next 45 minutes:**
+**Goal for the next 90–100 minutes** (Part 1 ≈ 45–50, Part 2 ≈ 45):
 - `NotificationService` implemented test-first
 - All tests named with the workshop convention
 - You ran the tests yourself at least once and saw the red → green transition
+- A user story taken to a working endpoint, plus an ADR
+
+Short on time? Finish Part 1; Part 2 makes a good homework exercise.
 
 **Bilingual note:** Labs 3 and 5 have separate .NET and Spring Boot walkthroughs. Use the section for your stack.
 
 ---
 
 <!-- Navigation -->
-[← 02 CLAUDE.md](02-claude-md-memory.md) | **Day 1 Module 03** | [Next: Plan Mode & Extended Thinking →](04-plan-mode-extended-thinking.md)
+[← 02 CLAUDE.md](02-claude-md-memory.md) | **Day 1 Module 03** | [Next: Plan Mode, Permission Modes & Thinking →](04-plan-mode-extended-thinking.md)

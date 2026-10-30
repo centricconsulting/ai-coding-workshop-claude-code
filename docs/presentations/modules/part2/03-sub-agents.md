@@ -5,201 +5,152 @@ paginate: true
 backgroundColor: #fff
 ---
 
-# Module 12: Sub-Agents & Parallel Workflows
+# Module 12: Custom Subagents & Agent Workflows
 
-## Structuring Tasks to Unlock Parallelism
+## Roles, Handoffs, and Isolated Context
 
 ---
 
 # Where We Are
 
-You've extended Claude Code with permissions, hooks, MCP, and skills.
+- **Module 11:** Skills package *procedures* that run **in** your conversation
+- **Module 12:** Subagents package *roles* that run **beside** it
 
-**Lab 12 is about how Claude Code itself works internally** —
-and how your prompt structure determines whether it works fast or slow.
+A **subagent** = its own context window + system prompt + tool allowlist + model.
+Claude delegates a task → the subagent works independently → **only the final result** comes back.
 
----
-
-# What Happens Inside a Complex Task
-
-When you give Claude Code a large task, it doesn't always execute it linearly.
-It can spawn **sub-agents**: separate agent instances that run in parallel.
-
-```
-Main Agent
-    ├── Sub-Agent A: analyze .NET project
-    ├── Sub-Agent B: analyze Spring Boot project
-    └── (waits for both, then synthesizes)
-```
-
-Each sub-agent has its own context window and tool access.
-The main agent synthesizes their results.
+The file reads, searches, and dead ends stay out of your context.
 
 ---
 
-# The Agent Tool
+# Built-in Subagents
 
-Sub-agents are invoked via an internal `Agent` tool.
+| Built-in | Tools | Used for |
+|---|---|---|
+| **Explore** | Read-only | Codebase search: *quick* / *medium* / *very thorough* |
+| **Plan** | Read-only | Research while in plan mode |
+| **general-purpose** | All | Multi-step tasks needing exploration *and* changes |
 
-Each sub-agent:
-- Has its own context window (doesn't see parent conversation history)
-- Can read files, run commands, and write files
-- Reports results back to the parent
-- Runs in isolation — context is passed explicitly in the task description
-
-This is why sub-agent quality depends on **how well you scope the task**.
+Explore and Plan skip CLAUDE.md to stay fast. **Custom subagents load CLAUDE.md and rules.**
 
 ---
 
-# When Claude Code Uses Sub-Agents
+# This Repo Ships Three Custom Subagents
 
-Sub-agents appear when:
-- The task has clearly **independent** parts
-- A subtask needs significant context that would pollute the main conversation
-- Parallel execution would be meaningfully faster than sequential
+`.claude/agents/` — ported from the Copilot workshop's custom agents
 
-Claude Code decides. But your prompt structure **signals** whether parallelism is possible.
-
----
-
-# Serial vs. Parallel Task Structure
-
-**Serial (slow) — hidden dependencies implied:**
-```
-Read all the domain entities, then read all the repositories,
-then read all the handlers, then tell me if the repository
-pattern is consistently applied.
-```
-
-**Parallel (fast) — independence explicit:**
-```
-Analyze whether the repository pattern is consistently applied.
-Check the Domain, Application, and Infrastructure layers in parallel.
-```
-
-The second framing lets Claude Code read all three simultaneously.
+| Subagent | Role | Tools | Model |
+|---|---|---|---|
+| `backlog-generator` | Feature → INVEST stories → `docs/backlog/` | Read, Grep, Glob, **Write** | sonnet |
+| `architecture-reviewer` | Clean Architecture / DDD review, both stacks | Read, Grep, Glob | inherit |
+| `test-strategist` | TDD-ready test plan, both stacks | Read, Grep, Glob | sonnet |
 
 ---
 
-# What Enables Parallelism
+# Anatomy of a Subagent
 
-Two things signal to Claude Code that sub-tasks can run in parallel:
-
-1. **Explicit "simultaneously" / "in parallel" / "at the same time"** language
-2. **Independent workstreams** — tasks that don't depend on each other's output
-
-```
-Analyze three things simultaneously:
-1. The domain layer for DDD pattern compliance
-2. The application layer for CQRS pattern compliance
-3. The test projects for AAA structure compliance
-
-Give me a scorecard for each area.
+```markdown
+---
+name: architecture-reviewer
+description: Read-only Clean Architecture and DDD reviewer ...
+  Use proactively after changes that add a reference between layers ...
+tools: Read, Grep, Glob        # omit = inherit ALL tools (incl. MCP)
+model: inherit                 # sonnet | opus | haiku | <id> | inherit
+---
+You are a senior software architect ...   ← the ENTIRE system prompt
 ```
 
-Watch the tool output — you'll see three parallel read threads.
+Optional: `disallowedTools`, `permissionMode`, `maxTurns`, `skills`, `mcpServers`, `hooks`, `memory`, `background`, `isolation: worktree`, `color`
+
+Scope: `.claude/agents/` (project) · `~/.claude/agents/` (personal) · plugin `agents/`
 
 ---
 
-# The Context Window Problem
+# Three Ways to Invoke
 
-A task like this will eventually fail:
+| How | Example | Guarantee |
+|---|---|---|
+| **Automatic** | "Is it OK to call Infrastructure from TaskService?" | Claude decides, based on `description` |
+| **Natural language** | "Use the architecture-reviewer subagent to…" | Strong hint |
+| **@-mention** | `@"test-strategist (agent)" plan tests…` or `@agent-test-strategist` | That subagent runs |
 
-```
-Implement the complete notification system end-to-end:
-domain, application, infrastructure, API, and tests.
-```
+Plus: `claude --agent architecture-reviewer` runs the *whole session* as that agent.
 
-Signs of context exhaustion:
-- Claude Code repeats earlier work
-- Quality degrades mid-task
-- Context indicator shows >80% used
-
-The fix isn't a bigger context window — it's **phased prompting**.
+> `/agents` is **not** a wizard anymore. Ask Claude or edit the files directly; changes are picked up live.
 
 ---
 
-# The Multi-Phase Pattern
+# Chaining: The Main Conversation Orchestrates
 
-**Phase 1:**
 ```
-Implement Phase 1 only: the domain model for notifications.
-Notification entity, NotificationType value object,
-INotificationRepository interface. Write and run the tests. Stop.
-```
-
-**Verify:**
-```
-Run the tests and give me a Phase 1 summary: what was created,
-what tests pass, what's needed next.
+backlog-generator ──► architecture-reviewer ──► test-strategist ──► implement (TDD)
+ stories + ACs          layer placement            test plan
+ docs/backlog/*.md      ADR-worthy decisions       per stack
 ```
 
-**Phase 2 (fresh session):**
-```
-Phase 1 summary: [paste]. Now implement Phase 2: the application layer —
-CreateNotificationCommand, handler, and tests.
-Domain interfaces from Phase 1 are in place.
-```
+- Copilot uses **handoff buttons**. In Claude Code, each subagent **returns to Claude**, which passes context to the next one
+- Subagents don't talk to each other directly. Files (`docs/backlog/`) are durable handoff artifacts
+- Each agent ends with a fixed output format and "Suggested Handoffs"
 
 ---
 
-# Right-Sizing a Session
+# Agent Design Principles
 
-**Good scope for one session:**
-- One class or interface + its tests
-- One refactoring target (`LegacyTaskProcessor`)
-- One API endpoint end-to-end (domain → application → API + tests)
-- A code review pass on a specific file or directory
-
-**Too large for one session:**
-- An entire feature from requirements to deployment
-- "Clean up the whole codebase"
-- Multiple unrelated features at once
-
-> Instead of "build the notification system," ask: "build the notification domain model."
-
----
-
-# Sub-Agents vs. Phases: When to Use Which
-
-| Pattern | Use When |
+| Principle | Ask yourself |
 |---|---|
-| **Parallel sub-agents** | Independent analysis or generation tasks |
-| **Multi-phase sessions** | Sequential work where phase 2 builds on phase 1 |
-| **Single session** | Scoped, focused tasks under ~1 hour of work |
+| **Role** | Who is this agent? |
+| **Scope** | What does it own, and what does it *not* do? |
+| **Trigger** | When should Claude delegate? ("Use proactively when…") |
+| **Tools** | Least privilege. Reviewers don't need Write or Bash |
+| **Model** | Does it need the strongest model, or will `haiku`/`sonnet` do? |
+| **Output format** | A fixed shape the next step can consume |
+| **Handoff** | What happens next, and where does the artifact live? |
 
-The patterns aren't mutually exclusive — a phase 1 session might internally use sub-agents for parallel file analysis.
+---
+
+# Parallel & Background
+
+- Subagents spawned from the main conversation start **in the background** by default
+- **Ctrl+B** backgrounds a running task; **`/tasks`** lists subagents, their models, and transcripts
+- Fan out independent work: *"Research the Domain, Application, and API layers in parallel using separate subagents"*
+- Every result lands in your context, so ask for **summaries**
+
+---
+
+# Subagent, Skill, or Main Conversation?
+
+| Use | When |
+|---|---|
+| **Main conversation** | Iterative back-and-forth; shared context across phases |
+| **Skill** | Reusable procedure that runs *in* your context |
+| **Subagent** | Verbose or self-contained work; enforced tool limits; a distinct role or model |
+| **Skill + `context: fork`** | One-off isolated task written as a skill |
 
 ---
 
 # Lab 12 Preview
 
-## What You'll Do
-
-1. Run a task designed to trigger parallel sub-agents — watch it happen
-2. Structure a task explicitly for parallelism and observe the difference
-3. Run a parallel generation task (.NET + Spring Boot + tests simultaneously)
-4. Ask Claude Code to plan a 4-phase feature implementation
-5. Practice the multi-phase pattern with a fresh session start
+1. **Part 0:** Run the built-in Explore subagent and watch it in `/tasks`
+2. **Part A:** Use `architecture-reviewer` (natural language) and `test-strategist` (@-mention)
+3. **Part B:** Chain backlog → architecture → tests on *task assignment + notifications*
+4. **Part C:** Apply the design principles and build your own subagent
+5. **Part D:** Fan out parallel subagents
 
 ## The Key Insight
 
-You don't control *whether* Claude Code uses sub-agents.
-You control *whether your task structure allows it.*
+A subagent is a **role with a boundary**: its own context, its own tools, and one job.
+The main conversation is the orchestrator.
 
 ---
 
-# Lab 12: Sub-Agents & Parallel Workflows
+# Lab 12: Custom Subagents & Agent Workflows
 
 👉 Open [docs/labs/lab-12-sub-agents.md](../../../labs/lab-12-sub-agents.md)
 
-**Goal for the next 30 minutes:**
-- Observe parallel sub-agent execution in at least one task
-- Structure at least one task explicitly for parallelism
-- Produce a multi-phase plan for a larger feature
-
-**Watch the tool call output** — that's where you see the parallelism.
-It won't show up in the text response.
+**Goal for the next 35–40 minutes:**
+- Invoked the shipped subagents three ways
+- `docs/backlog/<feature>.md` produced by the chained workflow
+- One custom subagent of your own in `.claude/agents/`
 
 ---
 

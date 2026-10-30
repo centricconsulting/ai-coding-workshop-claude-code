@@ -25,30 +25,47 @@ That's what checkpoints and rewind are for.
 
 # What a Checkpoint Is
 
-Claude Code automatically saves your working tree state at **every turn** —
-before it makes edits. You don't ask for this. It just happens.
+Every prompt you send creates a checkpoint: Claude Code snapshots
+the files its **edit tools** change. You don't ask for this. It just happens.
 
 A checkpoint is **not** a commit:
 
 - Not in git history
 - Not visible to teammates
-- Gone when the session ends
+- Saved with the conversation — still there after `/resume` (local, ~30-day retention)
 
-It exists purely so *you* can undo what just happened, *in this session*.
+It exists purely so *you* can undo what Claude did, *in this session*.
 
 ---
 
 # Rewind
 
 ```
-Esc Esc          (double-tap Escape)
-/rewind           (slash command)
+Esc Esc          (double-tap Escape on an empty prompt)
+/rewind          (aliases: /checkpoint, /undo)
 ```
 
-Claude Code shows you a list of checkpoints from the current session.
-Pick one. Your working tree snaps back to exactly that point.
+Pick a prompt from the list, then an action:
+
+| Option | Effect |
+|---|---|
+| Restore code and conversation | Both back to just before that prompt |
+| Restore conversation | Chat rewinds, code stays |
+| Restore code | Files revert, Claude keeps the chat |
+| Summarize from here / up to here | Compress part of the chat — files untouched |
+| Never mind | Back out |
 
 **No git command runs. Nothing is committed, stashed, or reset.**
+
+---
+
+# What Checkpoints Don't See
+
+- **Bash-made changes** — formatters, builds, `sed`, `rm`, files your tests write
+- **External changes** — your IDE edits, other Claude Code sessions
+- **Subagent edits** — including a background `/code-review --fix`
+
+For all of these: **git** is your undo.
 
 ---
 
@@ -56,10 +73,10 @@ Pick one. Your working tree snaps back to exactly that point.
 
 | | Checkpoints / Rewind | `git stash` | `git reset --hard` |
 |---|---|---|---|
-| Scope | This session only | Uncommitted tree | Uncommitted tree, to a commit |
-| Granularity | Per-turn | One shot | One shot |
+| Scope | Claude's edit-tool changes, this session | Uncommitted tree | Uncommitted tree, to a commit |
+| Granularity | Per prompt | One shot | One shot |
 | Needs a commit? | No | No | Yes |
-| Survives session end? | No | Yes, until popped | N/A — already applied |
+| Catches Bash/IDE edits? | No | Yes | Yes |
 
 **Checkpoints = session-level undo.**
 **Git = commit-level, durable undo.**
@@ -90,7 +107,8 @@ This is a normal, recoverable outcome — not a crisis.
 ```
 1. Run the characterization tests → confirm something broke
 2. Esc Esc  (or /rewind)
-3. Pick the checkpoint from right after the last-good state
+3. Select the over-broad prompt → "Restore code and conversation"
+   (restores to just *before* that prompt ran)
 4. git diff → confirm the damaging edit is gone
 5. Run tests again → confirm green
 ```
@@ -107,7 +125,9 @@ This is a normal, recoverable outcome — not a crisis.
 | Discard everything since your last commit | **`git reset --hard`** ⚠️ |
 | Set uncommitted work aside, keep it for later | **`git stash`** |
 | Small fix, faster to just describe it | **Ask Claude Code to undo/fix directly** |
-| Bad state spans a *previous* session | **Git** — checkpoints don't survive session end |
+| Bad state is from a *previous* session | **`/resume` + rewind**, or **Git** |
+| Damage came from Bash, your IDE, or a subagent | **Git** — not tracked by checkpoints |
+| Code is fine, context is bloated | **Rewind → Summarize from here** |
 | Not sure how far back the problem started | **Rewind one checkpoint at a time**, test at each step |
 
 ---
@@ -134,6 +154,7 @@ not a selective merge of good parts and bad parts.
 3. Confirm it did real damage (failing characterization tests)
 4. Rewind back to last-good — no git involved
 5. Diff before/after to confirm full recovery
+6. Watch a Bash-made file survive a rewind
 
 ---
 

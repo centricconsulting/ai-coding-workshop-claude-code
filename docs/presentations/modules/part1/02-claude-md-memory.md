@@ -47,30 +47,74 @@ You: We don't write XML doc comments
 - No abbreviations in identifiers
 ```
 
-Claude Code reads this at the start of every session.
+Claude Code loads it automatically whenever it works in `src/`.
 **You teach it once. It applies those lessons forever.**
 
 ---
 
-# The Hierarchy
+# The Memory Model
 
+| Scope | Location | Shared with |
+|---|---|---|
+| Managed policy | OS-level path set by IT | Whole organization |
+| User | `~/.claude/CLAUDE.md`, `~/.claude/rules/` | You, all projects |
+| Project | `./CLAUDE.md` **or** `./.claude/CLAUDE.md` | Team, via git |
+| Project rules | `./.claude/rules/*.md` (`paths:` optional) | Team, via git |
+| Local | `./CLAUDE.local.md` (keep out of git) | You, this project |
+| Subdirectory | `src/CLAUDE.md`, `tests/CLAUDE.md` | Team, via git |
+
+Plus **auto memory** — notes Claude writes for itself.
+
+---
+
+# How Files Load
+
+- **At launch**: `CLAUDE.md` / `CLAUDE.local.md` in the working dir **and every parent**, plus rules with **no** `paths:`
+- **On demand**: a subdirectory `CLAUDE.md` or a path-scoped rule loads the first time Claude reads/edits a matching file
+- **Concatenated, not overridden** — broader files first, closer files last
+
+**Conflicts aren't resolved by precedence** — Claude may follow either. Remove them.
+
+Check what's loaded: `/context` → **Memory files**
+
+---
+
+# Path-Scoped Rules: `.claude/rules/`
+
+```markdown
+---
+paths:
+  - "src/**/*.cs"
+  - "tests/**/*.cs"
+---
+# .NET Conventions
+- File-scoped namespaces, sealed by default, guard clauses ...
 ```
-~/.claude/CLAUDE.md              ← Personal (you, all projects)
 
-project-root/CLAUDE.md           ← Project overview, build commands,
-                                    what NOT to do
+Shipped in this repo:
 
-src/CLAUDE.md                    ← .NET-specific conventions
+| Rule | Loads when Claude touches… |
+|---|---|
+| `dotnet.md` | `src/**/*.cs`, `tests/**/*.cs`, `**/*.csproj` |
+| `springboot.md` | `src-springboot/**/*.java`, `pom.xml`, `*.{yml,yaml,properties}` |
+| `follow-up-questions.md` | *(no `paths:` → every session)* |
 
-src-springboot/CLAUDE.md         ← Java-specific conventions
+`paths` is the only frontmatter field rules use. Globs support `**` and `{a,b}`.
 
-tests/CLAUDE.md                  ← Test-specific conventions
+---
+
+# `@path` Imports
+
+```markdown
+# tests/CLAUDE.md
+Shared .NET conventions: @../src/CLAUDE.md
+Git workflow: @docs/git-instructions.md
 ```
 
-**More specific files win** when there are conflicts.
-
-Claude Code reads all files in the hierarchy from root to the
-current working file.
+- Relative to the importing file; nest up to 4 hops
+- Organizes files — **doesn't save context** (imports load in full)
+- Imports from outside the repo trigger a one-time approval dialog
+- Wrap in backticks to mention a path without importing it
 
 ---
 
@@ -98,8 +142,11 @@ current working file.
 | "Fix the bug in X" | That's a prompt, not project memory |
 | Long prose explanations | Bullet points; Claude Code doesn't need narrative |
 | Secrets or API keys | Never in files |
+| Rules for one part of the codebase | Use a path-scoped rule |
+| Multi-step procedures | Use a skill (Lab 11) |
 
 If it would be stale in 2 weeks, it doesn't belong.
+Keep each file **under ~200 lines** — longer files reduce adherence.
 
 ---
 
@@ -169,28 +216,34 @@ Explain framework-specific things, not language basics.
 
 ---
 
-# How Claude Code Loads CLAUDE.md
+# Personal Memory: Local and Auto
 
-1. Reads `~/.claude/CLAUDE.md` first (personal)
-2. Reads `project-root/CLAUDE.md` (project overview)
-3. As it reads files in `src/`, loads `src/CLAUDE.md`
-4. If it reads a file in `src/TaskManager.Domain/`, `src/CLAUDE.md` still applies
+**`CLAUDE.local.md`** — your notes for *this* repo (sandbox URLs, "I'm on the Spring track"). Keep it out of git.
 
-**You can verify this:** ask Claude Code *"What conventions are you following for this project?"* It will describe what it found in your CLAUDE.md files.
+**Auto memory** — on by default. Claude saves what it learns about *you*:
+
+```
+~/.claude/projects/<project>/memory/
+├── MEMORY.md            ← index; first 200 lines / 25 KB load every session
+└── feedback_testing.md  ← topic files, read on demand
+```
+
+- *"Remember that I prefer…"* → auto memory (you, this machine)
+- *"Add this to CLAUDE.md"* → shared with the team
 
 ---
 
-# The CLAUDE.md Hierarchy, Applied
+# The Memory Commands
 
-```
-project-root/CLAUDE.md               ← project-wide
-src/CLAUDE.md                        ← directory-scoped
-tests/CLAUDE.md                      ← directory-scoped
-~/.claude/CLAUDE.md                  ← personal/global
-```
+| Command | What it does |
+|---|---|
+| `/memory` | Open/create any memory file; toggle auto memory; open the auto memory folder |
+| `/context` | See what's in context, including **Memory files** |
+| `/init` | Generate a starter `CLAUDE.md` (or suggest improvements to an existing one) |
 
-The hierarchy is **directory-depth based** — more specific files win,
-giving very fine-grained control over what Claude Code knows where.
+**You can verify loading:** ask *"Which project instructions apply to this file, and where did each come from?"*
+
+**Remember:** memory is **context, not enforcement**. To guarantee a behavior, use permissions or hooks (Lab 9).
 
 ---
 
@@ -198,17 +251,16 @@ giving very fine-grained control over what Claude Code knows where.
 
 ## What You'll Do
 
-1. Read the existing CLAUDE.md files in this repo
-2. Ask Claude Code: *"What conventions are you following?"*
-3. Add a convention to `src/CLAUDE.md` that's currently missing
-4. Verify Claude Code applies the new convention without being told
+1. Read the shipped `CLAUDE.md` files and `.claude/rules/`
+2. Use `/context` and `/memory` to see what's loaded
+3. Watch a path-scoped rule load — then write your own (`domain-layer.md`)
+4. Write `tests/CLAUDE.md` with an `@path` import
+5. Set up personal memory: `~/.claude/CLAUDE.md`, `CLAUDE.local.md`, auto memory
 
 ## The Key Experiment
 
-Remove a convention from CLAUDE.md. Ask Claude Code to generate code.
-See what it produces. Then add it back and repeat.
-
-**You'll see exactly how much CLAUDE.md affects output.**
+Ask the same question outside the repo and inside it.
+**You'll see exactly how much memory affects output.**
 
 ---
 
@@ -216,10 +268,10 @@ See what it produces. Then add it back and repeat.
 
 👉 Open [docs/labs/lab-02-claude-md-memory.md](../../../labs/lab-02-claude-md-memory.md)
 
-**Goal for the next 30 minutes:**
-- You understand what's in each CLAUDE.md file and why
-- You've added at least one new convention
-- You've verified Claude Code applied it without prompting
+**Goal for the next 40 minutes:**
+- You understand what's in each memory file, and when it loads
+- You've added a path-scoped rule and a subdirectory `CLAUDE.md`
+- You've verified Claude Code applied them without prompting
 
 ---
 

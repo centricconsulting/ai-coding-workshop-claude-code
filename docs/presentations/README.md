@@ -46,13 +46,13 @@ npx @marp-team/marp-cli docs/presentations/modules/part1/01-claude-code-features
 npx @marp-team/marp-cli docs/presentations/modules/part1/02-claude-md-memory.md --pdf
 ```
 
-> **Note:** `npx @marp-team/marp-cli` requires Node.js 18+. If you use the maintainer devcontainer, Marp CLI is pre-installed as `marp`.
+> **Note:** `npx @marp-team/marp-cli` requires Node.js 18+. If you use the maintainer devcontainer, Node.js LTS and Marp CLI are pre-installed, so you can run `marp` directly.
 
 ---
 
 ## Module Index
 
-See [index.md](index.md) for the full list of modules, durations, and delivery patterns (full-day, two-session, lunch & learn).
+See [index.md](index.md) for the full list of modules, durations, and delivery patterns (full 2-day, two-session, and focused short sessions). Facilitators should also read the [Facilitator Guide](../../FACILITATOR_GUIDE.md).
 
 ### Day 1: Fundamentals
 
@@ -61,8 +61,8 @@ See [index.md](index.md) for the full list of modules, durations, and delivery p
 | [00-kickoff-and-setup.md](modules/part1/00-kickoff-and-setup.md) | Kickoff & Setup | 15 min |
 | [01-claude-code-features-tour.md](modules/part1/01-claude-code-features-tour.md) | Claude Code Features Tour | 15 min |
 | [02-claude-md-memory.md](modules/part1/02-claude-md-memory.md) | CLAUDE.md & Project Memory | 20 min |
-| [03-tdd-with-claude-code.md](modules/part1/03-tdd-with-claude-code.md) | TDD with Claude Code | 20 min |
-| [04-plan-mode-extended-thinking.md](modules/part1/04-plan-mode-extended-thinking.md) | Plan Mode & Extended Thinking | 20 min |
+| [03-tdd-with-claude-code.md](modules/part1/03-tdd-with-claude-code.md) | TDD & Requirements → Code | 20 min |
+| [04-plan-mode-extended-thinking.md](modules/part1/04-plan-mode-extended-thinking.md) | Plan Mode, Permission Modes & Thinking | 20 min |
 | [05-refactoring-and-context.md](modules/part1/05-refactoring-and-context.md) | Refactoring & Context Management | 15 min |
 | [06-checkpoints-and-rewind.md](modules/part1/06-checkpoints-and-rewind.md) | Checkpoints & Rewind | 15 min |
 | [07-git-workflow.md](modules/part1/07-git-workflow.md) | Git Workflow & PR Preparation | 10 min |
@@ -76,10 +76,10 @@ See [index.md](index.md) for the full list of modules, durations, and delivery p
 | [00-permissions-and-hooks.md](modules/part2/00-permissions-and-hooks.md) | Permissions, Safety & Hooks | 25 min |
 | [01-mcp-servers.md](modules/part2/01-mcp-servers.md) | MCP Servers | 20 min |
 | [02-skills.md](modules/part2/02-skills.md) | Skills | 20 min |
-| [03-sub-agents.md](modules/part2/03-sub-agents.md) | Sub-Agents & Parallel Workflows | 20 min |
+| [03-sub-agents.md](modules/part2/03-sub-agents.md) | Custom Subagents & Agent Workflows | 20 min |
 | [04-headless-automation.md](modules/part2/04-headless-automation.md) | Headless & Automation | 15 min |
 | [05-output-styles.md](modules/part2/05-output-styles.md) | Output Styles & Custom Personas | 15 min |
-| [06-capstone-team-config.md](modules/part2/06-capstone-team-config.md) | Capstone — Team Configuration | 15 min |
+| [06-capstone-team-config.md](modules/part2/06-capstone-team-config.md) | Capstone — Team Configuration & Plugins | 15 min |
 
 ---
 

@@ -4,10 +4,12 @@
 **Day**: 2 of 2 (Advanced)
 
 **Learning Objectives**:
-- Run Claude Code non-interactively with `--print`
+- Run Claude Code non-interactively with `-p` / `--print`
+- Get machine-readable output with `--output-format json` / `stream-json`
+- Control headless runs with `--allowedTools`, `--permission-mode`, and `--max-turns`
 - Use `--continue` and `--resume` for session persistence
-- Pipe Claude Code output into shell pipelines
-- Integrate Claude Code into a CI workflow
+- Pipe data into and out of Claude Code in shell pipelines
+- Integrate Claude Code into CI with the official GitHub Action (`anthropics/claude-code-action@v1`)
 - Know the safety implications of headless mode
 
 ---
@@ -16,88 +18,152 @@
 
 Everything you've done in the workshop has been interactive — a human in the loop. But Claude Code also runs headlessly: accepting a prompt via CLI flags, doing the work, and exiting. This opens up automation workflows that would otherwise require a human at a terminal.
 
+Programmatic Claude Code is part of the **Claude Agent SDK** (formerly the "Claude Code SDK"). The SDK is available three ways: the `claude -p` CLI you'll use in this lab, plus Python and TypeScript packages for building your own agents with the same tools, permissions, hooks, and sessions.
+
 ---
 
 ## Prerequisites
 
 - Completed Labs 1–12
 - Comfortable with basic shell scripting and pipes
+- `jq` installed (for parsing JSON output)
+- Authenticated Claude Code. `claude -p` uses the same login as your interactive sessions (Claude subscription or `ANTHROPIC_API_KEY`). The only exception is `--bare` mode, which requires `ANTHROPIC_API_KEY` (or a cloud provider).
 
 ---
 
-## Part A: The `--print` Flag (8 min)
+## Part A: The `-p` Flag (8 min)
 
-`--print` (or `-p`) runs Claude Code non-interactively: it takes a prompt, does the work, prints the result, and exits.
+`-p` (long form `--print`) runs Claude Code non-interactively: it takes a prompt, does the work, prints the result, and exits with code 0 on success or non-zero on failure.
 
 ### A.1 Basic Usage
 
 ```bash
-claude --print "What are the top 3 issues in src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs?"
+claude -p "What are the top 3 issues in src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs?"
 ```
 
 No interactive session opens. Claude Code reads the file, analyzes it, prints the result to stdout, and exits.
 
-### A.2 Piping Output
+> Headless runs load the same project configuration as an interactive session — CLAUDE.md, `.claude/settings.json` permissions and hooks, skills, subagents, and `.mcp.json` servers. There is **no one to answer permission prompts**, so anything that would prompt is denied unless you allow it up front (Part B).
 
-Because output goes to stdout, you can pipe it:
+### A.2 Piping In and Out
+
+`claude -p` reads stdin and writes stdout, so it composes like any other Unix tool:
 
 ```bash
-# Save the analysis to a file
-claude --print "List all public interfaces in the src/ directory." > interfaces.txt
+# Pipe data IN — Claude doesn't need Bash permission to read it
+git log --oneline -20 | claude -p "Summarize the themes of these recent commits in 3 bullets."
 
-# Count the issues found
-claude --print "List every naming convention violation in LegacyTaskProcessor.cs." | wc -l
+# Pipe output OUT to a file
+claude -p "List all public interfaces in the src/ directory." > interfaces.txt
 
 # Use the output in a script
-ISSUES=$(claude --print "Are there any TODO comments in the src/ directory? List them.")
-if [ -n "$ISSUES" ]; then
+ISSUES=$(claude -p "Are there any TODO comments in the src/ directory? List them, or print NONE.")
+if [ "$ISSUES" != "NONE" ]; then
   echo "Found TODOs: $ISSUES"
 fi
 ```
 
-### A.3 JSON Output
+### A.3 Structured Output
 
-For structured output, ask for JSON explicitly:
+Use `--output-format` to control the response shape:
+
+| Format | What you get |
+|---|---|
+| `text` (default) | Plain text — the final answer only |
+| `json` | One JSON object: `result`, `session_id`, `total_cost_usd`, usage, and more |
+| `stream-json` | Newline-delimited JSON events as they happen (for progress UIs and long runs; add `--verbose`) |
 
 ```bash
-claude --print "List all test files in the tests/ directory as JSON. Format: [{file: string, testCount: number}]"
+# Full JSON envelope
+claude -p "How many test projects are in tests/?" --output-format json | jq .
+
+# Just the answer
+claude -p "How many test projects are in tests/?" --output-format json | jq -r '.result'
+
+# What did that cost?
+claude -p "Summarize CLAUDE.md in one sentence." --output-format json | jq '.total_cost_usd'
 ```
 
-This makes it easy to parse Claude Code output in scripts.
+> Want output guaranteed to match a shape? Add `--json-schema '<schema>'` with `--output-format json` and read the `structured_output` field. Asking for "JSON" in the prompt alone works, but isn't validated.
 
 ---
 
-## Part B: Session Persistence (7 min)
+## Part B: Controlling a Headless Run (6 min)
 
-### B.1 `--continue`
+Headless runs can't ask "May I?", so you decide permissions **before** the run starts.
 
-`--continue` picks up where the last session left off:
+| Flag | Purpose | Example |
+|---|---|---|
+| `--allowedTools` | Pre-approve specific tools/commands (permission rule syntax) | `--allowedTools "Read,Bash(dotnet test *)"` |
+| `--disallowedTools` | Deny or remove tools for this run | `--disallowedTools "Edit,Write"` |
+| `--permission-mode` | Baseline mode: `default`, `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions` | `--permission-mode dontAsk` |
+| `--max-turns` | Cap the number of agentic turns (exits with an error when reached) | `--max-turns 5` |
+| `--max-budget-usd` | Stop once estimated spend reaches a limit | `--max-budget-usd 0.50` |
+| `--append-system-prompt` | Add instructions for this run only | `--append-system-prompt "Be terse."` |
+| `--bare` | Skip auto-loading hooks, skills, plugins, MCP, and CLAUDE.md for reproducible CI runs | `--bare` |
+
+### B.1 A Read-Only Analysis Run
+
+```bash
+claude -p "Run the .NET tests and summarize any failures. Do not change any files." \
+  --permission-mode dontAsk \
+  --allowedTools "Read,Grep,Glob,Bash(dotnet test *)" \
+  --max-turns 10
+```
+
+`dontAsk` denies anything that would normally prompt, so only reads and the explicitly allowed `dotnet test` command can run.
+
+### B.2 A Run That Is Allowed to Edit
+
+```bash
+claude -p "Fix the naming convention violations in LegacyTaskProcessor.cs, then run dotnet build." \
+  --permission-mode acceptEdits \
+  --allowedTools "Bash(dotnet build *)" \
+  --max-turns 15
+```
+
+Review the result with `git diff` — and remember `/rewind` doesn't help you here; use git.
+
+> **Prefix matching:** `Bash(git diff *)` (with a space before `*`) matches `git diff` and `git diff --stat` but not `git diff-index`. The older `Bash(git diff:*)` form still works.
+
+---
+
+## Part C: Session Persistence (5 min)
+
+### C.1 `--continue`
+
+`--continue` (`-c`) picks up the most recent conversation in the current directory:
 
 ```bash
 # Start a task
-claude --print "Read src/TaskManager.Domain/Entities/Task.cs and describe the current domain model."
+claude -p "Read src/TaskManager.Domain and describe the current domain model."
 
 # Continue in the next command
-claude --continue --print "Now suggest 3 improvements to the domain model based on what you read."
+claude -p "Now suggest 3 improvements to the domain model based on what you read." --continue
 ```
 
 The second command has the context of the first — Claude Code remembers what it read.
 
-### B.2 `--resume` and `--name`
+### C.2 `--resume` with a Session ID or Name
 
-Use `--name` to give a session a display name, then `--resume` to return to it:
+When scripts run several conversations, capture the session ID from JSON output:
 
 ```bash
-# Start a named session
-claude --name my-analysis --print "Analyze the test coverage in the .NET project."
+SESSION_ID=$(claude -p "Analyze the test coverage in the .NET project." --output-format json | jq -r '.session_id')
 
-# Resume it later by name
-claude --resume my-analysis --print "Now do the same analysis for the Spring Boot project."
+claude -p "Now do the same analysis for the Spring Boot project and compare." --resume "$SESSION_ID"
 ```
 
-Session names are set with `--name` and resumed with `--resume <name>`. If you run `--resume` without arguments, Claude Code shows an interactive picker of recent sessions.
+You can also name a session with `--name` (`-n`) and resume it by name:
 
-### B.3 When to Use Session Persistence
+```bash
+claude -n coverage-analysis -p "Analyze the test coverage in the .NET project."
+claude --resume coverage-analysis -p "Now do the same for Spring Boot."
+```
+
+Run `claude --resume` with no arguments (or `/resume` inside a session — `/continue` is an alias) to pick from recent sessions interactively.
+
+### C.3 When to Use Session Persistence
 
 - **Multi-step scripts**: where step 2 needs the output of step 1
 - **Daily reports**: resume a session to add today's activity to yesterday's analysis
@@ -105,17 +171,15 @@ Session names are set with `--name` and resumed with `--resume <name>`. If you r
 
 ---
 
-## Part C: CI Integration Patterns (10 min)
+## Part D: CI Integration Patterns (8 min)
 
-Headless mode is most valuable in CI pipelines.
+### D.1 Pre-Commit Code Review Script
 
-### C.1 Pre-Commit Code Review Script
-
-Create a script that runs a code review on every staged change:
+A local git hook that reviews staged changes. The diff is piped in, so Claude needs no tool permissions at all:
 
 ```bash
-# .githooks/pre-commit
 #!/bin/bash
+# .githooks/pre-commit
 
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E "\.(cs|java)$")
 
@@ -125,19 +189,15 @@ fi
 
 echo "Running Claude Code review on staged files..."
 
-REVIEW=$(claude --print "Review the following staged changes for bugs, convention violations, and missing tests. Be concise — flag real issues only, not style preferences.
-
-Files changed:
-$STAGED_FILES
-
-Diff:
-$(git diff --cached -- $STAGED_FILES)")
+REVIEW=$(git diff --cached -- $STAGED_FILES | claude -p \
+  --permission-mode dontAsk \
+  --max-turns 3 \
+  "Review this staged diff for bugs, convention violations, and missing tests. Be concise — flag real issues only, not style preferences. Start your answer with the single word BLOCK if there is a critical bug or security issue, otherwise OK.")
 
 echo "$REVIEW"
 
-# Optionally fail the commit on critical issues
-if echo "$REVIEW" | grep -qi "critical\|security\|bug"; then
-  echo "⚠ Claude Code found potential issues. Review before committing."
+if echo "$REVIEW" | head -1 | grep -q "^BLOCK"; then
+  echo "⚠ Claude Code found critical issues. Fix them or commit with --no-verify."
   exit 1
 fi
 ```
@@ -151,9 +211,34 @@ chmod +x .githooks/pre-commit
 git config core.hooksPath .githooks
 ```
 
-### C.2 Automated PR Description Generator
+> Asking for a fixed first token (`BLOCK`/`OK`) is far more reliable than grepping prose for words like "bug".
 
-A GitHub Actions workflow that uses Claude Code to generate PR descriptions:
+### D.2 GitHub Actions with `anthropics/claude-code-action@v1`
+
+For GitHub CI, use Anthropic's official action rather than hand-installing the CLI. The quickest setup is from inside Claude Code:
+
+```
+/install-github-app
+```
+
+It installs the Claude GitHub App on your repo, stores an auth secret, and opens a PR with a starter workflow. (github.com repos only.)
+
+The action has two modes:
+- **Interactive mode** — no `prompt` input; Claude responds to `@claude` mentions in issues and PR comments.
+- **Automation mode** — a `prompt` input; Claude runs on any event (PR opened, schedule, etc.).
+
+Key inputs:
+
+| Input | Purpose |
+|---|---|
+| `prompt` | Instructions (plain text or a `/skill-name`). Omit for `@claude` interactive mode |
+| `claude_args` | Any Claude Code CLI flags: `--allowedTools`, `--max-turns`, `--model`, `--append-system-prompt`, … |
+| `anthropic_api_key` | Claude API key (from a repo secret) |
+| `claude_code_oauth_token` | Alternative: Claude subscription token, generated with `claude setup-token` |
+| `settings` | Claude Code settings JSON (string or file path) |
+| `plugin_marketplaces` / `plugins` | Install plugins before the run |
+
+**Example: automated PR description generator**
 
 ```yaml
 # .github/workflows/pr-description.yml
@@ -165,42 +250,84 @@ on:
 jobs:
   describe-pr:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install Claude Code
-        run: npm install -g @anthropic-ai/claude-code
-
       - name: Generate PR description
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          DESCRIPTION=$(claude --print "
-          Generate a PR description for these changes. Include: summary, motivation, testing done, and reviewer checklist.
-          
-          Branch: ${{ github.head_ref }}
-          Commits: $(git log origin/${{ github.base_ref }}..HEAD --oneline)
-          Diff summary: $(git diff origin/${{ github.base_ref }}...HEAD --stat)
-          ")
-          
-          gh pr edit ${{ github.event.pull_request.number }} --body "$DESCRIPTION"
+        uses: anthropics/claude-code-action@v1
         env:
           GH_TOKEN: ${{ github.token }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Generate a PR description for pull request #${{ github.event.pull_request.number }}
+            in ${{ github.repository }}. Use `git log` and `git diff` against
+            origin/${{ github.event.pull_request.base.ref }} to see the changes.
+            Include: summary, motivation, testing done, and a reviewer checklist.
+            Then update the PR body with `gh pr edit <number> --body "<description>"`.
+          claude_args: |
+            --max-turns 10
+            --allowedTools "Bash(git log *),Bash(git diff *),Bash(gh pr edit *)"
 ```
 
-Review this workflow with the group. Note: this is a pattern to understand, not necessarily to run during the lab.
+Note what changed from a hand-rolled approach:
+- No `npm install` step — the action brings Claude Code with it
+- One `env:` block per step (YAML doesn't allow duplicate keys)
+- Tools are granted explicitly via `claude_args` — in automation mode Claude has **no** shell or GitHub access until you allow it
+- `id-token: write` is required for the action's default GitHub App authentication
 
-### C.3 Nightly Code Quality Report
+**Example: `@claude` on demand (interactive mode)**
+
+```yaml
+# .github/workflows/claude.yml
+name: Claude Code
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  claude:
+    if: contains(github.event.comment.body, '@claude')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--max-turns 10"
+```
+
+Now anyone with write access can comment `@claude add a unit test for TaskService.CompleteTask` on a PR.
+
+Review these workflows with the group. Note: they are patterns to understand, not necessarily to run during the lab. The action reads your repo's `CLAUDE.md`, `.claude/settings.json`, and skills — so everything you configured in earlier labs applies in CI too.
+
+> Not on GitHub? The same `claude -p` patterns work in any CI system (GitLab CI/CD has its own guide). Install the CLI on the runner with the native installer, set `ANTHROPIC_API_KEY` from a secret, and prefer `--bare` for reproducibility.
+
+### D.3 Nightly Code Quality Report
 
 ```bash
 #!/bin/bash
 # scripts/nightly-quality-report.sh
 
 DATE=$(date +%Y-%m-%d)
+mkdir -p docs/reports
 
-claude --print "
+claude -p "
 Generate a code quality summary for this repository. Cover:
 1. Top 5 files with the most TODO/FIXME comments
 2. Public methods with no corresponding tests
@@ -208,7 +335,11 @@ Generate a code quality summary for this repository. Cover:
 4. Any obvious anti-patterns in the recent git log (last 7 days)
 
 Format as a markdown report.
-" > docs/reports/quality-$DATE.md
+" \
+  --permission-mode dontAsk \
+  --allowedTools "Read,Grep,Glob,Bash(git log *)" \
+  --max-turns 20 \
+  > "docs/reports/quality-$DATE.md"
 
 echo "Report generated: docs/reports/quality-$DATE.md"
 ```
@@ -219,77 +350,88 @@ Create the file scripts/nightly-quality-report.sh with this content and make it 
 
 ---
 
-## Part D: Safety in Headless Mode (5 min)
+## Part E: Safety in Headless Mode (5 min)
 
 Headless mode removes the human-in-the-loop — which means the safety responsibility shifts entirely to your configuration.
 
 **Essential safety practices for headless:**
 
-1. **Use a restrictive `.claude/settings.json`** — headless Claude Code can't ask for confirmation. If `git push` is allowed, it may push.
+1. **Start locked down** — use `--permission-mode dontAsk` (deny anything not explicitly allowed) and grant only what the task needs with `--allowedTools`. Avoid `bypassPermissions` / `--dangerously-skip-permissions` outside an isolated container.
 
-2. **Never allow destructive operations in CI** — add to `deny`:
+2. **Never allow destructive operations in CI** — add to `deny` in `.claude/settings.json` (deny always wins over allow):
    ```json
-   "Bash(git push*)",
-   "Bash(rm -rf*)",
-   "Bash(git reset --hard*)"
+   "deny": [
+     "Bash(git push *)",
+     "Bash(rm -rf *)",
+     "Bash(git reset --hard *)"
+   ]
    ```
 
-3. **Use read-only scopes where possible** — many CI use cases only need Claude Code to read files and generate text. Lock it down:
-   ```json
-   "allow": ["Bash(git log*)", "Bash(git diff*)", "Read(*)"],
-   "deny": ["Write(*)", "Edit(*)", "Bash(*)" ]
+3. **Use read-only configurations where possible** — many CI use cases only need Claude Code to read files and generate text:
+   ```bash
+   claude -p "..." \
+     --permission-mode dontAsk \
+     --allowedTools "Read,Grep,Glob,Bash(git log *),Bash(git diff *)" \
+     --disallowedTools "Edit,Write"
    ```
 
-4. **Audit logs are mandatory in CI** — the hook from Lab 9 belongs in your CI `.claude/settings.json`.
+4. **Bound the run** — `--max-turns` and `--max-budget-usd` stop a runaway loop from burning time and money.
 
-5. **Test headless scripts locally first** — `--print` with `--dry-run` (if available) before wiring to CI.
+5. **Know what loads** — without `--bare`, a `-p` run executes the project's hooks and connects its `.mcp.json` servers *without* the trust/approval prompts you'd see interactively. Only run headless against repositories you trust, or use `--bare` and pass exactly the settings/MCP config you want.
+
+6. **Audit logs are mandatory in CI** — the hook from Lab 9 belongs in your CI `.claude/settings.json`.
+
+7. **Test headless scripts locally first** — run them with `--permission-mode plan` (read-only planning, no changes) before wiring them to CI.
 
 ---
 
 ## Success Criteria
 
-- [ ] You ran at least one `--print` command non-interactively
-- [ ] You piped Claude Code output to a file or another command
-- [ ] You understand `--continue` and `--resume` for session persistence
-- [ ] You can describe at least one CI integration pattern
-- [ ] You know which deny rules are essential before using Claude Code headlessly
+- [ ] You ran at least one `claude -p` command non-interactively
+- [ ] You piped data into Claude Code and piped its output to a file or another command
+- [ ] You parsed `--output-format json` output with `jq`
+- [ ] You used `--continue` or `--resume` for session persistence
+- [ ] You can describe how `anthropics/claude-code-action@v1` runs in interactive vs. automation mode
+- [ ] You know which flags and deny rules are essential before using Claude Code headlessly
 
 ---
 
 ## Extension Exercise
 
 Write a shell script that:
-1. Uses `--print` to list all public interfaces in the `src/` directory
-2. For each interface, uses `--continue` to check if a corresponding implementation exists
-3. Outputs a summary: "X of Y interfaces have implementations"
+1. Uses `claude -p ... --output-format json` to list all public interfaces in the `src/` directory and captures the `session_id`
+2. Uses `--resume "$SESSION_ID"` to check whether each interface has a corresponding implementation
+3. Outputs a summary: "X of Y interfaces have implementations" and the total cost from `total_cost_usd`
+
+**Stretch:** use `--json-schema` so step 1 returns `{"interfaces": ["..."]}` and loop over it with `jq`.
 
 ---
 
 ## Troubleshooting
 
-**`--print` exits immediately without doing work**
+**`claude -p` prints an authentication error**
 
-- Check `ANTHROPIC_API_KEY` is set in the environment
-- Verify with: `echo $ANTHROPIC_API_KEY`
-- Test: `claude --print "Say hello"` should print a greeting and exit
+- Run `claude` interactively once and `/login`, or set `ANTHROPIC_API_KEY`
+- If you used `--bare`, you **must** set `ANTHROPIC_API_KEY` — bare mode ignores subscription login
+- Test: `claude -p "Say hello"` should print a greeting and exit
 
-**Output contains interactive UI elements (colors, spinners)**
+**The run stops with "permission denied" or does nothing**
 
-Add `--output-format text` to disable terminal formatting:
-```bash
-claude --print --output-format text "your prompt"
-```
+- Headless runs can't prompt. Add the needed tools with `--allowedTools`, or check `permission_denials` in `--output-format json` output to see what was blocked
 
 **Session not found with `--resume`**
 
-Use `--name <name>` when starting the session, then `--resume <name>` later. Names must match exactly. Run `claude --resume` without arguments to see an interactive list of recent sessions.
+- Use the exact `session_id` from JSON output, or the exact `--name` you set. Run `claude --resume` without arguments to see an interactive list of recent sessions.
 
-**CI pipeline times out**
+**Run ends with a max-turns error**
 
-Headless Claude Code tasks should complete in under 2 minutes for most code tasks. If timing out:
+- Raise `--max-turns`, or narrow the task so it needs fewer steps
+
+**CI pipeline times out or costs too much**
+
 - Reduce the scope of the task
-- Add `--max-tokens` to limit response length
-- Check for permission prompts that are blocking (add allow rules)
+- Set `--max-turns` and `--max-budget-usd`
+- Check for tools that need allowing (denied calls cause retries and extra turns)
 
 ---
 
