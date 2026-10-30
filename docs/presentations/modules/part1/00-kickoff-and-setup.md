@@ -106,7 +106,7 @@ You: And async all the way through...
 ## With CLAUDE.md
 
 ```
-# src/CLAUDE.md
+# src-dotnet/CLAUDE.md
 - File-scoped namespaces
 - Sealed classes by default
 - Guard clauses (no else)
@@ -131,11 +131,11 @@ Claude Code: [creates it correctly the first time]
 project-root/CLAUDE.md       ← Project overview, how to build
                                 (applies to the whole project)
 
-src/CLAUDE.md                ← Layer/stack-specific conventions
-                                (applies to src/ and below)
+src-dotnet/CLAUDE.md                ← Layer/stack-specific conventions
+                                (applies to src-dotnet/ and below)
 
-tests/CLAUDE.md              ← Test-specific conventions
-                                (loaded when Claude works in tests/)
+src-dotnet/tests/CLAUDE.md              ← Test-specific conventions
+                                (loaded when Claude works in src-dotnet/tests/)
 
 .claude/rules/*.md           ← Path-scoped rules (`paths:` frontmatter)
                                 (loaded only for matching files)
@@ -181,7 +181,7 @@ claude doctor       # Diagnose install & settings
 
 ```bash
 # .NET — expect 11 skipped, 0 failed
-dotnet --version && dotnet build && dotnet test
+dotnet --version && dotnet build src-dotnet && dotnet test src-dotnet
 
 # Spring Boot
 java -version && cd src-springboot && mvn clean test

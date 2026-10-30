@@ -50,10 +50,10 @@ Part of the **Claude Agent SDK** (formerly "Claude Code SDK") — also available
 git diff main | claude -p "Report any typos in this diff as file:line."
 
 # Save to a file
-claude -p "List all public interfaces in src/." > interfaces.txt
+claude -p "List all public interfaces in src-dotnet/." > interfaces.txt
 
 # Structured output for scripts
-claude -p "How many test projects are in tests/?" --output-format json | jq -r '.result'
+claude -p "How many test projects are in src-dotnet/tests/?" --output-format json | jq -r '.result'
 ```
 
 `--output-format text | json | stream-json` — JSON includes `result`, `session_id`, `total_cost_usd`.
@@ -81,7 +81,7 @@ Nobody can answer a permission prompt — decide **before** the run:
 `--continue` picks up the most recent conversation:
 
 ```bash
-claude -p "Describe the current domain model in src/TaskManager.Domain."
+claude -p "Describe the current domain model in src-dotnet/src/TaskManager.Domain."
 claude -p "Suggest 3 improvements based on what you read." --continue
 ```
 

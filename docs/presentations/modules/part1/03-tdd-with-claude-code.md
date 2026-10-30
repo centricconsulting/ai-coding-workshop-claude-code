@@ -83,9 +83,9 @@ Claude Code often changes multiple files in one step.
 
 ```
 Files modified:
-  src/TaskManager.Application/Services/NotificationService.cs  (+45 lines)
-  src/TaskManager.Domain/Interfaces/INotificationService.cs    (+8 lines)
-  tests/TaskManager.UnitTests/Services/NotificationServiceTests.cs (+62 lines)
+  src-dotnet/src/TaskManager.Application/Services/NotificationService.cs  (+45 lines)
+  src-dotnet/src/TaskManager.Domain/Interfaces/INotificationService.cs    (+8 lines)
+  src-dotnet/tests/TaskManager.UnitTests/Services/NotificationServiceTests.cs (+62 lines)
 ```
 
 **Before accepting:**
@@ -188,7 +188,7 @@ A.CallTo(() => repo.FindByIdAsync(taskId, A<CancellationToken>._))
     .Returns((DomainTask?)null);
 ```
 
-**Integration tests** (.NET stubs in `tests/TaskManager.IntegrationTests/`; Spring uses MockMvc):
+**Integration tests** (.NET stubs in `src-dotnet/tests/TaskManager.IntegrationTests/`; Spring uses MockMvc):
 ```csharp
 // Full HTTP stack — slower, catches wiring bugs
 var response = await client.PostAsJsonAsync("/tasks", request);

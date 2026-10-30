@@ -72,10 +72,10 @@ project-root/
   CLAUDE.local.md          ← Personal, gitignored — what belongs here vs. the team file?
   .claude/
     rules/
-      backend.md           ← paths: ["src/**/*.cs"] — loaded only when matching files are in play
-      tests.md             ← paths: ["tests/**"]
-  src/
-    CLAUDE.md              ← What goes here? (loaded when Claude works in src/)
+      backend.md           ← paths: ["src-dotnet/src/**/*.cs"] — loaded only when matching files are in play
+      tests.md             ← paths: ["src-dotnet/tests/**"]
+  src-dotnet/
+    CLAUDE.md              ← What goes here? (loaded when Claude works in src-dotnet/)
   docs/
     CLAUDE.md              ← Maybe not needed
 ```
@@ -272,7 +272,7 @@ Before writing the definition, write down (in the spirit of TDD):
 - **3 things it must catch or produce** (e.g. "flags a domain entity that references EF Core")
 - **2 things it must *not* do** (e.g. "never edits files", "doesn't comment on formatting")
 - **The output format** you expect (sections, severity levels, max length)
-- **One test input** in this repo (e.g. `src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs`)
+- **One test input** in this repo (e.g. `src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs`)
 
 ### E.3 Create the Definition
 
@@ -328,7 +328,7 @@ Create .claude/skills/<your-skill-name>/SKILL.md for [procedure]. Use .claude/sk
 Run it against your test input:
 
 ```
-Use the <your-agent-name> subagent to review src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs.
+Use the <your-agent-name> subagent to review src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs.
 ```
 
 or

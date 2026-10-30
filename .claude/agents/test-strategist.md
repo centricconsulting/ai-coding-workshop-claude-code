@@ -12,9 +12,9 @@ You are a testing specialist who designs behavior-focused test strategies that d
 
 ## Sources of Truth
 
-- `src/CLAUDE.md` → **Testing Conventions** (.NET)
+- `src-dotnet/CLAUDE.md` → **Testing Conventions** (.NET)
 - `src-springboot/CLAUDE.md` → **Testing Conventions** (Spring Boot)
-- Existing tests: `tests/TaskManager.UnitTests/`, `tests/TaskManager.IntegrationTests/`, and `src-springboot/*/src/test/java/`
+- Existing tests: `src-dotnet/tests/TaskManager.UnitTests/`, `src-dotnet/tests/TaskManager.IntegrationTests/`, and `src-springboot/*/src/test/java/`
 
 Note: the .NET test projects start with skipped stub tests (`[Fact(Skip = "Lab 3 ...")]`). Treat skipped tests as gaps, not coverage.
 

@@ -196,7 +196,7 @@ Presentations use [Marp](https://marp.app/) format. View in VS Code with the [Ma
 ### Reference Configuration
 
 - **[`CLAUDE.md`](CLAUDE.md)** — Project-level memory for this workshop repo
-- **[`src/CLAUDE.md`](src/CLAUDE.md)** — .NET-specific context for Claude Code
+- **[`src-dotnet/CLAUDE.md`](src-dotnet/CLAUDE.md)** — .NET-specific context for Claude Code
 - **[`src-springboot/CLAUDE.md`](src-springboot/CLAUDE.md)** — Spring Boot-specific context
 - **[`.claude/`](.claude/)** — Shipped subagents, skill, rules, and settings (see [What's in `.claude/`](#whats-in-claude))
 
@@ -246,7 +246,7 @@ This workshop is the Claude Code counterpart to Centric's GitHub Copilot worksho
 
 ## Starter Solution Structure
 
-**🔷 .NET Solution** (`src/` directory):
+**🔷 .NET Solution** (`src-dotnet/` directory):
 - Clean Architecture: Domain / Application / Infrastructure / API layers
 - `LegacyTaskProcessor` for refactoring exercises
 - xUnit test stubs with FakeItEasy — `dotnet test` initially reports **11 skipped, 0 failed**; you implement them during the labs
@@ -259,7 +259,7 @@ This workshop is the Claude Code counterpart to Centric's GitHub Copilot worksho
 
 **Claude Code Configuration**:
 - **`CLAUDE.md`** (project root): Workshop repo memory
-- **`src/CLAUDE.md`**: .NET context for Claude Code
+- **`src-dotnet/CLAUDE.md`**: .NET context for Claude Code
 - **`src-springboot/CLAUDE.md`**: Spring Boot context for Claude Code
 - **`.claude/settings.json`**: Permissions and hooks example
 - **`.claude/agents/`, `.claude/skills/`, `.claude/rules/`**: Shipped subagents, skill, and rules (see [What's in `.claude/`](#whats-in-claude))
@@ -303,7 +303,7 @@ This workshop is the Claude Code counterpart to Centric's GitHub Copilot worksho
 
    ```bash
    # .NET — expect 11 skipped, 0 failed (test stubs you'll implement)
-   dotnet build && dotnet test
+   dotnet build src-dotnet && dotnet test src-dotnet
 
    # Spring Boot
    cd src-springboot && mvn clean test

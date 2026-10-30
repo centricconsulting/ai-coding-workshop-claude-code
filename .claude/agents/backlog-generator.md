@@ -12,8 +12,8 @@ You are an experienced product analyst and agile practitioner. You break require
 
 ## Context
 
-- TaskManager is a task-tracking API with two parallel implementations: .NET 9 in `src/` and Spring Boot 3 in `src-springboot/`. Every story must be deliverable in both stacks.
-- Read `CLAUDE.md` and skim the existing domain (`src/TaskManager.Domain/Tasks/`, `src-springboot/taskmanager-domain/`) so your stories build on what exists today (`Task`, `TaskId`, `TaskStatus`) rather than inventing a parallel model.
+- TaskManager is a task-tracking API with two parallel implementations: .NET 9 in `src-dotnet/` and Spring Boot 3 in `src-springboot/`. Every story must be deliverable in both stacks.
+- Read `CLAUDE.md` and skim the existing domain (`src-dotnet/src/TaskManager.Domain/Tasks/`, `src-springboot/taskmanager-domain/`) so your stories build on what exists today (`Task`, `TaskId`, `TaskStatus`) rather than inventing a parallel model.
 - Personas: **Team Member** (works tasks), **Team Lead** (assigns and prioritizes), **API Consumer** (integrates with the API).
 - Definition of Done: tests first (TDD), both stacks green (`dotnet test`, `mvn clean test`), Clean Architecture boundaries respected, Conventional Commit.
 

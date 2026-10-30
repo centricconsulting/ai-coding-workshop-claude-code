@@ -1,5 +1,5 @@
 // Template for the test-data-generator skill.
-// Matches the starting domain model in src/TaskManager.Domain/Tasks.
+// Matches the starting domain model in src-dotnet/src/TaskManager.Domain/Tasks.
 // Adapt it when the model gains new members (priority, due date, assignee, ...).
 using TaskManager.Domain.Tasks;
 using Task = TaskManager.Domain.Tasks.Task;

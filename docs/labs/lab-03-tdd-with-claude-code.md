@@ -30,8 +30,8 @@
 
 - Completed Labs 1 and 2
 - Personal branch checked out
-- `src/CLAUDE.md` or `src-springboot/CLAUDE.md` in place
-- `tests/CLAUDE.md` (.NET, written in Lab 2) and `.claude/rules/domain-layer.md` (written in Lab 2, Part C)
+- `src-dotnet/CLAUDE.md` or `src-springboot/CLAUDE.md` in place
+- `src-dotnet/tests/CLAUDE.md` (.NET, written in Lab 2) and `.claude/rules/domain-layer.md` (written in Lab 2, Part C)
 
 ---
 
@@ -52,7 +52,7 @@ claude
 #### 🔷 .NET Prompt
 
 ```
-Following the Clean Architecture and conventions in src/CLAUDE.md, design an INotificationService interface in the Application layer. It should support:
+Following the Clean Architecture and conventions in src-dotnet/CLAUDE.md, design an INotificationService interface in the Application layer. It should support:
 - Sending an email notification about a specific task
 - Sending an SMS notification about a specific task
 - Sending both email and SMS together
@@ -88,7 +88,7 @@ Now ask Claude Code to write tests for the interface — **before any implementa
 #### 🔷 .NET Prompt
 
 ```
-Write a comprehensive xUnit test class for INotificationService following the conventions in src/CLAUDE.md and tests/CLAUDE.md. Cover:
+Write a comprehensive xUnit test class for INotificationService following the conventions in src-dotnet/CLAUDE.md and src-dotnet/tests/CLAUDE.md. Cover:
 - SendEmailAsync succeeds for a valid task
 - SendEmailAsync throws ArgumentNullException for a null task
 - SendSmsAsync succeeds for a valid task  
@@ -96,7 +96,7 @@ Write a comprehensive xUnit test class for INotificationService following the co
 - SendBothAsync calls both email and SMS
 - SendBothAsync throws if either channel fails
 
-Use FakeItEasy for any dependencies. Write all the tests but do NOT create the implementation. Place the test file in tests/TaskManager.UnitTests/.
+Use FakeItEasy for any dependencies. Write all the tests but do NOT create the implementation. Place the test file in src-dotnet/tests/TaskManager.UnitTests/.
 ```
 
 #### 🟩 Spring Boot Prompt
@@ -145,7 +145,7 @@ Now implement `NotificationService` to make the tests pass.
 #### 🔷 .NET Prompt
 
 ```
-Create a NotificationService class that implements INotificationService. Make all the tests in the test file pass. Follow the conventions in src/CLAUDE.md. Use constructor injection for any dependencies.
+Create a NotificationService class that implements INotificationService. Make all the tests in the test file pass. Follow the conventions in src-dotnet/CLAUDE.md. Use constructor injection for any dependencies.
 ```
 
 #### 🟩 Spring Boot Prompt
@@ -158,7 +158,7 @@ Create a NotificationService class that implements the NotificationService inter
 
 Claude Code should read the test file, understand what's needed, then write the implementation. You'll see it:
 1. Read the test file
-2. Read `CLAUDE.md` or `src/CLAUDE.md` for conventions
+2. Read `CLAUDE.md` or `src-dotnet/CLAUDE.md` for conventions
 3. Write the implementation
 
 ### 3.2 Run the Tests Again
@@ -270,7 +270,7 @@ If Claude Code merged or split items differently, choose **No, keep planning** a
 #### 🔷 .NET Prompt
 
 ```
-Implement backlog Item 1 using TDD. First write xUnit tests only, in tests/TaskManager.UnitTests/Domain/PriorityTests.cs, for a Priority value object in src/TaskManager.Domain/Tasks/:
+Implement backlog Item 1 using TDD. First write xUnit tests only, in src-dotnet/tests/TaskManager.UnitTests/Domain/PriorityTests.cs, for a Priority value object in src-dotnet/src/TaskManager.Domain/Tasks/:
 - Four values: Low, Medium, High, Critical, each with a Name and a numeric Level for ordering (Low=1 … Critical=4)
 - Priority.FromName("high") is case-insensitive and returns Priority.High
 - FromName with an unknown, null, or empty name throws ArgumentException whose message lists the valid values
@@ -282,7 +282,7 @@ Run the tests and show me the failures. Do not create Priority yet.
 Then:
 
 ```
-Now implement Priority as a sealed record in src/TaskManager.Domain/Tasks/Priority.cs to make the tests pass. Run the tests.
+Now implement Priority as a sealed record in src-dotnet/src/TaskManager.Domain/Tasks/Priority.cs to make the tests pass. Run the tests.
 ```
 
 #### 🟩 Spring Boot Prompt
@@ -311,9 +311,9 @@ Now implement Priority in taskmanager-domain to make the tests pass. Run: mvn -q
 #### 🔷 .NET Prompt
 
 ```
-Implement backlog Item 2 using TDD. Task currently has Create(title, description) in src/TaskManager.Domain/Tasks/Task.cs.
+Implement backlog Item 2 using TDD. Task currently has Create(title, description) in src-dotnet/src/TaskManager.Domain/Tasks/Task.cs.
 
-First write failing tests in tests/TaskManager.UnitTests/Domain/TaskTests.cs:
+First write failing tests in src-dotnet/tests/TaskManager.UnitTests/Domain/TaskTests.cs:
 - Task.Create(title, description) defaults Priority to Medium and DueDate to null
 - Task.Create(title, description, Priority.High, futureUtcDate) sets both
 - A due date in the past throws ArgumentException
@@ -349,8 +349,8 @@ This is backlog Item 3. Work **outside-in on tests, inside-out on code**: write 
 ```
 Implement backlog Item 3, application layer, using TDD.
 
-1. Add a CreateTaskCommand record (Title, Description, Priority as string, DueDate as DateTime?) in src/TaskManager.Application/Tasks/Commands/.
-2. In tests/TaskManager.UnitTests/UnitTest1.cs, replace the skipped AddTaskAsync stubs in TaskServiceTests with real tests for AddTaskAsync(CreateTaskCommand):
+1. Add a CreateTaskCommand record (Title, Description, Priority as string, DueDate as DateTime?) in src-dotnet/src/TaskManager.Application/Tasks/Commands/.
+2. In src-dotnet/tests/TaskManager.UnitTests/UnitTest1.cs, replace the skipped AddTaskAsync stubs in TaskServiceTests with real tests for AddTaskAsync(CreateTaskCommand):
    - valid command → task saved via ITaskRepository.AddTaskAsync and SaveChangesAsync, returns the TaskId
    - unknown priority → ArgumentException, nothing saved
    - missing priority → defaults to Medium
@@ -365,13 +365,13 @@ Leave the GetTaskAsync / UpdateTaskStatusAsync stubs alone.
 #### 🔷 .NET Prompt — API layer
 
 ```
-Implement POST /tasks in src/TaskManager.Api/Extensions/EndpointExtensions.cs. Uncomment and adapt the CreateTaskRequest and TaskResponse records to include priority and dueDate. Return 201 Created with a Location header on success, and 400 ProblemDetails when the service throws ArgumentException. Keep the other commented-out endpoints as they are.
+Implement POST /tasks in src-dotnet/src/TaskManager.Api/Extensions/EndpointExtensions.cs. Uncomment and adapt the CreateTaskRequest and TaskResponse records to include priority and dueDate. Return 201 Created with a Location header on success, and 400 ProblemDetails when the service throws ArgumentException. Keep the other commented-out endpoints as they are.
 ```
 
 Verify it end-to-end:
 
 ```bash
-dotnet run --project src/TaskManager.Api
+dotnet run --project src-dotnet/src/TaskManager.Api
 ```
 
 In a second terminal (or ask Claude Code to run these with `!` in front):
@@ -388,7 +388,7 @@ curl -i -X POST http://localhost:5215/tasks \
 
 Expect `201` for the first and `400` (with the valid priorities listed) for the second.
 
-> **Why no integration test here?** The .NET integration test stubs (`tests/TaskManager.IntegrationTests/UnitTest1.cs`) for `POST /tasks` belong to Lab 5, where you'll write characterization tests before refactoring. For now, unit tests plus a `curl` check are enough.
+> **Why no integration test here?** The .NET integration test stubs (`src-dotnet/tests/TaskManager.IntegrationTests/UnitTest1.cs`) for `POST /tasks` belong to Lab 5, where you'll write characterization tests before refactoring. For now, unit tests plus a `curl` check are enough.
 
 #### 🟩 Spring Boot Prompt — Application + API
 
@@ -504,7 +504,7 @@ Add a new method to the interface: `SendDigestAsync(IEnumerable<Task> tasks)` th
 **Tests not found after Claude Code writes them**
 
 ```bash
-dotnet build   # or: mvn compile
+dotnet build src-dotnet   # or: cd src-springboot && mvn compile
 ```
 
 Often a build error is hiding the test discovery failure. Fix the build error first.

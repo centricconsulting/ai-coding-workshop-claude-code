@@ -86,11 +86,11 @@ Pick the stack you'll use during the workshop (.NET or Spring Boot). You don't n
 - [ ] .NET 9 SDK installed: `dotnet --version` prints `9.x.x`
 - [ ] Build passes:
   ```bash
-  dotnet build
+  dotnet build src-dotnet
   ```
 - [ ] Tests run (they'll be skipped, not failed):
   ```bash
-  dotnet test
+  dotnet test src-dotnet
   ```
   Expected: `Skipped: 11, Failed: 0`
 

@@ -89,7 +89,7 @@ Type this prompt:
 What is this project? Give me an overview of the architecture, the main domain concepts, and how the .NET and Spring Boot versions relate to each other.
 ```
 
-**Watch what happens**: Claude Code will read multiple files before responding. You'll see tool calls appear as it explores the `src/` directory and builds understanding — `CLAUDE.md` is already in its context because it loads automatically at session start. This is the agentic model in action — it's not guessing from a prompt, it's reading your actual code.
+**Watch what happens**: Claude Code will read multiple files before responding. You'll see tool calls appear as it explores the `src-dotnet/` directory and builds understanding — `CLAUDE.md` is already in its context because it loads automatically at session start. This is the agentic model in action — it's not guessing from a prompt, it's reading your actual code.
 
 **Expected behavior**: Claude Code should accurately describe:
 - TaskManager as a workshop codebase with two parallel implementations
@@ -163,9 +163,9 @@ For Part D, cycle to **Manual** mode so you can see permission prompts. (You can
 When Claude Code takes an action, you see lines like:
 
 ```
-● Read(src/TaskManager.Domain/Tasks/Task.cs)
+● Read(src-dotnet/src/TaskManager.Domain/Tasks/Task.cs)
 ● Bash(dotnet build)
-● Write(src/TaskManager.Application/Services/NotificationService.cs)
+● Write(src-dotnet/src/TaskManager.Application/Services/NotificationService.cs)
 ```
 
 These are **tool calls** — real actions Claude Code takes on your filesystem or in your terminal. You control which of these are allowed (Day 2, Lab 9).
@@ -204,7 +204,7 @@ Choose **Yes**, then ask Claude to delete `scratch-notes.md` (or delete it yours
 ### D.3 Understand What Just Happened
 
 Claude Code:
-1. Determined the correct test command from `CLAUDE.md` (or by exploring `src/`)
+1. Determined the correct test command from `CLAUDE.md` (or by exploring `src-dotnet/`)
 2. Checked the command against your permission rules and mode — `dotnet` was pre-approved, the file write was not
 3. Ran the action
 4. Parsed the output and gave you a human-readable summary
@@ -246,7 +246,7 @@ The key insight: **Claude Code's output is actions, not suggestions.** You revie
 Ask Claude Code to compare the .NET and Spring Boot implementations of the Task entity:
 
 ```
-Compare how Task is modeled in src/ (.NET) vs src-springboot/ (Java). What are the key similarities and differences?
+Compare how Task is modeled in src-dotnet/ (.NET) vs src-springboot/ (Java). What are the key similarities and differences?
 ```
 
 Notice that Claude Code will read files from both directories before responding.

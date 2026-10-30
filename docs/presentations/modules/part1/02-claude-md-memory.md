@@ -36,7 +36,7 @@ You: We don't write XML doc comments
 # CLAUDE.md Is Project Memory
 
 ```markdown
-# src/CLAUDE.md
+# src-dotnet/CLAUDE.md
 
 ## C# Conventions
 - File-scoped namespaces
@@ -47,7 +47,7 @@ You: We don't write XML doc comments
 - No abbreviations in identifiers
 ```
 
-Claude Code loads it automatically whenever it works in `src/`.
+Claude Code loads it automatically whenever it works in `src-dotnet/`.
 **You teach it once. It applies those lessons forever.**
 
 ---
@@ -61,7 +61,7 @@ Claude Code loads it automatically whenever it works in `src/`.
 | Project | `./CLAUDE.md` **or** `./.claude/CLAUDE.md` | Team, via git |
 | Project rules | `./.claude/rules/*.md` (`paths:` optional) | Team, via git |
 | Local | `./CLAUDE.local.md` (keep out of git) | You, this project |
-| Subdirectory | `src/CLAUDE.md`, `tests/CLAUDE.md` | Team, via git |
+| Subdirectory | `src-dotnet/CLAUDE.md`, `src-dotnet/tests/CLAUDE.md` | Team, via git |
 
 Plus **auto memory** — notes Claude writes for itself.
 
@@ -84,8 +84,8 @@ Check what's loaded: `/context` → **Memory files**
 ```markdown
 ---
 paths:
-  - "src/**/*.cs"
-  - "tests/**/*.cs"
+  - "src-dotnet/src/**/*.cs"
+  - "src-dotnet/tests/**/*.cs"
 ---
 # .NET Conventions
 - File-scoped namespaces, sealed by default, guard clauses ...
@@ -95,7 +95,7 @@ Shipped in this repo:
 
 | Rule | Loads when Claude touches… |
 |---|---|
-| `dotnet.md` | `src/**/*.cs`, `tests/**/*.cs`, `**/*.csproj` |
+| `dotnet.md` | `src-dotnet/src/**/*.cs`, `src-dotnet/tests/**/*.cs`, `**/*.csproj` |
 | `springboot.md` | `src-springboot/**/*.java`, `pom.xml`, `*.{yml,yaml,properties}` |
 | `follow-up-questions.md` | *(no `paths:` → every session)* |
 
@@ -106,8 +106,8 @@ Shipped in this repo:
 # `@path` Imports
 
 ```markdown
-# tests/CLAUDE.md
-Shared .NET conventions: @../src/CLAUDE.md
+# src-dotnet/tests/CLAUDE.md
+Domain-layer rules: @../../.claude/rules/domain-layer.md
 Git workflow: @docs/git-instructions.md
 ```
 
@@ -184,7 +184,7 @@ public async Task<TaskDto> Handle(CreateTaskCommand command)
     // ...
 ```
 
-**With `src/CLAUDE.md`** — Claude Code produces:
+**With `src-dotnet/CLAUDE.md`** — Claude Code produces:
 
 ```csharp
 public async Task<TaskDto> Handle(CreateTaskCommand command)
@@ -254,7 +254,7 @@ Explain framework-specific things, not language basics.
 1. Read the shipped `CLAUDE.md` files and `.claude/rules/`
 2. Use `/context` and `/memory` to see what's loaded
 3. Watch a path-scoped rule load — then write your own (`domain-layer.md`)
-4. Write `tests/CLAUDE.md` with an `@path` import
+4. Write `src-dotnet/tests/CLAUDE.md` with an `@path` import
 5. Set up personal memory: `~/.claude/CLAUDE.md`, `CLAUDE.local.md`, auto memory
 
 ## The Key Experiment

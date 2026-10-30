@@ -85,7 +85,7 @@ For ordinary keys, **higher wins**. For permission **rules**, every level is mer
 ```json
 {
   "permissions": {
-    "allow": ["Bash(dotnet *)", "Bash(git diff *)", "Edit(src/**)"],
+    "allow": ["Bash(dotnet *)", "Bash(git diff *)", "Edit(src-dotnet/**)"],
     "ask":   ["Bash(git push *)"],
     "deny":  ["Bash(git push --force*)", "Bash(rm -rf *)",
               "Bash(dotnet ef *)", "Read(./.env)"],
@@ -245,14 +245,14 @@ jq -r '"[\(now | todate)] Bash: \(.tool_input.command)"' >> "${CLAUDE_PROJECT_DI
 
 **Format after edit** (`PostToolUse`, `Edit|Write`):
 ```bash
-f=$(jq -r '.tool_input.file_path // empty'); case "$f" in *.cs) cd "$CLAUDE_PROJECT_DIR" &&
-  dotnet format whitespace TaskManager.sln --include "${f#"$CLAUDE_PROJECT_DIR"/}";; esac
+f=$(jq -r '.tool_input.file_path // empty'); case "$f" in *.cs) cd "$CLAUDE_PROJECT_DIR/src-dotnet" &&
+  dotnet format whitespace TaskManager.sln --include "${f#"$CLAUDE_PROJECT_DIR/src-dotnet"/}";; esac
 ```
 
 **Run tests when a test file changes** — and tell Claude if they fail:
 ```bash
 f=$(jq -r '.tool_input.file_path // empty'); case "$f" in */tests/TaskManager.UnitTests/*.cs)
-  cd "$CLAUDE_PROJECT_DIR" && dotnet test tests/TaskManager.UnitTests/ --nologo -v q >&2 || exit 2;; esac
+  cd "$CLAUDE_PROJECT_DIR" && dotnet test src-dotnet/tests/TaskManager.UnitTests/ --nologo -v q >&2 || exit 2;; esac
 ```
 
 ---

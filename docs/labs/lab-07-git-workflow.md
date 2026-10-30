@@ -53,7 +53,7 @@ The command takes an effort level, flags, and a target:
 Try a couple of variations:
 
 ```
-/code-review low src/TaskManager.Infrastructure/Legacy
+/code-review low src-dotnet/src/TaskManager.Infrastructure/Legacy
 ```
 
 ```
@@ -121,10 +121,9 @@ git diff --stat
 Stage the files:
 
 ```bash
-git add src/     # .NET changes
+git add src-dotnet/      # .NET changes (src/ and tests/)
 # or
 git add src-springboot/  # Spring Boot changes
-git add tests/           # test files
 ```
 
 Ask Claude Code to verify the staged set makes sense:

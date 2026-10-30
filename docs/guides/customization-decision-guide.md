@@ -14,7 +14,7 @@ Claude Code has many ways to customize its behavior. This guide helps you pick t
 
 | Mechanism | Where it lives | Loaded / triggered | Best for | Workshop lab |
 |---|---|---|---|---|
-| **CLAUDE.md** (memory) | `./CLAUDE.md`, `src/CLAUDE.md`, `~/.claude/CLAUDE.md`, `CLAUDE.local.md` | Always, at session start (subdirectory files load when Claude works there) | Project facts and conventions that apply to nearly every task | Lab 2 |
+| **CLAUDE.md** (memory) | `./CLAUDE.md`, `src-dotnet/CLAUDE.md`, `~/.claude/CLAUDE.md`, `CLAUDE.local.md` | Always, at session start (subdirectory files load when Claude works there) | Project facts and conventions that apply to nearly every task | Lab 2 |
 | **Rules** | `.claude/rules/*.md` (optional `paths:` frontmatter) | Without `paths:` — always. With `paths:` — only when Claude touches matching files | Conventions that apply to one stack, folder, or file type | Lab 2 |
 | **Skills** (incl. former custom commands) | `.claude/skills/<name>/SKILL.md` (legacy `.claude/commands/*.md` still work) | On demand — you type `/name`, or Claude invokes it when the `description` matches | Repeatable procedures, checklists, templates, "how we do X" | Labs 8, 11 |
 | **Subagents** | `.claude/agents/<name>.md` | Delegated by Claude based on `description`, or explicitly (`@agent-name`, "use the X subagent") | Specialized roles that need their own context window, tools, or model | Lab 12 |
@@ -75,7 +75,7 @@ flowchart TD
 ## Scenarios from This Repository
 
 ### "Every .NET file should use file-scoped namespaces and sealed classes"
-**Use: a rule with `paths:`** — see [`.claude/rules/dotnet.md`](../../.claude/rules/dotnet.md), scoped to `src/**/*.cs` and `tests/**/*.cs`. Spring Boot developers never pay the context cost for C# conventions, and vice versa with [`springboot.md`](../../.claude/rules/springboot.md).
+**Use: a rule with `paths:`** — see [`.claude/rules/dotnet.md`](../../.claude/rules/dotnet.md), scoped to `src-dotnet/src/**/*.cs` and `src-dotnet/tests/**/*.cs`. Spring Boot developers never pay the context cost for C# conventions, and vice versa with [`springboot.md`](../../.claude/rules/springboot.md).
 
 *Why not CLAUDE.md?* It would load C# rules for Java work. *Why not a skill?* Conventions should apply automatically, not when someone remembers to invoke them.
 

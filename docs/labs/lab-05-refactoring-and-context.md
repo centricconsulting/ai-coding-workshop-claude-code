@@ -23,8 +23,8 @@ The `LegacyTaskProcessor` class exists in both stacks. It's intentionally proble
 
 | | 🔷 .NET | 🟩 Spring Boot |
 |---|---|---|
-| Legacy class | `src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs` | `src-springboot/taskmanager-infrastructure/src/main/java/com/example/taskmanager/infrastructure/legacy/LegacyTaskProcessor.java` |
-| Caller | `src/TaskManager.Infrastructure/Legacy/LegacyBatchImportService.cs` | `src-springboot/.../infrastructure/legacy/LegacyBatchImportService.java` |
+| Legacy class | `src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs` | `src-springboot/taskmanager-infrastructure/src/main/java/com/example/taskmanager/infrastructure/legacy/LegacyTaskProcessor.java` |
+| Caller | `src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyBatchImportService.cs` | `src-springboot/.../infrastructure/legacy/LegacyBatchImportService.java` |
 
 ### Choose Your Stack
 
@@ -51,7 +51,7 @@ claude
 #### 🔷 .NET Prompt
 
 ```
-Read src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and its caller LegacyBatchImportService.cs and give me a code review. Identify: code smells, Object Calisthenics violations, naming issues, missing tests, and any correctness bugs. Don't change anything yet.
+Read src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and its caller LegacyBatchImportService.cs and give me a code review. Identify: code smells, Object Calisthenics violations, naming issues, missing tests, and any correctness bugs. Don't change anything yet.
 ```
 
 #### 🟩 Spring Boot Prompt
@@ -90,7 +90,7 @@ Before changing anything, capture the current behavior with tests. This is how y
 Before we change any code, write characterization tests that document the current behavior of LegacyTaskProcessor and LegacyBatchImportService — even the bad parts (for example, Chk returning false until Init(true) is called). These tests should pass against the current implementation and will protect us during refactoring.
 ```
 
-🔷 .NET: put them in a new test class under `tests/TaskManager.UnitTests/` (xUnit v3). 🟩 Spring Boot: put them under `src-springboot/taskmanager-infrastructure/src/test/java/` (JUnit 5).
+🔷 .NET: put them in a new test class under `src-dotnet/tests/TaskManager.UnitTests/` (xUnit v3). 🟩 Spring Boot: put them under `src-springboot/taskmanager-infrastructure/src/test/java/` (JUnit 5).
 
 ### 2.1 Run the Tests
 
@@ -273,7 +273,7 @@ Pick one more Object Calisthenics principle to apply:
 
 Write new tests for the wrapped types, then implement.
 
-🔷 .NET bonus: `tests/TaskManager.IntegrationTests/UnitTest1.cs` contains skipped stubs marked "Lab 5" for the `POST /tasks`, `GET /tasks/{id}`, and `PUT` endpoints. If you've implemented those endpoints on your branch (the handlers are `TODO`s in `EndpointExtensions.cs`), ask Claude Code to implement the tests with `WebApplicationFactory` so the API has its own characterization safety net before future refactors.
+🔷 .NET bonus: `src-dotnet/tests/TaskManager.IntegrationTests/UnitTest1.cs` contains skipped stubs marked "Lab 5" for the `POST /tasks`, `GET /tasks/{id}`, and `PUT` endpoints. If you've implemented those endpoints on your branch (the handlers are `TODO`s in `EndpointExtensions.cs`), ask Claude Code to implement the tests with `WebApplicationFactory` so the API has its own characterization safety net before future refactors.
 
 ---
 

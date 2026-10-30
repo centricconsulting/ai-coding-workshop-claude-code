@@ -60,7 +60,7 @@ Not a security scanner — that's `/security-review` (next module).
 |---|---|
 | High-confidence findings only | `/code-review low` |
 | Broader coverage | `/code-review high` |
-| Just the legacy folder | `/code-review src/TaskManager.Infrastructure/Legacy` |
+| Just the legacy folder | `/code-review src-dotnet/src/TaskManager.Infrastructure/Legacy` |
 | Review and apply fixes | `/code-review --fix` |
 | Review a PR, post inline comments | `/code-review 42 --comment` |
 | Deep multi-agent cloud review | `/code-review ultra` |

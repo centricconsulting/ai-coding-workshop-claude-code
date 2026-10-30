@@ -21,7 +21,7 @@ Request: $ARGUMENTS
 
 The domain evolves during the labs (priorities, due dates, assignments, and so on), so read the entity before generating anything:
 
-- .NET: `src/TaskManager.Domain/` (for example `Tasks/Task.cs`, `Tasks/TaskId.cs`, `Tasks/TaskStatus.cs`)
+- .NET: `src-dotnet/src/TaskManager.Domain/` (for example `Tasks/Task.cs`, `Tasks/TaskId.cs`, `Tasks/TaskStatus.cs`)
 - Spring Boot: `src-springboot/taskmanager-domain/src/main/java/com/example/taskmanager/domain/`
 
 Use only constructors, factory methods, and business methods that actually exist. If the requested entity does not exist, say so and stop. Do not invent types.
@@ -44,12 +44,12 @@ Adapt the template to the current model rather than copying it verbatim.
 3. **Realistic and varied.** Use believable software-team work items ("Fix login timeout on mobile", "Write ADR for caching strategy"), not "Test 1", "Test 2". Mix statuses and lengths.
 4. **Deterministic.** No `Random` without a fixed seed, and no hidden reliance on the current time in assertions. If a time-dependent field exists (due dates), accept a reference time parameter.
 5. **Edge cases on request or when `count` ≥ 5:** empty/whitespace title, maximum-length title, unicode and emoji, every status value, and invalid state transitions (for example completing a cancelled task).
-6. **Follow stack conventions** in `src/CLAUDE.md` / `src-springboot/CLAUDE.md`: `sealed`/`final`, file-scoped namespaces, records for DTOs, no field injection.
+6. **Follow stack conventions** in `src-dotnet/CLAUDE.md` / `src-springboot/CLAUDE.md`: `sealed`/`final`, file-scoped namespaces, records for DTOs, no field injection.
 
 ## Output
 
 1. The generated code or JSON in a single fenced block.
-2. Where to put it (for example `tests/TaskManager.UnitTests/TestData/TaskTestData.cs` or `src-springboot/taskmanager-domain/src/test/java/.../TaskTestData.java`).
+2. Where to put it (for example `src-dotnet/tests/TaskManager.UnitTests/TestData/TaskTestData.cs` or `src-springboot/taskmanager-domain/src/test/java/.../TaskTestData.java`).
 3. One usage example in a test.
 
 Do not write files unless the user asks. This skill only pre-approves read-only tools.

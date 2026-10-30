@@ -135,8 +135,8 @@ dotnet --version   # should print 9.x.x
 **Verify the project builds:**
 ```bash
 cd /path/to/ai-coding-workshop-claude-code
-dotnet build
-dotnet test
+dotnet build src-dotnet
+dotnet test src-dotnet
 ```
 
 Expected: `Build succeeded`, and the test summary shows **11 skipped, 0 failed** — the skipped tests are stubs you fill in during the labs.
@@ -263,8 +263,8 @@ claude -p "Say hello"
 
 # .NET (if using)
 dotnet --version
-dotnet build
-dotnet test
+dotnet build src-dotnet
+dotnet test src-dotnet
 
 # Java (if using)
 java -version
