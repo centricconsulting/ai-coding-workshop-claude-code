@@ -123,13 +123,15 @@ public bool Chk(string d, int tp)
 unless you called `Init(true)` first.
 
 **The caller (`LegacyBatchImportService`) does call `Init(true)` before checking.**
-But `LegacyTaskProcessor` used standalone skips every validation.
+But `LegacyTaskProcessor` used standalone rejects every input.
+And every rename you make must ripple into `LegacyBatchImportService` —
+that's what makes this a *multi-file* refactor.
 
 A characterization test will expose this. The refactoring should fix it.
 
 ---
 
-# Context Management: The `/compact` Command
+# Context Management: See It First with `/context`
 
 A refactoring session builds up a lot of context:
 - Files read
@@ -137,14 +139,38 @@ A refactoring session builds up a lot of context:
 - Previous versions of the code
 
 ```
-[████████████████████░░░░]  80% full
+/context
 ```
 
-When context fills, Claude Code starts dropping early turns.
-It may forget the conventions it loaded from CLAUDE.md.
-It may forget what the tests said 10 turns ago.
+Shows a colored grid of the window plus a breakdown: system prompt,
+CLAUDE.md / rules, skills, MCP tools, messages — with suggestions.
 
-**Use `/compact` before you hit the wall, not after.**
+When the window nears its limit, Claude Code **auto-compacts**:
+it summarizes older history so the session keeps going.
+But the automatic summary guesses what matters — details from
+10 turns ago (like which tests cover which branch) can get lost.
+
+**Compact on your terms, at a phase boundary, before auto-compact does it for you.**
+
+---
+
+# The Context Toolkit
+
+| Command | What it does |
+|---|---|
+| `/context` | Visualize what's filling the window |
+| `/compact [instructions]` | Summarize the conversation; instructions say what to keep |
+| `/clear` | New conversation, empty context (CLAUDE.md still loads). Aliases `/reset`, `/new` |
+| `/resume` | Return to an earlier conversation (`/continue` is an alias) |
+| `/usage` | Session cost, plan limits, activity (`/cost` is an alias) |
+
+```
+/compact Keep the characterization test list, files changed, and
+remaining phases. Drop raw test output.
+```
+
+`/compact` is itself a large request; `/clear` is free.
+Need continuity → compact. Starting something new → clear.
 
 ---
 
@@ -161,7 +187,9 @@ It may forget what the tests said 10 turns ago.
 
 **After `/compact`:**
 Claude Code has a summary of the session, not the raw history.
-You may need to re-orient it: *"We're now starting Phase 3.
+Project-root CLAUDE.md is re-injected from disk; path-scoped rules
+reload when a matching file is touched again.
+You may still need to re-orient it: *"We're now starting Phase 3.
 The characterization tests are passing. Focus on `ProcessTask`."*
 
 ---
@@ -220,8 +248,13 @@ By the end of Lab 5, `LegacyTaskProcessor` should:
 - Replace magic numbers with a `ProcessType` enum (or equivalent)
 - Extract the case-inversion logic into a focused private method
 - Replace the `Chk()` method with a proper `Validate(string input, int taskType)` method
+- Follow Object Calisthenics: one level of indentation, no `else`, no abbreviations
 - Add `ILogger` logging at key points
+- Keep `LegacyBatchImportService` compiling and passing against the new names
 - Have all characterization tests passing
+
+Stretch (same targets as the Copilot workshop): `StringBuilder`, no swallowed
+exceptions, file I/O behind an `ITaskOutputWriter`, wrap primitives, first-class collections.
 
 **You don't need to fix every problem in 45 minutes.**
 Complete Phase 1 and Phase 2 cleanly. Phase 3 is the extension.
@@ -232,14 +265,14 @@ Complete Phase 1 and Phase 2 cleanly. Phase 3 is the extension.
 
 ## What You'll Do
 
-1. Write characterization tests for `LegacyTaskProcessor` (Phase 1) — starting from the plan you drafted in Lab 4
+1. Write characterization tests for `LegacyTaskProcessor` and `LegacyBatchImportService` (Phase 1) — starting from the plan you drafted in Lab 4
 2. Commit — tests all pass
 3. Ask Claude Code to rename params and extract methods — no logic changes (Phase 2)
 4. Confirm tests still pass
 5. Commit
 6. Start Phase 3 if time permits: fix the `Chk`/`Validate` bug
 
-**Before Phase 3:** use `/compact` to compress the session.
+**Before Phase 3:** check `/context`, then `/compact <what to keep>`.
 
 ---
 
@@ -250,7 +283,7 @@ Complete Phase 1 and Phase 2 cleanly. Phase 3 is the extension.
 **Goal for the next 60 minutes:**
 - Characterization tests committed and passing
 - At least one rename/extract phase completed
-- `/compact` used at least once
+- `/context` checked and `/compact` (with instructions) used at least once
 
 ---
 

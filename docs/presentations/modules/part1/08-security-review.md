@@ -13,28 +13,28 @@ backgroundColor: #fff
 
 # Where We Are
 
-Module 07 / Lab 7: `/review` became your pre-commit quality gate —
-bugs, style drift, missing tests, and *incidentally* security issues
-if `/review` happens to notice them.
+Module 07 / Lab 7: `/code-review` (alias `/review`) became your
+pre-commit gate for **correctness bugs** — and *incidentally*
+security issues if it happens to notice them.
 
 **This is the last module of Day 1.** Security deserves a dedicated pass,
 not a side effect of a general review.
 
 ---
 
-# `/review` Recap
+# `/code-review` Recap
 
 ```
-/review
+/code-review [low…max|ultra] [--fix] [--comment] [target]
 ```
 
-Runs against your staged and unstaged changes. Checks:
-- Bugs, logic errors, missing error handling
-- Style drift from `CLAUDE.md`
-- Missing tests
-- Security issues — **if it happens to notice them**
+Reviews branch commits + uncommitted changes. Looks for:
+- Correctness bugs, broken edge cases
+- (higher effort) reuse / simplification cleanups
+- Follows `CLAUDE.md` while it reviews
+- Security issues — **only if it happens to notice them**
 
-General-purpose. Security is not its focus.
+Correctness-focused. Security is not its job.
 
 ---
 
@@ -51,7 +51,10 @@ Specifically looks for:
 - **Secrets** — hardcoded credentials, tokens, connection strings
 - **Broken authorization** — missing or wrong checks on *who* can touch *whose* data
 
-Reads your actual diff. Not a description of it, not a summary — the diff.
+Reads your actual diff: **commits on your branch vs. `origin`'s default branch**.
+
+- Needs an `origin` remote (your fork) — `git remote set-head origin --auto` if it errors
+- Commit first — uncommitted edits aren't in the branch diff
 
 ---
 
@@ -78,8 +81,9 @@ and small enough to build and fix inside one lab.
 PUT /tasks/{id}/assign
 ```
 
-- Task gets `AssignedToUserId` and `OrganizationId`
+- Task gets **new** `AssignedToUserId` and `OrganizationId` fields (the lab adds them — they don't exist in the starter code)
 - Endpoint reassigns a task to any user, given just a task ID
+- No auth in the API yet → caller's org is simulated via an `X-Organization-Id` header
 - **First pass: no check that the requester belongs to the task's organization**
 
 Any caller who knows (or guesses) a task ID from another org can reassign it.
@@ -102,6 +106,8 @@ Reject with `403 Forbidden` otherwise.
 /security-review
 ```
 → Confirm the finding is gone.
+→ Expect a new one: *org ID trusted from a client header*. Correct!
+  That's the lab's known limitation — the real fix is authentication.
 
 ---
 
@@ -109,10 +115,20 @@ Reject with `403 Forbidden` otherwise.
 
 `/security-review` doesn't know TaskManager's specific risk areas.
 
-This lab creates the repo's **first custom security artifact**:
+This lab creates the repo's **first custom security artifact** — a skill:
 
 ```
-.claude/commands/security-checklist.md
+.claude/skills/security-checklist/SKILL.md
+```
+
+```yaml
+---
+name: security-checklist
+description: TaskManager-specific security review
+argument-hint: "[path]"
+disable-model-invocation: true   # only runs when you type it
+allowed-tools: Read, Grep, Glob, Bash(git diff *)
+---
 ```
 
 Layers TaskManager-specific checks on top of the generic review:
@@ -121,7 +137,23 @@ Layers TaskManager-specific checks on top of the generic review:
 
 ---
 
-# Why a Custom Command, Not Tribal Knowledge
+# Commands → Skills
+
+Custom slash commands have been **merged into Skills**.
+
+| | `.claude/commands/x.md` | `.claude/skills/x/SKILL.md` |
+|---|---|---|
+| Creates `/x` | ✅ | ✅ |
+| Same frontmatter | ✅ | ✅ |
+| Supporting files | ❌ | ✅ (checklists, scripts, templates) |
+| Claude can auto-invoke | ✅ unless disabled | ✅ unless `disable-model-invocation: true` |
+
+Old command files still work. New work: **use a skill.**
+(Day 2's Lab 11 goes deep on skills.)
+
+---
+
+# Why a Project Skill, Not Tribal Knowledge
 
 **Without it**: "make sure you check the org ID on task endpoints" lives in
 one senior engineer's head, repeated in code review comments forever.
@@ -140,12 +172,31 @@ Same checks, every time, for anyone on the team — encoded once, run automatica
 
 | Timing | When it makes sense |
 |---|---|
-| **Before `/review`** | Catch security issues early, before investing review time in code that has to change anyway |
-| **After `/review`** | Final gate right before commit, on top of general quality |
+| **Before `/code-review`** | Catch security issues early, before investing review time in code that has to change anyway |
+| **After `/code-review`** | Final gate right before push/PR, on top of correctness |
 | **Both, at different points** | `/security-checklist` any time you touch task assignment, queries, or notification content — not just at commit time |
 
 For TaskManager: assignment, task queries, notification content →
-always get `/security-checklist`, not just `/review`.
+always get `/security-checklist`, not just `/code-review`.
+
+---
+
+# Security in Layers: Team & CI Options
+
+| Stage | Tool |
+|---|---|
+| While Claude writes | **`security-guidance` plugin** — Claude reviews & fixes its own edits automatically |
+| On demand | **`/security-review`** — single pass on branch changes |
+| On demand, project rules | **`/security-checklist`** — your skill |
+| On demand, deep scan | **`claude-security` plugin** — multi-agent repo/diff scan |
+| Every PR | **`anthropics/claude-code-security-review`** GitHub Action — comments findings on PRs |
+
+```
+/plugin install security-guidance@claude-plugins-official
+```
+
+⚠️ Install it *after* Lab 8 — it would fix the deliberate bug before you find it.
+⚠️ The Action isn't hardened against prompt injection — trusted PRs only.
 
 ---
 
@@ -153,11 +204,11 @@ always get `/security-checklist`, not just `/review`.
 
 ## What You'll Do
 
-1. Recap `/review` vs. `/security-review`
-2. Introduce a real cross-tenant authorization gap
+1. Recap `/code-review` vs. `/security-review`
+2. Add assignment fields + endpoint with a real cross-tenant authorization gap; commit it
 3. Run `/security-review`, review the finding, fix the actual issue
-4. Build `.claude/commands/security-checklist.md`
-5. Discuss where security review sits in PR prep
+4. Build `.claude/skills/security-checklist/SKILL.md`
+5. Discuss where security review sits in PR prep, and the plugin / GitHub Action options
 
 ---
 
@@ -167,7 +218,7 @@ always get `/security-checklist`, not just `/review`.
 
 **Goal for the next 30 minutes:**
 - One real finding, fixed at the root cause
-- `.claude/commands/security-checklist.md` created and runnable
+- `.claude/skills/security-checklist/SKILL.md` created and runnable
 - A clear answer to "where does security review fit in PR prep?"
 
 **This is the last lab of Day 1** — Day 1 wrap-up comes next.

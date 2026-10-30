@@ -4,8 +4,10 @@
 **Day**: 1 of 2 (Fundamentals)
 
 **Learning Objectives**:
-- Use Claude Code to refactor legacy code across multiple files
-- Understand context window limits and when to use `/compact`
+- Use Claude Code to refactor legacy code across multiple files (`LegacyTaskProcessor` and its caller `LegacyBatchImportService`)
+- Apply Object Calisthenics rules incrementally, protected by characterization tests
+- Inspect context usage with `/context` and manage it with `/compact [instructions]`, `/clear`, and auto-compact
+- Check session cost and plan usage with `/usage` (`/cost` is an alias)
 - Practice the diff-review workflow for large changes
 - Recognize when a task is too large for a single conversation
 
@@ -16,6 +18,13 @@
 ## Overview
 
 The `LegacyTaskProcessor` class exists in both stacks. It's intentionally problematic code — the kind you'd find in any production codebase that grew organically without discipline. You'll use Claude Code to modernize it, following Object Calisthenics and the CLAUDE.md conventions.
+
+`LegacyTaskProcessor` has one real consumer: `LegacyBatchImportService`, which calls `Init(true)`, `Chk(...)`, `ProcessTask(...)`, `GetCount()`, and `GetLast()`. Any rename you make has to ripple into that caller — that's what makes this a multi-file refactor.
+
+| | 🔷 .NET | 🟩 Spring Boot |
+|---|---|---|
+| Legacy class | `src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs` | `src-springboot/taskmanager-infrastructure/src/main/java/com/example/taskmanager/infrastructure/legacy/LegacyTaskProcessor.java` |
+| Caller | `src/TaskManager.Infrastructure/Legacy/LegacyBatchImportService.cs` | `src-springboot/.../infrastructure/legacy/LegacyBatchImportService.java` |
 
 ### Choose Your Stack
 
@@ -42,13 +51,13 @@ claude
 #### 🔷 .NET Prompt
 
 ```
-Read src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and give me a code review. Identify: code smells, Object Calisthenics violations, naming issues, missing tests, and any correctness bugs. Don't change anything yet.
+Read src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and its caller LegacyBatchImportService.cs and give me a code review. Identify: code smells, Object Calisthenics violations, naming issues, missing tests, and any correctness bugs. Don't change anything yet.
 ```
 
 #### 🟩 Spring Boot Prompt
 
 ```
-Read the LegacyTaskProcessor in src-springboot/ and give me a code review. Identify: code smells, Object Calisthenics violations, naming issues, missing tests, and any correctness bugs. Don't change anything yet.
+Read the LegacyTaskProcessor and LegacyBatchImportService in src-springboot/ and give me a code review. Identify: code smells, Object Calisthenics violations, naming issues, missing tests, and any correctness bugs. Don't change anything yet.
 ```
 
 ### 1.1 Ask for a Refactoring Plan
@@ -59,6 +68,18 @@ Based on your analysis, what's the safest order to refactor this? I want to mode
 
 Discuss the plan. This is a good moment to adjust scope — a 45-minute lab should tackle the highest-value changes, not everything.
 
+> **Tip**: If you saved the phased plan from Lab 4, paste it (or reference the file with `@path/to/plan.md`) instead of generating a new one.
+
+### 1.2 Check Your Starting Context
+
+Before the heavy lifting starts, take a baseline:
+
+```
+/context
+```
+
+`/context` draws a colored grid of how full the context window is and breaks it down by category — system prompt, CLAUDE.md and rules, skills, MCP tools, and messages — with suggestions for anything taking up a lot of space. Note the percentage; you'll compare it after the refactoring phases.
+
 ---
 
 ## Step 2: Write Characterization Tests First (10 min)
@@ -66,8 +87,10 @@ Discuss the plan. This is a good moment to adjust scope — a 45-minute lab shou
 Before changing anything, capture the current behavior with tests. This is how you refactor safely when there are no existing tests.
 
 ```
-Before we change any code, write characterization tests that document the current behavior of LegacyTaskProcessor — even the bad parts. These tests should pass against the current implementation and will protect us during refactoring.
+Before we change any code, write characterization tests that document the current behavior of LegacyTaskProcessor and LegacyBatchImportService — even the bad parts (for example, Chk returning false until Init(true) is called). These tests should pass against the current implementation and will protect us during refactoring.
 ```
+
+🔷 .NET: put them in a new test class under `tests/TaskManager.UnitTests/` (xUnit v3). 🟩 Spring Boot: put them under `src-springboot/taskmanager-infrastructure/src/test/java/` (JUnit 5).
 
 ### 2.1 Run the Tests
 
@@ -109,23 +132,53 @@ Now refactor the conditional logic: replace nested if/else blocks with guard cla
 
 Review, run tests, confirm green.
 
-### Phase 3: Extract Methods
+### Phase 3: Extract Methods (Object Calisthenics)
 
 ```
-Extract any code blocks longer than 5–6 lines into well-named private methods. Apply the "one level of indentation" rule where possible. Run the characterization tests.
+Extract any code blocks longer than 5–6 lines into well-named private methods. Apply these Object Calisthenics rules: one level of indentation per method, don't use the else keyword, and don't abbreviate names. Run the characterization tests.
 ```
+
+### Phase 4 (if time permits): Modernize
+
+These are the same targets the GitHub Copilot version of this workshop uses for `LegacyTaskProcessor`:
+
+```
+Continue refactoring LegacyTaskProcessor:
+- Replace the magic numbers for type (1, 2) with an enum
+- Use StringBuilder (or a stream) instead of string concatenation in loops
+- Stop swallowing exceptions; inject a logger (ILogger<T> / SLF4J) and log failures
+- Extract the file write into an ITaskOutputWriter abstraction
+- Remove Thread.Sleep
+Update LegacyBatchImportService to match. Run the characterization tests after each change.
+```
+
+Some of these intentionally change behavior (logging, no sleep). If a characterization test now documents behavior you *meant* to change, update that test deliberately and say so in your commit message.
 
 ### 3.1 Context Management During Long Tasks
 
-After 3 phases of refactoring, check how long your session has been running. If the conversation feels long or Claude Code seems to be losing track of earlier context, use `/compact` before continuing:
+After 3 phases of refactoring, check how much context you've used:
 
 ```
-/compact
+/context
 ```
 
-`/compact` summarizes the conversation history into a condensed form, freeing up context for more work. Claude Code retains the essential context — which files it changed, what the characterization tests cover — but drops the verbose back-and-forth.
+Compare it with your baseline from Step 1.2. Every file read, test run, and diff has been added to the conversation. If usage is high or Claude Code seems to be losing track of earlier decisions, compact before continuing — and tell it what to keep:
 
-> **Key practice**: Use `/compact` proactively, before you hit the context limit. Waiting until the limit causes abrupt conversation truncation.
+```
+/compact Keep: the characterization test names and what they cover, the files changed so far, and the remaining refactoring phases. Drop: full test output and old versions of the code.
+```
+
+`/compact [instructions]` replaces the conversation with a structured summary, freeing context for more work. Your project CLAUDE.md is re-injected from disk afterward, so conventions survive; path-scoped rules and nested CLAUDE.md files reload when Claude next touches a matching file.
+
+Then check what the session has cost so far:
+
+```
+/usage
+```
+
+`/usage` shows session cost, plan usage limits, and activity stats (`/cost` is an alias).
+
+> **Key practice**: Claude Code **auto-compacts** as you approach the context limit, so a full window won't end your session — but the automatic summary guesses what matters. Running `/compact` yourself at a phase boundary, with focus instructions, keeps the details *you* care about.
 
 ---
 
@@ -134,7 +187,7 @@ After 3 phases of refactoring, check how long your session has been running. If 
 Renaming methods means callers may be broken.
 
 ```
-Search the codebase for any code that calls LegacyTaskProcessor methods. If anything calls the old method names, update those callers too.
+Search the codebase for any code that calls LegacyTaskProcessor methods. LegacyBatchImportService is one — are there others? Update every caller to the new method names and run all tests.
 ```
 
 Claude Code should:
@@ -186,10 +239,14 @@ As tasks get larger, context management becomes a skill:
 
 | Signal | Action |
 |---|---|
-| Session has grown long and Claude Code seems to "forget" earlier context | Run `/compact` |
-| Claude Code is repeating questions it already answered | Run `/compact` or start a new focused task |
+| You're not sure how full the window is | Run `/context` |
+| A phase just finished and the next one needs only a summary of it | Run `/compact <what to keep>` |
+| Session has grown long and Claude Code seems to "forget" earlier context | Run `/compact` with focus instructions |
 | Task spans >10 files | Consider splitting into sub-tasks |
-| Claude Code is repeating itself | Run `/clear` and re-describe the remaining work |
+| Switching to an unrelated task, or Claude Code is going in circles | Run `/clear` (new conversation, empty context; CLAUDE.md still loads) and re-describe the remaining work. `/resume` gets the old conversation back |
+| Wondering what this is costing | Run `/usage` |
+
+`/compact` keeps continuity but is itself a large request (it reads everything it summarizes). `/clear` is free and gives a clean slate. Pick based on whether you need the history.
 
 The best practice is **small, focused tasks** with clear scope. Rather than "refactor the whole codebase," break it into phases as you did in this lab.
 
@@ -200,7 +257,9 @@ The best practice is **small, focused tasks** with clear scope. Rather than "ref
 - [ ] Characterization tests written and passing before any refactoring
 - [ ] LegacyTaskProcessor refactored in at least two phases
 - [ ] All characterization tests still pass after refactoring
-- [ ] You used `/compact` or understand when to use it
+- [ ] `LegacyBatchImportService` updated to match any renames
+- [ ] You checked context usage with `/context` and used `/compact` (ideally with instructions) at least once
+- [ ] You can explain when to use `/compact` vs `/clear`
 - [ ] You reviewed the full git diff before committing
 
 ---
@@ -213,6 +272,8 @@ Pick one more Object Calisthenics principle to apply:
 - **No getters/setters**: replace property access with behavior methods
 
 Write new tests for the wrapped types, then implement.
+
+🔷 .NET bonus: `tests/TaskManager.IntegrationTests/UnitTest1.cs` contains skipped stubs marked "Lab 5" for the `POST /tasks`, `GET /tasks/{id}`, and `PUT` endpoints. If you've implemented those endpoints on your branch (the handlers are `TODO`s in `EndpointExtensions.cs`), ask Claude Code to implement the tests with `WebApplicationFactory` so the API has its own characterization safety net before future refactors.
 
 ---
 
@@ -232,7 +293,7 @@ A characterization test is failing: [paste failure]. Which change caused this? R
 
 **Context overflow — Claude Code losing track of the task**
 
-Run `/compact`. If the task is very large, commit what you have, `/clear`, and start a new session for the next phase.
+Run `/context` to confirm, then `/compact` with instructions about what to keep. If the task is very large, commit what you have, `/clear`, and start the next phase in a fresh conversation (paste in the remaining plan).
 
 **"File not found" errors after renames**
 

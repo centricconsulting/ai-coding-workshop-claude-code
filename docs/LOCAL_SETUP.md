@@ -8,8 +8,8 @@ For participants who cannot use Dev Containers. If you can use the devcontainer,
 
 | Tool | Required Version | Check Command |
 |---|---|---|
-| Node.js | 18+ | `node --version` |
 | Claude Code CLI | latest | `claude --version` |
+| Claude account | Pro/Max/Team/Enterprise subscription **or** Console API key | `/status` inside Claude Code |
 | .NET SDK | 9.0+ | `dotnet --version` |
 | Java JDK | 21+ | `java -version` |
 | Maven | 3.9+ | `mvn --version` |
@@ -17,103 +17,102 @@ For participants who cannot use Dev Containers. If you can use the devcontainer,
 
 You only need **.NET** or **Java** — not both. Pick the stack you'll use for the labs.
 
----
-
-## Step 1: Node.js
-
-Claude Code requires Node.js 18 or later.
-
-**macOS (Homebrew):**
-```bash
-brew install node
-```
-
-**macOS/Linux (nvm — recommended):**
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-nvm install 20
-nvm use 20
-```
-
-**Windows:**
-Download the LTS installer from [nodejs.org](https://nodejs.org).
-
-**Verify:**
-```bash
-node --version   # should print v18.x.x or higher
-npm --version
-```
+Claude Code runs on macOS 13+, Windows 10 1809+ (natively or under WSL), and Ubuntu 20.04+, Debian 10+, or Alpine 3.19+ with 4 GB+ RAM. **Node.js is not required** unless you choose the npm install option.
 
 ---
 
-## Step 2: Claude Code CLI
+## Step 1: Install Claude Code
 
+The **native installer** is the recommended option on every OS. It installs a self-contained binary to `~/.local/bin/claude` and auto-updates in the background.
+
+**macOS / Linux / WSL:**
 ```bash
-npm install -g @anthropic-ai/claude-code
+curl -fsSL https://claude.ai/install.sh | bash
 ```
+
+**Windows PowerShell:**
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+**Windows CMD:**
+```batch
+curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+```
+
+> On native Windows, [Git for Windows](https://git-scm.com/downloads/win) is recommended (Claude Code uses Git Bash when available, otherwise PowerShell). WSL 2 is also supported — run the Linux command inside your WSL shell.
+
+### Alternatives
+
+| Option | Command | Notes |
+|---|---|---|
+| Homebrew (macOS/Linux) | `brew install --cask claude-code` | Does **not** auto-update — run `brew upgrade claude-code` |
+| WinGet (Windows) | `winget install Anthropic.ClaudeCode` | Does **not** auto-update — run `winget upgrade Anthropic.ClaudeCode` |
+| npm | `npm install -g @anthropic-ai/claude-code` | Requires **Node.js 22+**. Never use `sudo npm install -g` |
 
 **Verify:**
 ```bash
 claude --version
+claude doctor      # read-only diagnostics for your installation and settings
+```
+
+If `claude` isn't found after the native install, add `~/.local/bin` to your `PATH` and open a new terminal:
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc   # or ~/.bashrc
 ```
 
 ---
 
-## Step 3: ANTHROPIC_API_KEY
+## Step 2: Choose How You'll Authenticate
 
-Claude Code requires an Anthropic API key. Get one at [console.anthropic.com](https://console.anthropic.com).
+Claude Code needs a Claude account. Your facilitator will tell you which option your cohort uses.
 
-### macOS / Linux
+| Option | Use when | How |
+|---|---|---|
+| **Claude subscription** (Pro, Max, Team, Enterprise) | You or your org has a claude.ai plan | Run `claude` and sign in through the browser (or `/login` later) |
+| **Claude Console API key** | Your org bills usage through the Anthropic Console | Set `ANTHROPIC_API_KEY` in your shell profile |
+| **Cloud provider** (Amazon Bedrock, Google Vertex AI, Microsoft Foundry) | Your org routes model access through its cloud | Set the provider env vars per the [authentication docs](https://code.claude.com/docs/en/authentication) |
 
-Add to your shell profile (`~/.zshrc`, `~/.bashrc`, or `~/.bash_profile`):
-
-```bash
-export ANTHROPIC_API_KEY="sk-ant-..."
-```
-
-Then reload:
-```bash
-source ~/.zshrc   # or source ~/.bashrc
-```
-
-### Windows (PowerShell)
-
-```powershell
-[System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "sk-ant-...", "User")
-```
-
-Restart your terminal after setting it.
-
-### Verify
-
-```bash
-echo $ANTHROPIC_API_KEY   # macOS/Linux — should print your key
-```
-
-```powershell
-echo $env:ANTHROPIC_API_KEY   # Windows PowerShell
-```
-
----
-
-## Step 4: Authenticate Claude Code
+### Option A — Subscription login
 
 ```bash
 claude
 ```
 
-On first launch, Claude Code will prompt you to authenticate. Follow the browser flow. Once authenticated, the session persists.
+On first launch Claude Code opens a browser to sign in. If no browser opens (SSH, WSL, containers), copy the URL shown in the terminal into a browser and paste the returned code back. You can switch accounts any time with `/login`.
 
-**Quick smoke test:**
+### Option B — Console API key
+
+Create a key at [platform.claude.com](https://platform.claude.com) (formerly console.anthropic.com).
+
+**macOS / Linux** — add to your shell profile (`~/.zshrc`, `~/.bashrc`, or `~/.bash_profile`) and reload:
 ```bash
-claude --print "Say hello"
+export ANTHROPIC_API_KEY="sk-ant-..."
+source ~/.zshrc   # or source ~/.bashrc
 ```
 
-If this prints a greeting and exits, Claude Code is working correctly.
+**Windows (PowerShell)** — then restart your terminal:
+```powershell
+[System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "sk-ant-...", "User")
+```
+
+The first time you start `claude` with a key set, it asks you to approve the key. When an API key is set it **takes precedence** over a subscription login — `unset ANTHROPIC_API_KEY` to fall back to your subscription.
 
 ---
 
-## Step 5: .NET 9 SDK (if using the .NET stack)
+## Step 3: Smoke Test
+
+```bash
+claude -p "Say hello"
+```
+
+If this prints a greeting and exits, Claude Code is working. Inside an interactive session, `/status` shows which account and credential are active.
+
+> **Using a Dev Container later?** Run `claude setup-token` on your host to generate a one-year subscription token, and export it as `CLAUDE_CODE_OAUTH_TOKEN` — the workshop devcontainers forward it automatically. See `.devcontainer/README.md`.
+
+---
+
+## Step 4: .NET 9 SDK (if using the .NET stack)
 
 **macOS (Homebrew):**
 ```bash
@@ -140,11 +139,11 @@ dotnet build
 dotnet test
 ```
 
-Expected: `Build succeeded`, all tests skipped (not failed).
+Expected: `Build succeeded`, and the test summary shows **11 skipped, 0 failed** — the skipped tests are stubs you fill in during the labs.
 
 ---
 
-## Step 6: Java 21 JDK + Maven (if using the Spring Boot stack)
+## Step 5: Java 21 JDK + Maven (if using the Spring Boot stack)
 
 ### Java 21
 
@@ -199,7 +198,7 @@ Expected: `BUILD SUCCESS`, all tests pass.
 
 ---
 
-## Step 7: VS Code Setup
+## Step 6: VS Code Setup
 
 ### Required Extension
 
@@ -207,11 +206,13 @@ Install the **Claude Code** extension:
 - Open VS Code
 - Press `Ctrl+Shift+X` (Extensions)
 - Search for "Claude Code" by Anthropic
-- Install
+- Install (requires VS Code 1.94+)
+
+The extension bundles its own copy of the CLI for the chat panel, but the labs run `claude` in the terminal, so you still need Step 1.
 
 Or via command line:
 ```bash
-code --install-extension anthropics.claude-code
+code --install-extension anthropic.claude-code
 ```
 
 ### Recommended Extension (for presentations)
@@ -223,7 +224,7 @@ code --install-extension marp-team.marp-vscode
 
 ---
 
-## Step 8: Fork and Clone
+## Step 7: Fork and Clone
 
 The workshop requires a **fork** (not just a clone) because Labs 10, 13, and 15 need a GitHub remote you control.
 
@@ -257,7 +258,8 @@ Before the workshop, confirm all of these pass:
 ```bash
 # Claude Code
 claude --version
-claude --print "Say hello"
+claude doctor
+claude -p "Say hello"
 
 # .NET (if using)
 dotnet --version
@@ -281,13 +283,16 @@ If anything fails, see the troubleshooting section below or ask in the workshop 
 ## Troubleshooting
 
 **`claude: command not found`**
-- Run `npm install -g @anthropic-ai/claude-code` again
-- Verify npm global bin is on your PATH: `npm bin -g`
+- Native install: check `ls ~/.local/bin/claude`, add `~/.local/bin` to `PATH`, and open a new terminal
+- npm install: check `node --version` is 22+ and that `npm prefix -g`'s `bin` directory is on your PATH
+- Run `claude doctor` for diagnostics
 
-**`ANTHROPIC_API_KEY` not found / authentication errors**
-- Check `echo $ANTHROPIC_API_KEY` returns your key
-- Make sure you reloaded your shell after adding it: `source ~/.zshrc`
-- On Windows, restart the terminal after setting the env var
+**Authentication errors / wrong account**
+- Run `/status` inside Claude Code to see which credential is active
+- An `ANTHROPIC_API_KEY` in your environment overrides a subscription login — `unset ANTHROPIC_API_KEY` if you meant to use your subscription
+- API keys: check `echo $ANTHROPIC_API_KEY` returns your key and that you reloaded your shell (Windows: restart the terminal)
+- Subscriptions: run `/login` to sign in again
+- Corporate proxies/firewalls: see the [troubleshooting docs](https://code.claude.com/docs/en/troubleshooting)
 
 **`dotnet: command not found`**
 - Verify the SDK is installed: check Add/Remove Programs (Windows) or `ls /usr/local/share/dotnet`

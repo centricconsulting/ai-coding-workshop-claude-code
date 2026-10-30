@@ -1,27 +1,31 @@
 {
-  "_comment": "This file is a TEACHING ARTIFACT for Lab 9. It demonstrates Claude Code hooks and permissions. Participants study and modify it during the workshop.",
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "_comment": "This file is a TEACHING ARTIFACT for Lab 9. It demonstrates Claude Code permissions (allow/ask/deny) and hooks. Hooks read their input as JSON on stdin and require jq. Participants study and modify it during the workshop.",
 
   "permissions": {
     "allow": [
-      "Bash(dotnet:*)",
-      "Bash(mvn:*)",
+      "Bash(dotnet *)",
+      "Bash(mvn *)",
       "Bash(git status)",
-      "Bash(git diff*)",
-      "Bash(git log*)",
-      "Bash(git add*)",
-      "Bash(git commit*)",
-      "Bash(git checkout*)",
-      "Bash(find:*)",
-      "Bash(grep:*)",
-      "Bash(ls:*)",
-      "Bash(cat:*)"
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)"
+    ],
+    "ask": [
+      "Bash(git push *)"
     ],
     "deny": [
-      "Bash(git push*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
       "Bash(git reset --hard*)",
-      "Bash(rm -rf*)",
-      "Bash(dotnet ef*)",
-      "Bash(mvn flyway*)"
+      "Bash(rm -rf *)",
+      "Bash(dotnet ef *)",
+      "Bash(mvn flyway*)",
+      "Read(./.env)",
+      "Read(./.env.*)"
     ]
   },
 
@@ -32,27 +36,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '[hook] About to run: $CLAUDE_TOOL_INPUT' >> /tmp/claude-audit.log"
+            "command": "jq -r '\"[\\(now | todate)] Bash: \\(.tool_input.command)\"' >> \"${CLAUDE_PROJECT_DIR}/.claude/audit.log\""
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "Write",
+        "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
-            "command": "echo '[hook] File written at '$(date) >> /tmp/claude-audit.log"
-          }
-        ]
-      },
-      {
-        "matcher": "Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '[hook] File edited at '$(date) >> /tmp/claude-audit.log"
+            "command": "jq -r '\"[\\(now | todate)] \\(.tool_name): \\(.tool_input.file_path)\"' >> \"${CLAUDE_PROJECT_DIR}/.claude/audit.log\""
           }
         ]
       }

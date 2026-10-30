@@ -299,3 +299,7 @@ fastlane/test_output
 participant-notes/
 my-solutions/
 personal-scratch/
+
+# Claude Code personal/local files
+CLAUDE.local.md
+.claude/settings.local.json

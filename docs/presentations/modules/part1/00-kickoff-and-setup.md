@@ -135,10 +135,13 @@ src/CLAUDE.md                ← Layer/stack-specific conventions
                                 (applies to src/ and below)
 
 tests/CLAUDE.md              ← Test-specific conventions
-                                (applies to tests/ and below)
+                                (loaded when Claude works in tests/)
+
+.claude/rules/*.md           ← Path-scoped rules (`paths:` frontmatter)
+                                (loaded only for matching files)
 ```
 
-More specific files win when there are conflicts.
+More specific instructions take precedence when there are conflicts.
 
 ---
 
@@ -148,18 +151,19 @@ More specific files win when there are conflicts.
 
 ```bash
 claude              # Start interactive session
-claude --print "…"  # Run non-interactively
+claude -p "…"       # Run non-interactively (print mode)
 claude --continue   # Resume last session
+claude doctor       # Diagnose install & settings
 ```
-
-**Essential slash commands:**
 
 | Command | Purpose |
 |---|---|
-| `/help` | List all commands |
-| `/compact` | Compress history (use at 60%+ context) |
-| `/review` | Pre-commit code review |
-| `/clear` | Fresh session |
+| `/help` · `/context` | List commands · see what fills the context window |
+| `/model` · `/effort` | Pick model · set reasoning effort |
+| `/compact` · `/clear` | Summarize history · fresh session |
+| `/code-review` | Review changes (`/review` is an alias) |
+
+**Shift+Tab** cycles permission modes: Auto → Manual → Accept edits → Plan
 
 ---
 
@@ -167,8 +171,8 @@ claude --continue   # Resume last session
 
 ## What participants need
 
-- **Claude Code installed**: `npm install -g @anthropic-ai/claude-code`
-- **Authenticated**: `claude` → follow login flow
+- **Claude Code installed**: `curl -fsSL https://claude.ai/install.sh | bash` (Windows: `irm https://claude.ai/install.ps1 | iex`) — or use the devcontainer
+- **Authenticated**: Claude subscription (`/login`) **or** Console API key (`ANTHROPIC_API_KEY`); `/status` shows which
 - **Repository forked** on GitHub, then cloned from the fork
 - **Upstream remote added**: `git remote add upstream https://github.com/centricconsulting/…`
 - **Personal branch**: `git checkout -b workshop/your-name`
@@ -176,8 +180,8 @@ claude --continue   # Resume last session
 ## Verify your stack
 
 ```bash
-# .NET
-dotnet --version && dotnet build
+# .NET — expect 11 skipped, 0 failed
+dotnet --version && dotnet build && dotnet test
 
 # Spring Boot
 java -version && cd src-springboot && mvn clean test
@@ -191,8 +195,8 @@ java -version && cd src-springboot && mvn clean test
 
 - Install and authenticate Claude Code *(if not done)*
 - Ask Claude Code to explore the TaskManager codebase
-- Experience permission prompts firsthand
-- Learn the essential slash commands
+- Run the tests and trigger a permission prompt in Manual mode
+- Learn the essential slash commands and Shift+Tab permission modes
 
 ## The key experiment
 
@@ -209,8 +213,9 @@ Watch how it reads multiple files before answering — not guessing from a promp
 | Completion-Based Tools | Claude Code Workshop |
 |---|---|
 | Tool-per-action | Task-per-outcome |
-| Per-file-pattern instruction files | `CLAUDE.md` |
-| Custom agents | Hooks + MCP |
+| Per-file-pattern instruction files | `CLAUDE.md` + `.claude/rules/` |
+| Custom agents | Subagents in `.claude/agents/` |
+| Prompt files | Skills in `.claude/skills/` |
 | Bilingual split | Language-agnostic config |
 
 ---

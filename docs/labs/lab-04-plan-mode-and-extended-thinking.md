@@ -1,116 +1,126 @@
-# Lab 4: Plan Mode & Extended Thinking
+# Lab 4: Plan Mode, Permission Modes & Thinking
 
-**Duration**: 20 minutes
+**Duration**: 25–30 minutes
 **Day**: 1 of 2 (Fundamentals)
 
 **Learning Objectives**:
-- Understand Plan Mode as a read-only planning state that makes zero edits
-- Enter and exit Plan Mode deliberately
-- Iterate on a plan risk-free before any code changes happen
-- Use extended-thinking triggers (`think`, `think hard`, `think harder`, `ultrathink`) and know when the extra latency is worth it
-
-> **Note**: Claude Code's Plan Mode is a hard boundary — while it's active, no file is written, no command that mutates state runs. You approve the plan, *then* Claude Code executes it.
+- Treat permission modes as interaction models: ask-before-act, plan-first, and act-autonomously
+- Switch modes deliberately with `Shift+Tab`, `/plan`, and `--permission-mode`
+- Use plan mode to iterate on a refactor plan before any source file changes
+- Control reasoning depth with effort levels (`/effort`, `--effort`) and the one-turn `ultrathink` boost — and know when it's worth it
 
 ---
 
 ## Overview
 
-So far you've asked Claude Code to write tests and implementations directly. For small, well-scoped changes that's fine. But the next lab (Lab 5) asks Claude Code to refactor `LegacyTaskProcessor` — a messier, multi-file, higher-risk task. Before touching that code, you're going to plan the refactor first, without any risk of Claude Code jumping ahead and editing files mid-thought.
+So far you've asked Claude Code to write tests and implementations directly. For small, well-scoped changes that's fine. The next lab (Lab 5) refactors `LegacyTaskProcessor` — a messier, multi-file, higher-risk task. Before touching that code, you'll plan the refactor without any risk of Claude Code editing files mid-thought.
 
-That's what Plan Mode is for: a mode where Claude Code can read the codebase, reason about an approach, and propose a phased plan — but literally cannot write, edit, or run mutating commands until you exit the mode and approve.
+Along the way you'll learn the two dials that shape *every* Claude Code session:
+
+1. **Permission mode** — how much Claude Code may do before checking with you
+2. **Effort** — how hard Claude Code thinks before answering
+
+> **Coming from GitHub Copilot?** Copilot Chat's **Ask / Plan / Agent** modes map closely onto Claude Code's permission modes. The difference: in Claude Code it's one agent the whole time — you're changing *what it's allowed to do without asking*, not switching to a different assistant.
 
 ### Choose Your Stack
 
-> Follow sections marked 🔷 for .NET or 🟩 for Spring Boot. Plan Mode and extended thinking behave identically in both — only the file paths differ.
+> Follow sections marked 🔷 for .NET or 🟩 for Spring Boot. Modes and effort behave identically in both — only the file paths differ.
 
 ---
 
 ## Prerequisites
 
 - Completed Labs 1–3
-- Personal branch with Lab 3 work committed or stashed (Plan Mode won't touch it, but start clean)
+- Lab 3 work committed or stashed (`git status` clean), so it's easy to see what this lab changes
 
 ---
 
-## Part A: What Plan Mode Is (5 min)
+## Part A: Permission Modes as Interaction Models (7 min)
 
-### A.1 The Problem It Solves
+### A.1 The Modes
 
-When you ask Claude Code for something non-trivial, it normally does three things in one breath: reads code, decides on an approach, and starts editing. If the approach is wrong, you find out *after* files have already changed — and now you're reviewing a diff to figure out what happened, instead of reviewing a plan to decide what should happen.
+| Claude Code mode | Status bar | What runs without asking | Copilot analogue | Use it for |
+|---|---|---|---|---|
+| `default` (shown as **Manual**) | `⏸ manual mode on` | Reads only — every edit and command asks first | **Ask** (but Claude can still act once you approve) | Unfamiliar code, sensitive work |
+| `plan` | `⏸ plan mode on` | Reads and exploration; **source edits are blocked** until you approve a plan | **Plan** | Multi-step or risky changes |
+| `acceptEdits` | `⏵⏵ accept edits on` | Reads, file edits, and common filesystem commands in the working directory | **Agent** (edits auto-applied) | Iterating on code you're reviewing as it lands |
+| `auto` | `⏵⏵ auto mode on` | Everything, with a background safety classifier blocking risky actions | **Agent** (fully autonomous) | Long tasks you trust; the built-in starting mode in recent versions |
 
-Plan Mode splits those two things apart. While it's active:
-- Claude Code can use read-only tools freely: reading files, searching, running read-only commands (`git status`, `git log`, test runs that don't mutate code)
-- Claude Code **cannot** write files, edit files, or run commands that change state
-- Every response is a proposal, not an action
+Two more exist for automation, not day-to-day work: `dontAsk` (only pre-approved tools — for CI) and `bypassPermissions` (no checks — containers/VMs only). Neither is used in this workshop.
 
-### A.2 Entering and Exiting Plan Mode
+> **Note**: Plan mode blocks *edits*, not all commands. When auto mode is available, a safety classifier lets Claude run exploratory shell commands during planning; otherwise, anything outside the built-in read-only set asks first. Your working tree's source files stay untouched until you approve.
 
-Enter Plan Mode with `Shift+Tab` (cycles through modes) or by starting Claude Code with the `--permission-mode plan` flag. While in Plan Mode you'll see an indicator in the CLI showing you're in a read-only state.
+### A.2 Switch Modes
 
-To exit, you have two paths:
-- **Approve the plan** — Claude Code asks for confirmation and, once you approve, switches to normal mode and starts executing
-- **Cancel** — back out without approving anything; no files were touched either way
+Start Claude Code and press **`Shift+Tab`** a few times. Watch the status bar under the prompt. From `auto`, the cycle runs `manual → accept edits → plan → auto`. (If your organization disables auto mode, you'll start in Manual and the cycle skips it.)
 
-> **Key practice**: Plan Mode isn't just for big refactors. Any time you're not sure what Claude Code will decide to do, entering Plan Mode first costs you nothing — you can always approve immediately if the first proposal is good.
+Other ways in:
 
-### A.3 Why Zero Edits Matters
+```bash
+claude --permission-mode plan      # start a session in plan mode
+claude --permission-mode default   # or: manual
+```
 
-The guarantee isn't "Claude Code will probably be careful." It's structural — the tools available in Plan Mode don't include `Write`, `Edit`, or mutating `Bash` commands. You can iterate on a bad plan ten times in a row and your working tree is byte-for-byte what it was when you started. That's what makes Plan Mode safe to use liberally, even mid-session, even when you're unsure what you want yet.
+```
+/plan Explain how tasks are persisted     ← enter plan mode and start on this task in one step
+```
+
+To make a mode the project default, set `"permissions": { "defaultMode": "plan" }` in `.claude/settings.json` (don't do this now — this repo's settings are shared by everyone).
+
+### A.3 Feel the Difference
+
+Switch to **Manual** (`⏸ manual mode on`) and ask:
+
+```
+Add a one-line XML doc comment to the TaskId class.
+```
+
+(🟩 Spring: *"Add a one-line Javadoc comment to the TaskId class."*)
+
+Claude Code proposes the edit and **asks** before writing. Choose **No** — and notice that you were the gate. Now press `Shift+Tab` to `⏵⏵ accept edits on`, repeat the request, and watch it apply immediately. Undo it:
+
+```
+Revert that change.
+```
+
+> **Key practice**: Pick the mode for the *task*, not for the day. Manual for anything unfamiliar, plan mode for anything with more than one step, accept-edits or auto once you trust the direction.
 
 ---
 
-## Part B: Plan the LegacyTaskProcessor Refactor (10 min)
+## Part B: Plan the LegacyTaskProcessor Refactor (12 min)
 
-This is the main exercise, and it matters beyond this lab: **the plan you produce here is what Lab 5 starts from.** Don't skip ahead and refactor anything now — the point is to leave this lab with a written plan and an untouched codebase.
+This is the main exercise: **the plan you produce here is what Lab 5 starts from.** Don't refactor anything now.
 
-### B.1 Enter Plan Mode
-
-```bash
-claude
-```
-
-Press `Shift+Tab` until you see the Plan Mode indicator, or start with:
-
-```bash
-claude --permission-mode plan
-```
-
-### B.2 Ask for a Phased Refactor Plan
+### B.1 Enter Plan Mode with a Task
 
 #### 🔷 .NET Prompt
 
 ```
-Read src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and src/CLAUDE.md.
-
+/plan Read src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and src/CLAUDE.md.
 I want to modernize LegacyTaskProcessor to follow the conventions in src/CLAUDE.md
 (guard clauses, no abbreviations, ILogger instead of Console, Object Calisthenics)
 without changing its observable behavior.
-
 Draft a phased plan: what order should the work happen in, what does each phase
 touch, and what's the safety net (tests) for each phase before moving to the next?
-Don't write anything yet — I want to review and adjust the plan first.
 ```
 
 #### 🟩 Spring Boot Prompt
 
 ```
-Read src-springboot/taskmanager-infrastructure/src/main/java/com/example/taskmanager/infrastructure/legacy/LegacyTaskProcessor.java
+/plan Read src-springboot/taskmanager-infrastructure/src/main/java/com/example/taskmanager/infrastructure/legacy/LegacyTaskProcessor.java
 and src-springboot/CLAUDE.md.
-
 I want to modernize LegacyTaskProcessor to follow the conventions in src-springboot/CLAUDE.md
 (guard clauses, no abbreviations, SLF4J instead of System.out, constructor injection)
 without changing its observable behavior.
-
 Draft a phased plan: what order should the work happen in, what does each phase
 touch, and what's the safety net (tests) for each phase before moving to the next?
-Don't write anything yet — I want to review and adjust the plan first.
 ```
 
-Claude Code will read the legacy file and CLAUDE.md, then propose a plan — typically something like: characterize current behavior with tests first, then rename/extract with no logic changes, then address real bugs, then clean up logging and guards. This should look familiar from Lab 5's structure, because that's exactly what you're pre-building here.
+Watch what happens while it researches. In plan mode, Claude Code often delegates codebase research to the built-in **Plan** subagent (and uses the read-only **Explore** subagent for searches elsewhere). Both run in their own context window and can't write or edit files, so the exploration noise stays out of your main conversation. Expect a plan along these lines: characterize current behavior with tests → rename/extract with no logic changes → fix real bugs → clean up logging and guards.
 
-### B.3 Iterate on the Plan — Risk-Free
+### B.2 Iterate — Risk-Free
 
-This is the part Plan Mode is built for. Push back on the plan the same way you'd push back on a design doc, because nothing is at risk:
+When the plan appears, you'll get three choices: **Yes, and use auto mode** (or **Yes, auto-accept edits**), **Yes, manually approve edits**, and **No, keep planning**. Choose **No, keep planning** and push back like you would on a design doc:
 
 ```
 Phase 3 feels too broad — it's touching both the validation bug and the logging
@@ -122,80 +132,128 @@ Which phase is riskiest? What could go wrong there, and how would we detect it
 before moving to the next phase?
 ```
 
-Ask as many follow-up questions as you want. Every response stays inside Plan Mode — no files change no matter how many rounds this takes.
+Every round stays in plan mode — your source files don't change no matter how many iterations this takes.
 
-### B.4 Approve and Exit
+> 💡 Press **`Ctrl+G`** while the plan is shown to open it in your text editor and edit it directly.
 
-Once the plan looks right, approve it to exit Plan Mode:
+### B.3 Keep the Plan for Lab 5 — Without Executing It
 
-```
-This plan looks good. Exit plan mode — but don't start executing yet, I'm saving
-this for the next lab.
-```
+Approving a plan exits plan mode **and starts execution**, so don't approve it here. Instead:
 
-> **Save this plan.** Copy the final plan text somewhere durable — a scratch file, a comment in your terminal scrollback, or just leave this Claude Code session open. **Lab 5 starts from this exact plan.** If your session ends, ask Claude Code to restate the plan from the conversation, or re-run the planning prompt from B.2 to regenerate it before starting Lab 5.
+1. Choose **No, keep planning** one last time, then press `Shift+Tab` until you're in **Manual** mode (`⏸ manual mode on`). This leaves plan mode without approving anything.
+2. Ask:
+
+   ```
+   Save the final plan we agreed on to docs/plans/legacy-refactor-plan.md. Don't change any other file.
+   ```
+
+3. Approve that single write when prompted.
+
+> **Lab 5 starts from this file.** Because it's in the repo, it survives `/clear`, a new session, or a restart.
 
 ---
 
-## Part C: Extended Thinking — `ultrathink` and the Cost Tradeoff (5 min)
+## Part C: Effort and Thinking (6 min)
 
-Claude Code supports thinking triggers you can drop into a prompt: `think`, `think hard`, `think harder`, and `ultrathink`, in increasing order of reasoning depth. Each level gives the model more space to reason before responding — useful for genuinely hard problems, wasteful for simple ones.
+### C.1 What Actually Controls Reasoning Depth
 
-### C.1 Re-run the Plan with `ultrathink`
+You may have seen advice to write "think", "think hard", or "think harder" in prompts. **Claude Code doesn't treat those as keywords** — they're passed through as ordinary text. The real controls are:
 
-Start a fresh planning prompt, this time asking for maximum reasoning depth:
+| Control | Scope | How |
+|---|---|---|
+| **Effort level** | Session (or saved default) | `/effort low\|medium\|high\|xhigh\|max\|auto`, the left/right arrows in `/model`, or `claude --effort high` at launch |
+| **`ultrathink`** | One turn | Type the word anywhere in a prompt; Claude Code adds an instruction to reason deeply on that turn (on recent versions it shows in rainbow colors and can raise that turn to `xhigh`) |
+| **Thinking on/off** | Session | `Option+T` (macOS) / `Alt+T` (Windows/Linux); default in `/config`. The newest models always think, so the toggle may show *Thinking can't be turned off* |
+| **See the thinking** | Display | `Ctrl+O` toggles verbose output, showing reasoning in gray italics |
+
+Effort levels, roughly:
+
+| Level | Good for |
+|---|---|
+| `low` | Quick exchanges you review step by step — renames, first sketches |
+| `medium` | Day-to-day features with a clear scope (the default on the newest models) |
+| `high` | Bug fixes in existing code, work where edge cases matter |
+| `xhigh` | Deeper reasoning at higher token cost |
+| `max` | Hard problems you want worked through without you; session-only and prone to overthinking |
+
+Check your current level:
 
 ```
-ultrathink: Read LegacyTaskProcessor again. I want the single safest possible
-phased plan to refactor it with zero risk of behavior change — consider edge
-cases in the existing logic that a naive refactor could silently break.
+/effort status
 ```
 
-### C.2 Compare
+### C.2 Compare Effort Levels on the Same Question
 
-Look at the two plans side by side (your Part B plan and this one):
+Ask a narrow, risk-focused question at low effort:
 
-- Did `ultrathink` surface a risk or edge case the first plan missed?
-- Did it take noticeably longer to respond?
-- Is the extra depth worth it for *this* task, or would it matter more on a harder one?
+```
+/effort low
+```
 
-> **Key practice**: Extended thinking is a dial, not a default. Reach for `think` or `think hard` when a task has real ambiguity or risk — an architecture decision, a subtle bug, a security-sensitive change. Skip it for routine work; the latency cost isn't worth it when the answer is already obvious.
+```
+List the edge cases in LegacyTaskProcessor that a naive refactor could silently break.
+```
+
+Then restore your previous level (`/effort auto` resets to the model default) and ask again with a one-turn boost:
+
+```
+ultrathink — list the edge cases in LegacyTaskProcessor that a naive refactor could silently break, and say which phase of our plan would catch each one.
+```
+
+Compare:
+- Did the deeper answer surface a risk the plan in `docs/plans/legacy-refactor-plan.md` missed? If so, add it to the plan.
+- How much longer did it take? (Thinking tokens are billed even when collapsed.)
+- Would you pay that cost for every prompt — or only for this kind of question?
+
+> **Key practice**: Effort is a dial, not a default. Leave it at the model's default for routine work, raise it (or use `ultrathink`) for architecture decisions, subtle bugs, and security-sensitive changes, and lower it for quick, reviewed iterations.
+
+### C.3 (Optional) A Model for Planning: `opusplan`
+
+```
+/model opusplan
+```
+
+`opusplan` is a model alias that uses **Opus while you're in plan mode** and switches to **Sonnet for execution** — strong reasoning where the decisions are made, a faster model for carrying them out. Switch back with `/model` when you're done.
 
 ---
 
 ## Success Criteria
 
-- [ ] You entered and exited Plan Mode at least once
-- [ ] You have a written, phased refactor plan for `LegacyTaskProcessor`
-- [ ] Zero files were edited during this lab — `git status` is clean
-- [ ] You compared a plan with and without `ultrathink` and can describe the difference
-- [ ] You saved or can regenerate the plan for use in Lab 5
+- [ ] You switched between Manual, accept-edits, and plan mode and can explain when to use each
+- [ ] You entered plan mode with `/plan` and iterated on the plan at least once
+- [ ] `docs/plans/legacy-refactor-plan.md` exists — and `git status` shows **no other changes**
+- [ ] You compared a low-effort answer with an `ultrathink` answer and can describe the difference
+- [ ] You can explain why "think hard" in a prompt doesn't change Claude Code's reasoning budget
 
 ---
 
 ## Extension Exercise
 
-While still in Plan Mode, ask Claude Code to plan a *different* task — adding the `SendDigestAsync` extension from Lab 3 — and compare how much shorter and more confident that plan is compared to the LegacyTaskProcessor plan. Discuss why: task size, existing test coverage, and ambiguity all affect how much a plan needs to say.
+In plan mode, plan a *different* task — the `SendDigestAsync` extension from Lab 3 — and compare how much shorter and more confident that plan is than the `LegacyTaskProcessor` plan. Discuss why: task size, existing test coverage, and ambiguity all affect how much a plan needs to say. Then approve it with **Yes, manually approve edits** and watch plan mode hand off to execution.
 
 ---
 
 ## Troubleshooting
 
-**Claude Code seems to edit a file while "in Plan Mode"**
+**Claude Code edited a file while I thought I was in plan mode**
 
-Check the mode indicator in the CLI — it's easy to have exited Plan Mode accidentally (e.g., by approving a plan) without noticing. If in doubt, run `git status` — if there are no unexpected changes, you're fine.
+Check the status bar — approving a plan exits plan mode and switches to the mode you picked. Run `git status` and `git diff` to see what changed, and ask Claude Code to revert anything unexpected.
 
-**Plan Mode isn't available / `Shift+Tab` doesn't cycle to it**
+**`Shift+Tab` doesn't show auto mode**
 
-Confirm your Claude Code version supports Plan Mode (`claude --version`), or launch directly with `claude --permission-mode plan`.
+Auto mode needs a supported model and can be disabled by your organization. Manual, accept-edits, and plan mode are always available.
+
+**Plan mode keeps asking permission to run commands**
+
+That happens when auto mode isn't available: commands outside the built-in read-only set ask first. Approve read-only ones like `git log`; deny anything that writes.
+
+**`ultrathink` isn't shown in rainbow colors**
+
+Retype it outside quotes, brackets, or paths, in a prompt that doesn't start with `/`. Some providers and effort caps can't raise the turn; use `/effort` instead.
 
 **The plan is too vague to act on**
 
-Ask Claude Code to make it concrete: "For each phase, name the specific methods or files that phase touches, and the specific test command that verifies it before moving on."
-
-**`ultrathink` response takes a long time or feels like overkill**
-
-That's the tradeoff in action. For a task this size, `think` or even no trigger is often enough — `ultrathink` is worth reaching for on harder, higher-stakes problems.
+Ask: "For each phase, name the specific methods or files it touches, and the specific test command that verifies it before moving on."
 
 ---
 

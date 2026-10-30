@@ -7,13 +7,13 @@ using TaskManager.Domain.Tasks;
 namespace TaskManager.UnitTests;
 
 /// <summary>
-/// Unit tests for TaskService — Labs 2 &amp; 3
+/// Unit tests for TaskService — Lab 3
 ///
-/// LAB 2 INSTRUCTIONS:
+/// LAB 3 (TDD) INSTRUCTIONS:
 /// Use Claude Code to implement the TaskService.AddTaskAsync method and its tests.
 /// Follow the TDD cycle: interface → tests → implementation.
 ///
-/// LAB 3 INSTRUCTIONS:
+/// LAB 3 (STRETCH) INSTRUCTIONS:
 /// Use Claude Code to generate additional unit tests covering edge cases.
 ///
 /// Example prompts:
@@ -34,7 +34,7 @@ public class TaskServiceTests
         _taskService = new TaskService(_mockRepository, _mockLogger);
     }
 
-    [Fact(Skip = "Lab 2: Implement this test with Claude Code — follow the TDD cycle in lab-02")]
+    [Fact(Skip = "Lab 3: Implement this test with Claude Code — follow the TDD cycle in lab-03")]
     public System.Threading.Tasks.Task AddTaskAsync_WithValidData_ShouldReturnTaskId()
     {
         // Arrange
@@ -49,7 +49,7 @@ public class TaskServiceTests
         return System.Threading.Tasks.Task.CompletedTask;
     }
 
-    [Fact(Skip = "Lab 2: Implement this test with Claude Code — follow the TDD cycle in lab-02")]
+    [Fact(Skip = "Lab 3: Implement this test with Claude Code — follow the TDD cycle in lab-03")]
     public System.Threading.Tasks.Task AddTaskAsync_WithNullTitle_ShouldThrowArgumentException()
     {
         // TODO: Test validation for null title

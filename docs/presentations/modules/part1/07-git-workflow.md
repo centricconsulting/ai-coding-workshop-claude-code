@@ -7,7 +7,7 @@ backgroundColor: #fff
 
 # Module 07: Git Workflow & PR Preparation
 
-## `/review` as a Quality Gate, Not a Post-Hoc Check
+## `/code-review` as a Quality Gate, Not a Post-Hoc Check
 
 ---
 
@@ -21,51 +21,75 @@ You have uncommitted or recently-committed changes.
 
 **Lab 7 is about what you do before and after the code is done:**
 - Code review before committing
+- Doc comments for what you changed
 - Commit message generation
-- PR description from session context
+- PR description from session context, opened with `gh`
 
 ---
 
-# The `/review` Command
+# The `/code-review` Command
 
 ```
-/review
+/code-review          # /review is an alias
 ```
 
-Claude Code reviews **your current staged and unstaged changes**:
+A bundled **skill** that reviews **your branch's commits ahead of
+upstream + uncommitted changes** (no upstream → compares to `main`):
 
-- Bug risks
-- Convention violations from CLAUDE.md
-- Missing test coverage
-- Security issues (SQL injection, unvalidated input, etc.)
-- Naming and structural problems
+- Hunts for **correctness bugs**
+- Follows your CLAUDE.md conventions
+- Higher effort → also reuse / simplification / efficiency cleanups
+- Runs as a **background subagent** — findings arrive when done
+
+Not a security scanner — that's `/security-review` (next module).
 
 **This is a pre-commit check — not a post-merge review.**
-Run it before `git add`, not after `git push`.
+
+> Before v2.1.223, `/review` was a separate read-only PR review. Old blog posts describe that.
 
 ---
 
-# What `/review` Looks For
+# Tuning `/code-review`
+
+```
+/code-review [low|medium|high|xhigh|max|ultra] [--fix] [--comment]
+             [--max-findings n|all] [pr#|branch|path]
+```
+
+| You want… | Type |
+|---|---|
+| High-confidence findings only | `/code-review low` |
+| Broader coverage | `/code-review high` |
+| Just the legacy folder | `/code-review src/TaskManager.Infrastructure/Legacy` |
+| Review and apply fixes | `/code-review --fix` |
+| Review a PR, post inline comments | `/code-review 42 --comment` |
+| Deep multi-agent cloud review | `/code-review ultra` |
+
+⚠️ Background `--fix` edits aren't covered by `/rewind` — use git.
+
+---
+
+# What `/code-review` Reports
 
 Example output:
 
 ```
-Reviewing changes in 3 files...
+Reviewed 4 files (branch + uncommitted changes)
 
-⚠ NotificationService.cs:47
-  Potential null reference: task.AssignedTo is nullable
-  but used without null check before calling .Email
+1. LegacyTaskProcessor.cs:42 — correctness
+   Validate() now returns true before Init() is called; the
+   original Chk() returned false. Characterization test
+   Chk_BeforeInit_ReturnsFalse was updated to match — was
+   this behavior change intended?
 
-⚠ NotificationServiceTests.cs
-  Only 2 of 4 public methods have test coverage.
-  Missing: SendBatchAsync, GetPendingCount
-
-✓ Naming and conventions: consistent with src/CLAUDE.md
-✓ Async/await: correct throughout
-✓ No obvious security issues
+2. NotificationService.cs:31 — correctness
+   Exception from the sender is caught and swallowed; callers
+   can't tell a notification failed.
 ```
 
-Fix the warnings. Then commit.
+*(Illustrative — your findings will differ.)*
+
+Fix them — or rerun with `--fix`. Then commit.
 
 ---
 
@@ -112,6 +136,22 @@ Claude Code will pick the right type if you ask it to.
 
 ---
 
+# Documentation Comments
+
+Same idea as the Copilot workshop's `/doc` step — just ask:
+
+```
+Add XML documentation comments to the public members of
+NotificationService and the refactored LegacyTaskProcessor.
+Describe behavior and edge cases. Don't change any code.
+```
+
+🟩 Spring Boot: ask for **Javadoc** (`@param`, `@return`, `@throws`).
+
+Review it: a comment that restates the method name is noise.
+
+---
+
 # PR Descriptions from Session Context
 
 After a long session, Claude Code knows:
@@ -130,6 +170,24 @@ Write a PR description for my changes. Include:
 
 This is dramatically faster than writing it from memory after
 you've context-switched away from the code.
+
+---
+
+# GitHub via the `gh` CLI
+
+Claude Code drives GitHub through `gh` — no special command needed:
+
+```
+Save the PR description to pr-body.md and open a PR against my
+fork's main with gh pr create --body-file pr-body.md.
+```
+
+```
+Use gh to read the review comments on PR #12 and address each one.
+```
+
+`/pr-comments` was **removed** — just ask Claude, as above.
+`/code-review 12 --comment` posts findings as inline PR comments.
 
 ---
 
@@ -161,7 +219,9 @@ Summary of the full workflow:
 ```
 Make changes
      ↓
-/review  ← Quality gate. Fix issues before staging.
+/code-review  ← Quality gate. Fix issues before staging.
+     ↓
+Doc comments for what changed
      ↓
 git add <files>
      ↓
@@ -171,10 +231,10 @@ git commit -m "..."
      ↓
 git push origin workshop/your-name
      ↓
-"Write a PR description"
+"Write a PR description" → gh pr create
 ```
 
-**`/review` is step 1, not step last.**
+**`/code-review` is step 1, not step last.**
 
 ---
 
@@ -183,16 +243,16 @@ git push origin workshop/your-name
 ## What You'll Do
 
 1. Stage your changes from Labs 3, 5, and 6
-2. Run `/review` — read the output, fix at least one issue
-3. Ask Claude Code to generate a commit message
-4. Commit
+2. Run `/code-review` — read the output, fix at least one issue
+3. Add XML docs / Javadoc to what you changed
+4. Ask Claude Code to generate a commit message, then commit
 5. Ask Claude Code to write a PR description
-6. (Optional) Open an actual PR against your fork
+6. (Optional) Open a PR on your fork with `gh`, then `/code-review <pr#> --comment`
 
 ## The Key Experiment
 
-Run `/review` before staging. See what it finds.
-Then stage and run it again. See if the output changes.
+Run `/code-review low`, then `/code-review high`.
+Compare: how do coverage and false positives change?
 
 ---
 
@@ -200,8 +260,9 @@ Then stage and run it again. See if the output changes.
 
 👉 Open [docs/labs/lab-07-git-workflow.md](../../../labs/lab-07-git-workflow.md)
 
-**Goal for the next 15 minutes:**
-- `/review` run at least once on real changes
+**Goal for the next 20 minutes:**
+- `/code-review` run at least once on real changes
+- Doc comments added
 - Commit message generated and committed
 - PR description drafted
 
@@ -212,8 +273,8 @@ If you finish early, go back and extend Labs 3 or 5.
 
 # Up Next: Security Review
 
-`/review` is a general quality gate. The next lab goes deeper on
-one category it only glances at — security.
+`/code-review` is a correctness gate. The next lab covers the
+category it deliberately leaves out — security.
 
 👉 [Lab 8: Security Review Workflows](../../../labs/lab-08-security-review-workflows.md)
 

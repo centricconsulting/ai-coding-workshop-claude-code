@@ -3,7 +3,7 @@ namespace TaskManager.IntegrationTests;
 /// <summary>
 /// Integration tests for Task Manager API — Lab 5
 ///
-/// LAB 4 INSTRUCTIONS:
+/// LAB 5 INSTRUCTIONS:
 /// Use Claude Code to generate integration tests for the API endpoints.
 /// Follow the characterization-test pattern in lab-05 before refactoring.
 ///

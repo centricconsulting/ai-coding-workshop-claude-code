@@ -19,7 +19,7 @@ Every Claude Code response is built from tool calls:
 You: "Add a method to validate email addresses"
 
 Claude Code:
-  1. Read(TaskManager.Domain/Entities/Task.cs)   ← sees the model
+  1. Read(src/TaskManager.Domain/Tasks/Task.cs)  ← sees the model
   2. Read(src/CLAUDE.md)                          ← loads conventions
   3. Edit(Task.cs, ...)                           ← makes the change
   4. Bash(dotnet test)                            ← verifies it works
@@ -35,12 +35,15 @@ Claude Code is not predicting text — it's **executing a plan**.
 | Tool | What It Does |
 |---|---|
 | `Read` | Read a file (respects context window) |
+| `Glob` / `Grep` | Find files and search their contents |
 | `Write` | Create a new file |
 | `Edit` | Make targeted edits to an existing file |
 | `Bash` | Run shell commands |
 | `WebSearch` / `WebFetch` | Look things up |
+| `Agent` | Delegate to a subagent (built-in: Explore, Plan, general-purpose) |
+| `Skill` | Load a skill's instructions when relevant |
 
-Every action is **visible and approvable** before it runs.
+Every action is **visible** — and, depending on your permission mode, **approvable** before it runs.
 
 ---
 
@@ -48,33 +51,37 @@ Every action is **visible and approvable** before it runs.
 
 ```
 ┌─────────────────────────────────────────────┐
-│  Claude Code wants to run:                  │
-│                                             │
-│  Bash: git push origin main                 │
-│                                             │
-│  [Allow once]  [Allow always]  [Deny]       │
+│  Bash command                               │
+│    dotnet test                              │
+│  Do you want to proceed?                    │
+│  ❯ 1. Yes                                   │
+│    2. Yes, and don't ask again for:         │
+│       dotnet test *                         │
+│    3. No                                    │
+│  Esc to cancel · Tab to amend               │
 └─────────────────────────────────────────────┘
 ```
 
-Three responses:
-- **Allow once** — this execution only
-- **Allow always** — add to `allow` list in settings
-- **Deny** — blocked; Claude Code must work around it
+- **Yes** — this execution only
+- **Yes, and don't ask again** — saves an allow rule (Bash rules go to `.claude/settings.local.json`)
+- **No** — blocked; tell Claude what to do instead (`Tab` adds a note)
 
 ---
 
 # What Gets Prompted vs. What Runs Freely
 
-**Runs without prompting** (once allowed):
-- Reading files in the project
-- Running `dotnet build`, `dotnet test`, `mvn clean test`
-- Editing files you're working on
+It depends on the **permission mode** — cycle with `Shift+Tab`:
 
-**Always prompts** (unless explicitly allowed):
-- `git push`
-- Destructive commands (`rm -rf`, `git reset --hard`)
-- Network calls outside the project
-- Anything in the `deny` list
+| Mode | Runs without asking |
+|---|---|
+| Manual (`default`) | Reads only |
+| `acceptEdits` | Reads + file edits |
+| `plan` | Reads only — no edits until you approve a plan |
+| `auto` | Everything, with background safety checks (the starting mode in current versions) |
+
+Plus your **rules** in `.claude/settings.json`: `allow` (e.g. `Bash(dotnet *)`), `ask` (e.g. `Bash(git push *)`), and `deny` — deny wins in every mode.
+
+**Not seeing prompts?** You're probably in `auto`. For Day 1, try `claude --permission-mode default` to watch every action. *(Day 2, Lab 9 goes deep.)*
 
 ---
 
@@ -101,12 +108,53 @@ Turn 3: "Write tests for it"
 
 | Command | When to Use |
 |---|---|
-| `/help` | List all available commands |
-| `/compact` | Compress history when context fills up |
-| `/review` | Run a structured code review |
-| `/clear` | Start a completely fresh session |
+| `/help` | List all available commands (type `/` to browse) |
+| `/init` · `/memory` | Generate / edit CLAUDE.md project memory |
+| `/model` · `/effort` | Pick the model; set reasoning depth |
+| `/plan` | Enter plan mode (or `Shift+Tab`) |
+| `/context` | See what's filling the context window |
+| `/compact [focus]` · `/clear` | Summarize history · start a fresh conversation |
+| `/rewind` | Undo Claude's edits / conversation (`Esc Esc`) |
+| `/code-review` | Review your diff for bugs (`/review` is an alias) |
+| `/security-review` | Security pass on your branch |
+| `/usage` | Session cost & plan limits (`/cost` is an alias) |
 
-**`/compact` is proactive, not emergency:** use it at ~60% context, not when Claude Code starts forgetting things.
+---
+
+# Configuration Commands (Day 2)
+
+| Command | What it manages |
+|---|---|
+| `/permissions` | Allow / ask / deny rules |
+| `/hooks` | View configured hooks |
+| `/mcp` | MCP server connections & auth |
+| `/skills` | Project, user, and plugin skills |
+| `/agents` | Points you to `.claude/agents/` — subagents are just Markdown files |
+| `/plugin` | Install plugins from marketplaces |
+| `/resume` | Return to an earlier conversation (`/continue` alias) |
+
+**`/compact` is proactive, not emergency:** check `/context` and compact at a phase boundary, before auto-compact decides for you.
+
+---
+
+# Models and Effort
+
+```
+/model            # picker: opus, sonnet, haiku, opusplan, ...
+/effort high      # low | medium | high | xhigh | max
+claude --model sonnet --effort medium
+```
+
+| Alias | Use for |
+|---|---|
+| `opus` | Hardest reasoning, big refactors, design |
+| `sonnet` | Everyday coding |
+| `haiku` | Fast, simple tasks |
+| `opusplan` | Opus while planning → Sonnet while executing |
+
+Need one extra-careful turn? Put **`ultrathink`** in the prompt.
+(Plain "think hard" is just text now — use `/effort`.)
+Available levels and defaults vary by model — check `/model`.
 
 ---
 
@@ -118,9 +166,10 @@ claude
 > Describe what you want...
 ```
 
-**Headless** (`--print` flag):
+**Headless** (`-p` / `--print`):
 ```bash
-claude --print "List all TODO comments in src/"
+claude -p "List all TODO comments in src/"
+claude -p "..." --output-format json --max-turns 5
 ```
 No session opens. Claude Code reads, processes, prints to stdout, exits.
 
@@ -144,8 +193,9 @@ No session opens. Claude Code reads, processes, prints to stdout, exits.
 └──────────────────────────────────────┘
 ```
 
-When context fills, Claude Code starts dropping early turns.
-`/compact` summarizes history to free space before that happens.
+`/context` shows the real breakdown. Near the limit, Claude Code
+**auto-compacts** (summarizes older history). Run `/compact <what to keep>`
+yourself first so the summary keeps what *you* care about.
 
 ---
 
@@ -184,13 +234,28 @@ This workshop has two parallel stacks:
 | | .NET | Spring Boot |
 |---|---|---|
 | Build | `dotnet build` | `mvn clean test` |
-| Test | `dotnet test` | `mvn test` |
+| Test | `dotnet test` | `mvn test` (from `src-springboot/`) |
 | Entry | `src/` | `src-springboot/` |
 | Config | `src/CLAUDE.md` | `src-springboot/CLAUDE.md` |
 
-Claude Code reads **whichever `CLAUDE.md` is closest** to the file it's working on.
+Claude Code always loads the root `CLAUDE.md`, and pulls in `src/CLAUDE.md`
+or `src-springboot/CLAUDE.md` (plus matching `.claude/rules/`) when it works in that tree.
 
 You can work in either stack for all labs. The concepts are identical.
+
+---
+
+# Where Claude Code Runs
+
+| Surface | Notes |
+|---|---|
+| **Terminal CLI** | What this workshop uses — full feature set |
+| **VS Code extension** | Recommended way to use it in VS Code (also Cursor): inline diffs, plan review, @-mentions |
+| **JetBrains plugin** | IntelliJ, Rider, etc.: diff viewing, selection context |
+| **Desktop app** | macOS / Windows: parallel sessions, visual diffs, cloud sessions |
+| **Web** (claude.ai/code) | Cloud sessions on repos you don't have locally; `/teleport` pulls one into your terminal |
+
+Same engine, same `CLAUDE.md`, skills, and settings across local surfaces.
 
 ---
 
@@ -200,11 +265,11 @@ You can work in either stack for all labs. The concepts are identical.
 |---|---|
 | **02 CLAUDE.md** | Project memory — teach Claude Code once |
 | **03 TDD** | Tests as a feedback loop |
-| **04 Plan Mode** | Plan large tasks before executing them |
-| **05 Refactoring** | Large tasks need phases and checkpoints |
+| **04 Plan Mode** | Plan large tasks before executing them; tune effort |
+| **05 Refactoring** | Large tasks need phases — and `/context` / `/compact` |
 | **06 Checkpoints & Rewind** | Recover from a bad edit without touching git |
-| **07 Git Workflow** | `/review` as a quality gate |
-| **08 Security Review** | A deeper gate before every PR |
+| **07 Git Workflow** | `/code-review` as a quality gate |
+| **08 Security Review** | `/security-review` + a project security skill |
 
 After Lab 1, you'll have hands-on time with all of these.
 

@@ -35,45 +35,46 @@ If you get stuck, ask in the workshop Slack channel or email the facilitator. Do
 
 ---
 
-### 3. Set your ANTHROPIC_API_KEY
+### 3. Install Claude Code
 
-- [ ] Get an API key from [console.anthropic.com](https://console.anthropic.com) (create an account if needed)
-- [ ] Add to your shell profile (`~/.zshrc` or `~/.bashrc`):
+- [ ] Run the **native installer** (recommended — auto-updates, no Node.js needed):
   ```bash
-  export ANTHROPIC_API_KEY="sk-ant-..."
+  # macOS / Linux / WSL
+  curl -fsSL https://claude.ai/install.sh | bash
   ```
-- [ ] Reload your shell:
+  ```powershell
+  # Windows PowerShell
+  irm https://claude.ai/install.ps1 | iex
+  ```
+  *(Alternatives: `brew install --cask claude-code`, `winget install Anthropic.ClaudeCode`, or `npm install -g @anthropic-ai/claude-code` with Node.js 22+. See [docs/LOCAL_SETUP.md](LOCAL_SETUP.md).)*
+- [ ] Verify the install:
   ```bash
-  source ~/.zshrc
+  claude --version
+  claude doctor
   ```
-- [ ] Verify:
-  ```bash
-  echo $ANTHROPIC_API_KEY   # should print your key (not empty)
-  ```
+  If `claude` isn't found, add `~/.local/bin` to your `PATH` and open a new terminal.
 
-> If using a Dev Container: set the key on your **host** machine before opening the container. The devcontainer forwards it automatically.
+> **Using a Dev Container?** Skip this item — the container installs Claude Code for you. Read `.devcontainer/README.md` for the authentication options instead.
 
 ---
 
-### 4. Install Claude Code and authenticate
+### 4. Authenticate
 
-- [ ] Install Claude Code CLI:
+Your facilitator will tell you which option your cohort uses.
+
+- [ ] **Option A — Claude subscription (Pro, Max, Team, Enterprise):** run `claude` and follow the browser sign-in. If no browser opens, copy the URL from the terminal into a browser and paste the code back.
+- [ ] **Option B — Console API key:** create a key at [platform.claude.com](https://platform.claude.com), add it to your shell profile, and reload your shell:
   ```bash
-  npm install -g @anthropic-ai/claude-code
+  export ANTHROPIC_API_KEY="sk-ant-..."
   ```
-  *(Requires Node.js 18+. See [docs/LOCAL_SETUP.md](LOCAL_SETUP.md) for Node.js installation.)*
-
-- [ ] Run the authentication flow:
-  ```bash
-  claude
-  ```
-  Follow the browser prompt to log in with your Anthropic account.
-
+  Approve the key the first time `claude` asks.
 - [ ] Verify authentication works:
   ```bash
-  claude --print "Say hello"
+  claude -p "Say hello"
   ```
-  Expected: Claude Code prints a greeting and exits. If it hangs or errors, check your API key.
+  Expected: Claude Code prints a greeting and exits. Inside an interactive session, `/status` shows which account is active.
+
+> **Dev Container users:** either sign in inside the container with `/login`, or set `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`) or `ANTHROPIC_API_KEY` on your **host** before opening the container — it's forwarded automatically.
 
 ---
 
@@ -110,8 +111,8 @@ Pick the stack you'll use during the workshop (.NET or Spring Boot). You don't n
 - [ ] Open VS Code
 - [ ] Install **Claude Code** by Anthropic:
   - Extensions panel (`Ctrl+Shift+X`) → search "Claude Code"
-  - Or: `code --install-extension anthropics.claude-code`
-- [ ] Verify: a Claude Code icon appears in the VS Code sidebar
+  - Or: `code --install-extension anthropic.claude-code`
+- [ ] Verify: a Claude Code (spark) icon appears in the editor toolbar or Activity Bar (requires VS Code 1.94+)
 
 > Optional but recommended: install [Marp for VS Code](https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode) to view workshop slide decks.
 
@@ -137,7 +138,7 @@ Run this sequence to confirm everything works end-to-end:
 
 ```bash
 # From the repo root
-claude --print "What is this project? Give me a one-sentence summary."
+claude -p "What is this project? Give me a one-sentence summary."
 ```
 
 Claude Code should:
@@ -163,6 +164,6 @@ For issues you can't resolve yourself, post in the workshop Slack channel with:
 ## What to Bring to the Workshop
 
 - Laptop with all the above installed
-- API key accessible (environment variable set and verified)
+- Claude Code authenticated (subscription login or API key verified with `claude -p "Say hello"`)
 - Your fork cloned, upstream remote added, personal branch created
 - Questions — the first 10 minutes are Q&A from pre-work
