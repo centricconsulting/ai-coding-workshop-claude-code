@@ -5,15 +5,15 @@
 This is a hands-on workshop codebase for learning AI-assisted software development with Claude Code. The application is a **TaskManager API** used as the exercise substrate for all labs.
 
 There are two parallel implementations:
-- `src/` — .NET 9, Clean Architecture, Minimal APIs, xUnit
-- `src-springboot/` — Spring Boot 3.x, Clean Architecture, REST, JUnit 5
+- `src/` — .NET 9, Clean Architecture, Minimal APIs, xUnit v3 + FakeItEasy
+- `src-springboot/` — Spring Boot 3.x, Clean Architecture, REST, JUnit 5 + Mockito
 
-Both implementations model the same domain: tasks with priorities, due dates, notifications, and assignments.
+Both implementations model the same domain. The starter code has the basics: a `Task` aggregate (`TaskId`, title, description, `TaskStatus`) and a repository. Priorities, due dates, notifications, and assignments are added by participants during the labs — read the current code rather than assuming they exist.
 
 ## How to Build and Test
 
 ```bash
-# .NET
+# .NET — a fresh checkout reports 11 skipped stub tests (implemented during the labs), 0 failed
 dotnet build
 dotnet test
 
@@ -32,7 +32,10 @@ tests/                       ← .NET test projects (unit + integration)
 docs/labs/                   ← Step-by-step lab guides
 docs/presentations/          ← Marp slide decks
 docs/guides/                 ← Reference guides (agent design, customization)
-.claude/settings.json        ← Claude Code permissions and hooks
+.claude/settings.json        ← Permissions and hooks (Lab 9 teaching artifact; hooks need jq)
+.claude/agents/              ← Subagents: architecture-reviewer, backlog-generator, test-strategist
+.claude/skills/              ← Skills: test-data-generator
+.claude/rules/               ← Path-scoped rules (dotnet.md, springboot.md) + follow-up-questions.md
 ```
 
 ## Key Conventions (Both Stacks)
