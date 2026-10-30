@@ -16,7 +16,7 @@
     },
 
     // Claude Code native installer -> ~/.local/bin/claude (auto-updates; no Node.js needed)
-    "postCreateCommand": "curl -fsSL https://claude.ai/install.sh | bash && dotnet build TaskManager.sln && dotnet dev-certs https --trust",
+    "postCreateCommand": "curl -fsSL https://claude.ai/install.sh | bash && dotnet build src-dotnet/TaskManager.sln && dotnet dev-certs https --trust",
 
     "customizations": {
         "vscode": {

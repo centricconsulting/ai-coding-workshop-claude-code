@@ -17,7 +17,7 @@ namespace TaskManager.UnitTests;
 /// Use Claude Code to generate additional unit tests covering edge cases.
 ///
 /// Example prompts:
-/// - "Implement AddTaskAsync with validation and logging following src/CLAUDE.md conventions"
+/// - "Implement AddTaskAsync with validation and logging following src-dotnet/CLAUDE.md conventions"
 /// - "Generate unit tests for happy path and validation scenarios"
 /// - "Add tests for null parameters and empty strings"
 /// </summary>

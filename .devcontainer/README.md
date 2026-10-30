@@ -81,7 +81,7 @@ echo ${CLAUDE_CODE_OAUTH_TOKEN:+token set} ${ANTHROPIC_API_KEY:+api key set}
 - C# Dev Kit
 - GitHub CLI
 
-**Builds on startup:** `TaskManager.sln`
+**Builds on startup:** `src-dotnet/TaskManager.sln`
 
 ---
 
@@ -111,7 +111,7 @@ echo ${CLAUDE_CODE_OAUTH_TOKEN:+token set} ${ANTHROPIC_API_KEY:+api key set}
 - All .NET and Java extensions
 - GitHub CLI
 
-**Builds on startup:** Both `TaskManager.sln` and `src-springboot/`
+**Builds on startup:** Both `src-dotnet/TaskManager.sln` and `src-springboot/`
 
 ---
 
