@@ -118,7 +118,7 @@ No `.claude/output-styles/` directory exists anywhere in this repo yet.
 Before creating the style, run a prompt under default behavior so you have something to compare against:
 
 ```
-Review src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and tell me what's wrong with it.
+Review src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and tell me what's wrong with it.
 ```
 
 Note the tone: default Claude Code responses tend to be balanced, hedge with caveats, and explain reasoning at moderate length.
@@ -167,7 +167,7 @@ Claude Code reads style files at startup, so **restart Claude Code** (`/exit`, t
 ```
 
 ```
-Review src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and tell me what's wrong with it.
+Review src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and tell me what's wrong with it.
 ```
 
 ### B.4 Compare Side by Side

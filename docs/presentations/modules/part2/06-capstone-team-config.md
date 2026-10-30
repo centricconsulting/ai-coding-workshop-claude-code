@@ -75,7 +75,7 @@ This is ambient intelligence: it shapes every interaction automatically.
 CLAUDE.md (root)
   ↓ What this project is. Tech stack. Build + test. Conventions. Don't-do list.
 
-src/CLAUDE.md
+src-dotnet/CLAUDE.md
   ↓ Architecture layers. Domain vocabulary. Pattern rules. Key file locations.
 
 .claude/rules/*.md  (paths: frontmatter)
@@ -122,11 +122,11 @@ For your scenario, answer per file:
 What does Claude Code need to know to work in this repo at all?
 (Stack, build commands, conventions, what NOT to do)
 
-**src/ CLAUDE.md:**
+**src-dotnet/ CLAUDE.md:**
 What does Claude Code need to know to write correct code here?
 (Architecture, naming, domain vocabulary, patterns)
 
-**`.claude/rules/tests.md`** (`paths: ["tests/**"]`):
+**`.claude/rules/tests.md`** (`paths: ["src-dotnet/tests/**"]`):
 What does a good test look like here?
 (Naming, structure, coverage expectations, what's in scope)
 

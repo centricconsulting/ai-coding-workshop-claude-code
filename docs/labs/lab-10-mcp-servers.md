@@ -149,7 +149,7 @@ Start Claude Code. Because `filesystem` comes from a project `.mcp.json`, Claude
 `/mcp` shows each server, its scope, connection status (✔ / ✘), and its tools. Select `filesystem` to browse tools such as `read_text_file`, `list_directory`, `search_files`, and `directory_tree`.
 
 ```
-Using the filesystem MCP tools, show me the directory tree of src/ two levels deep.
+Using the filesystem MCP tools, show me the directory tree of src-dotnet/ two levels deep.
 ```
 
 > **Note on tool search:** By default Claude Code *defers* MCP tool definitions — only tool names load at startup, and Claude looks up full schemas on demand. That's why adding many servers doesn't blow up your context window. Run `/context` to see how little space the MCP tools take.

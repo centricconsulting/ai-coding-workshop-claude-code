@@ -93,7 +93,7 @@ Rules are written as `Tool` or `Tool(specifier)`:
   "Bash(dotnet *)",        ← any dotnet command (trailing " *" also matches bare "dotnet")
   "Bash(git status)",      ← exact command only
   "Bash(git diff *)",      ← git diff with any arguments
-  "Edit(src/**)"           ← edit any file under src/
+  "Edit(src-dotnet/**)"           ← edit any file under src-dotnet/
 ],
 "ask": [
   "Bash(git push *)"       ← always confirm, even in modes that wouldn't otherwise ask
@@ -311,7 +311,7 @@ exit 0
 
 ```bash
 echo '{"tool_name":"Edit","tool_input":{"file_path":"/repo/.devcontainer/README.md"}}' | .claude/hooks/protect-files.sh; echo "exit=$?"
-echo '{"tool_name":"Edit","tool_input":{"file_path":"/repo/src/Program.cs"}}' | .claude/hooks/protect-files.sh; echo "exit=$?"
+echo '{"tool_name":"Edit","tool_input":{"file_path":"/repo/src-dotnet/src/TaskManager.Api/Program.cs"}}' | .claude/hooks/protect-files.sh; echo "exit=$?"
 ```
 
 You should see the block message with `exit=2`, then `exit=0`.
@@ -331,7 +331,7 @@ Watch what happens: the edit is blocked, Claude receives your stderr message (`P
 A common team use case: automatically format code after Claude Code changes a file. Claude changes files with **both** `Edit` (modify) and `Write` (create/overwrite), so match both:
 
 ```
-Add a PostToolUse hook to .claude/settings.json with matcher "Edit|Write". It should read the hook JSON from stdin with jq, get .tool_input.file_path, and only if it ends in .cs, run "dotnet format whitespace TaskManager.sln --include <path>" from $CLAUDE_PROJECT_DIR. dotnet format needs the path relative to the solution, so strip the "$CLAUDE_PROJECT_DIR/" prefix. Put the logic in .claude/hooks/format-cs.sh. Show me what you'd add before writing.
+Add a PostToolUse hook to .claude/settings.json with matcher "Edit|Write". It should read the hook JSON from stdin with jq, get .tool_input.file_path, and only if it ends in .cs, run "dotnet format whitespace TaskManager.sln --include <path>" from $CLAUDE_PROJECT_DIR/src-dotnet. dotnet format needs the path relative to the solution, so strip the "$CLAUDE_PROJECT_DIR/src-dotnet/" prefix. Put the logic in .claude/hooks/format-cs.sh. Show me what you'd add before writing.
 ```
 
 Review the proposed hook. A working script looks like:
@@ -342,14 +342,14 @@ Review the proposed hook. A working script looks like:
 FILE_PATH=$(jq -r '.tool_input.file_path // empty')
 case "$FILE_PATH" in
   *.cs)
-    cd "$CLAUDE_PROJECT_DIR" &&
-      dotnet format whitespace TaskManager.sln --include "${FILE_PATH#"$CLAUDE_PROJECT_DIR"/}"
+    cd "$CLAUDE_PROJECT_DIR/src-dotnet" &&
+      dotnet format whitespace TaskManager.sln --include "${FILE_PATH#"$CLAUDE_PROJECT_DIR/src-dotnet"/}"
     ;;
 esac
 exit 0
 ```
 
-Confirm and write. Then ask Claude to make a small change to `src/TaskManager.Domain/Tasks/Task.cs` and check `git diff` — the file should come back consistently formatted.
+Confirm and write. Then ask Claude to make a small change to `src-dotnet/src/TaskManager.Domain/Tasks/Task.cs` and check `git diff` — the file should come back consistently formatted.
 
 > **Spring Boot track**: use the same pattern with `*.java` and your formatter of choice (for example `mvn spotless:apply` if the project uses Spotless). Don't add new Maven plugins without asking.
 
@@ -358,13 +358,13 @@ Confirm and write. Then ask Claude to make a small change to `src/TaskManager.Do
 Add a `PostToolUse` hook that runs the unit tests whenever a unit test file changes, and tells Claude if they fail:
 
 ```
-Add another PostToolUse hook with matcher "Edit|Write". Read .tool_input.file_path from stdin with jq. If the path is under tests/TaskManager.UnitTests/ and ends in .cs, run "dotnet test tests/TaskManager.UnitTests/ --nologo -v q" from $CLAUDE_PROJECT_DIR with its output sent to stderr, and exit 2 if the tests fail so Claude sees the failure. Exit 0 otherwise.
+Add another PostToolUse hook with matcher "Edit|Write". Read .tool_input.file_path from stdin with jq. If the path is under src-dotnet/tests/TaskManager.UnitTests/ and ends in .cs, run "dotnet test src-dotnet/tests/TaskManager.UnitTests/ --nologo -v q" from $CLAUDE_PROJECT_DIR with its output sent to stderr, and exit 2 if the tests fail so Claude sees the failure. Exit 0 otherwise.
 ```
 
 A one-line version of the command:
 
 ```bash
-f=$(jq -r '.tool_input.file_path // empty'); case "$f" in */tests/TaskManager.UnitTests/*.cs) cd "$CLAUDE_PROJECT_DIR" && dotnet test tests/TaskManager.UnitTests/ --nologo -v q >&2 || exit 2 ;; esac
+f=$(jq -r '.tool_input.file_path // empty'); case "$f" in */tests/TaskManager.UnitTests/*.cs) cd "$CLAUDE_PROJECT_DIR" && dotnet test src-dotnet/tests/TaskManager.UnitTests/ --nologo -v q >&2 || exit 2 ;; esac
 ```
 
 Now every time Claude Code changes a test file, the tests run automatically, and a failure comes straight back to Claude via exit code 2 — no prompt needed.

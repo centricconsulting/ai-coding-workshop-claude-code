@@ -5,7 +5,7 @@
 This is a hands-on workshop codebase for learning AI-assisted software development with Claude Code. The application is a **TaskManager API** used as the exercise substrate for all labs.
 
 There are two parallel implementations:
-- `src/` — .NET 9, Clean Architecture, Minimal APIs, xUnit v3 + FakeItEasy
+- `src-dotnet/` — .NET 9, Clean Architecture, Minimal APIs, xUnit v3 + FakeItEasy
 - `src-springboot/` — Spring Boot 3.x, Clean Architecture, REST, JUnit 5 + Mockito
 
 Both implementations model the same domain. The starter code has the basics: a `Task` aggregate (`TaskId`, title, description, `TaskStatus`) and a repository. Priorities, due dates, notifications, and assignments are added by participants during the labs — read the current code rather than assuming they exist.
@@ -14,8 +14,8 @@ Both implementations model the same domain. The starter code has the basics: a `
 
 ```bash
 # .NET — a fresh checkout reports 11 skipped stub tests (implemented during the labs), 0 failed
-dotnet build
-dotnet test
+dotnet build src-dotnet
+dotnet test src-dotnet
 
 # Spring Boot
 cd src-springboot
@@ -26,9 +26,8 @@ mvn clean test
 
 ```
 CLAUDE.md                    ← you are here (project root)
-src/                         ← .NET solution (see src/CLAUDE.md)
+src-dotnet/                  ← .NET solution: TaskManager.sln, src/, tests/ (see src-dotnet/CLAUDE.md)
 src-springboot/              ← Spring Boot solution (see src-springboot/CLAUDE.md)
-tests/                       ← .NET test projects (unit + integration)
 docs/labs/                   ← Step-by-step lab guides
 docs/presentations/          ← Marp slide decks
 docs/guides/                 ← Reference guides (agent design, customization)

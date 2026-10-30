@@ -22,14 +22,14 @@
 
 ### A.1 Read the Existing Memory Files
 
-This workshop repo ships three `CLAUDE.md` files (root, `src/`, `src-springboot/`) and a set of path-scoped rules in `.claude/rules/`. Start Claude Code and ask about them:
+This workshop repo ships three `CLAUDE.md` files (root, `src-dotnet/`, `src-springboot/`) and a set of path-scoped rules in `.claude/rules/`. Start Claude Code and ask about them:
 
 ```bash
 claude
 ```
 
 ```
-Read the CLAUDE.md files in this project (root, src/, and src-springboot/) and the files in .claude/rules/. Explain what each one covers, when each one is loaded, and why they're organized that way.
+Read the CLAUDE.md files in this project (root, src-dotnet/, and src-springboot/) and the files in .claude/rules/. Explain what each one covers, when each one is loaded, and why they're organized that way.
 ```
 
 Claude Code will read them and give you a structured explanation.
@@ -53,22 +53,22 @@ The instruction files live in several places, each with a different scope:
 | **Project** | `./CLAUDE.md` **or** `./.claude/CLAUDE.md` | Your team, via git |
 | **Project rules** | `./.claude/rules/*.md` (optionally scoped with `paths:` frontmatter) | Your team, via git |
 | **Local** | `./CLAUDE.local.md` — keep it out of git | Only you, this project |
-| **Subdirectory** | `src/CLAUDE.md`, `tests/CLAUDE.md`, … | Your team, via git |
+| **Subdirectory** | `src-dotnet/CLAUDE.md`, `src-dotnet/tests/CLAUDE.md`, … | Your team, via git |
 
 > 💡 Repos that already use `AGENTS.md` for other coding tools are supported too — see the [memory docs](https://code.claude.com/docs/en/memory) for how `AGENTS.md` and `CLAUDE.md` interact.
 
 ### A.3 How the Files Load
 
 - **At launch**, Claude Code loads `CLAUDE.md` and `CLAUDE.local.md` from your working directory **and every directory above it**, plus any rule in `.claude/rules/` that has **no** `paths:` frontmatter.
-- **On demand**, it loads a subdirectory's `CLAUDE.md` (e.g., `src/CLAUDE.md`) the first time Claude reads or edits a file in that subdirectory, and a **path-scoped rule** the first time Claude reads or edits a file matching its `paths:` globs.
+- **On demand**, it loads a subdirectory's `CLAUDE.md` (e.g., `src-dotnet/CLAUDE.md`) the first time Claude reads or edits a file in that subdirectory, and a **path-scoped rule** the first time Claude reads or edits a file matching its `paths:` globs.
 - Files are **concatenated, not overridden**. Broader files appear first; files closer to where you're working are read last. If two files contradict each other, Claude may pick either one — so the fix for a conflict is to remove it, not to rely on precedence.
 
-So when you start `claude` at the repo root and ask it to change `src/TaskManager.Domain/Tasks/Task.cs`, its context contains:
+So when you start `claude` at the repo root and ask it to change `src-dotnet/src/TaskManager.Domain/Tasks/Task.cs`, its context contains:
 
 1. `~/.claude/CLAUDE.md` (if it exists)
 2. `./CLAUDE.md` + any unscoped rules (e.g., `.claude/rules/follow-up-questions.md`)
 3. `./CLAUDE.local.md` (if it exists)
-4. `src/CLAUDE.md` and `.claude/rules/dotnet.md` — pulled in once Claude touches a `.cs` file under `src/`
+4. `src-dotnet/CLAUDE.md` and `.claude/rules/dotnet.md` — pulled in once Claude touches a `.cs` file under `src-dotnet/`
 
 ### A.4 Check What's Actually Loaded
 
@@ -136,10 +136,10 @@ cd <path-to-workshop-repo> && claude
 ```
 
 ```
-Look at src/TaskManager.Application, then sketch a TaskService class for the .NET Application layer. Don't write any files — just show me the code.
+Look at src-dotnet/src/TaskManager.Application, then sketch a TaskService class for the .NET Application layer. Don't write any files — just show me the code.
 ```
 
-This time Claude Code should follow conventions from `CLAUDE.md`, `src/CLAUDE.md`, and `.claude/rules/dotnet.md` (file-scoped namespaces, sealed classes, guard clauses, async patterns) without you restating them — the root file loads at launch, and the `src/` file and `.cs` rule load automatically as soon as Claude reads a file under `src/`.
+This time Claude Code should follow conventions from `CLAUDE.md`, `src-dotnet/CLAUDE.md`, and `.claude/rules/dotnet.md` (file-scoped namespaces, sealed classes, guard clauses, async patterns) without you restating them — the root file loads at launch, and the `src-dotnet/` file and `.cs` rule load automatically as soon as Claude reads a file under `src-dotnet/`.
 
 > **Key insight**: Memory removes the need to re-state your conventions in every prompt. You write it once; Claude Code reads it every session.
 
@@ -161,8 +161,8 @@ A path-scoped rule is a markdown file with a `paths:` list in YAML frontmatter:
 ```markdown
 ---
 paths:
-  - "src/**/*.cs"
-  - "tests/**/*.cs"
+  - "src-dotnet/src/**/*.cs"
+  - "src-dotnet/tests/**/*.cs"
 ---
 
 # .NET Conventions
@@ -171,24 +171,24 @@ paths:
 
 | Shipped rule | `paths:` | Loads when… |
 |---|---|---|
-| `dotnet.md` | `src/**/*.cs`, `tests/**/*.cs`, `**/*.csproj` | Claude reads/edits a C# or project file |
+| `dotnet.md` | `src-dotnet/src/**/*.cs`, `src-dotnet/tests/**/*.cs`, `**/*.csproj` | Claude reads/edits a C# or project file |
 | `springboot.md` | `src-springboot/**/*.java`, `pom.xml`, `*.{yml,yaml,properties}` | Claude reads/edits Java, POM, or config files in the Spring Boot tree |
 | `follow-up-questions.md` | *(none)* | Every session, at launch |
 
 Notes:
 - `paths` is the **only** frontmatter field Claude Code reads from a rule; other fields are ignored.
 - Rules are discovered recursively, so you can organize them into `.claude/rules/frontend/`, `.claude/rules/backend/`, etc.
-- Globs support `**`, `*`, and brace expansion such as `src/**/*.{ts,tsx}`.
+- Globs support `**`, `*`, and brace expansion such as `src-dotnet/src/**/*.{ts,tsx}`.
 
 ### C.2 Watch a Rule Load
 
 In a fresh session (`/clear`), run `/context` and note which memory files are listed. Then:
 
 ```
-Read src/TaskManager.Domain/Tasks/Task.cs and tell me which project instructions apply to this file and where each one came from.
+Read src-dotnet/src/TaskManager.Domain/Tasks/Task.cs and tell me which project instructions apply to this file and where each one came from.
 ```
 
-Claude should now cite `src/CLAUDE.md` **and** `.claude/rules/dotnet.md` — neither was in context until it touched a matching file. (If you're on the Spring Boot track, read `src-springboot/taskmanager-domain/src/main/java/com/example/taskmanager/domain/tasks/Task.java` instead and look for `springboot.md`.)
+Claude should now cite `src-dotnet/CLAUDE.md` **and** `.claude/rules/dotnet.md` — neither was in context until it touched a matching file. (If you're on the Spring Boot track, read `src-springboot/taskmanager-domain/src/main/java/com/example/taskmanager/domain/tasks/Task.java` instead and look for `springboot.md`.)
 
 ### C.3 Add and Trigger Your Own Rule
 
@@ -196,7 +196,7 @@ Create a rule that only applies to the **domain layer** of both stacks. Ask Clau
 
 ```
 Create .claude/rules/domain-layer.md with paths frontmatter matching
-src/TaskManager.Domain/**/*.cs and src-springboot/taskmanager-domain/**/*.java.
+src-dotnet/src/TaskManager.Domain/**/*.cs and src-springboot/taskmanager-domain/**/*.java.
 Rules:
 - Value objects expose a static parse method (FromName in C#, fromString in Java)
 - Invalid input throws ArgumentException (C#) / IllegalArgumentException (Java)
@@ -226,20 +226,20 @@ Keep `domain-layer.md` — you'll use it again in Lab 3, Part 2 when you build a
 
 ## Part D: Writing a CLAUDE.md for a Subdirectory (8 min)
 
-The `tests/` directory currently has no `CLAUDE.md`. You'll write one.
+The `src-dotnet/tests/` directory currently has no `CLAUDE.md`. You'll write one.
 
 ### D.1 Ask Claude Code to Explore the Tests
 
 ```
-Read the test projects in the tests/ directory and describe the current test structure, what frameworks are used, and what testing patterns you observe.
+Read the test projects in the src-dotnet/tests/ directory and describe the current test structure, what frameworks are used, and what testing patterns you observe.
 ```
 
 Claude Code will read the test project files and give you a summary. (Expect xUnit v3 + FakeItEasy, and test methods that are currently `Skip` stubs — `dotnet test` reports them as skipped until you implement them in Labs 3 and 5.)
 
-### D.2 Draft and Write `tests/CLAUDE.md`
+### D.2 Draft and Write `src-dotnet/tests/CLAUDE.md`
 
 ```
-Based on what you found in the tests/ directory, draft a CLAUDE.md for tests/ that captures: the testing frameworks, the naming conventions, the project structure, and any important "don't do this" rules for tests in this codebase. Keep it short. If something is already covered by src/CLAUDE.md or .claude/rules/dotnet.md, import or reference it instead of repeating it.
+Based on what you found in the src-dotnet/tests/ directory, draft a CLAUDE.md for src-dotnet/tests/ that captures: the testing frameworks, the naming conventions, the project structure, and any important "don't do this" rules for tests in this codebase. Keep it short. If something is already covered by src-dotnet/CLAUDE.md (which loads alongside it) or .claude/rules/dotnet.md, reference it instead of repeating it.
 ```
 
 Review the draft. It should include things like:
@@ -251,15 +251,15 @@ Review the draft. It should include things like:
 Then:
 
 ```
-Write this as tests/CLAUDE.md.
+Write this as src-dotnet/tests/CLAUDE.md.
 ```
 
 ### D.3 Use an `@path` Import
 
-`CLAUDE.md` files can pull in other files with `@path/to/file`. Relative paths resolve from the file containing the import, and imports can nest (up to four hops). Ask Claude Code to add a line like this to `tests/CLAUDE.md`:
+`CLAUDE.md` files can pull in other files with `@path/to/file`. Relative paths resolve from the file containing the import, and imports can nest (up to four hops). `src-dotnet/CLAUDE.md` already loads whenever Claude works under `src-dotnet/`, so there's no need to import it. Instead, pull in the domain-layer rule you wrote in Part C, so tests for domain code follow it even when Claude is only reading test files. Ask Claude Code to add a line like this to `src-dotnet/tests/CLAUDE.md`:
 
 ```markdown
-Shared .NET conventions: @../src/CLAUDE.md
+Domain-layer rules: @../../.claude/rules/domain-layer.md
 ```
 
 > ⚠️ Imports organize a file; they **don't** save context — the imported file loads in full alongside the one that imports it. To mention a path *without* importing it, wrap it in backticks: `` `@README.md` ``.
@@ -271,10 +271,10 @@ Shared .NET conventions: @../src/CLAUDE.md
 ```
 
 ```
-Read tests/TaskManager.UnitTests/UnitTest1.cs, then write a test for TaskService.GetTaskAsync returning null when the task doesn't exist. Show it to me; don't write the file.
+Read src-dotnet/tests/TaskManager.UnitTests/UnitTest1.cs, then write a test for TaskService.GetTaskAsync returning null when the task doesn't exist. Show it to me; don't write the file.
 ```
 
-Reading a file under `tests/` pulls `tests/CLAUDE.md` (and its import) into context, so the test should follow those conventions without you needing to specify them.
+Reading a file under `src-dotnet/tests/` pulls `src-dotnet/tests/CLAUDE.md` (and its import) into context, so the test should follow those conventions without you needing to specify them.
 
 ---
 
@@ -348,7 +348,7 @@ Remember: all of these are **context, not enforcement**. To guarantee something 
 - [ ] You can explain the memory model (managed → user → project/rules → local → subdirectory, plus auto memory) and when each file loads
 - [ ] You used `/context` and `/memory` to see which memory files are active
 - [ ] You watched a path-scoped rule load and created `.claude/rules/domain-layer.md`
-- [ ] You wrote a `tests/CLAUDE.md` (with an `@path` import) that Claude Code uses to generate better tests
+- [ ] You wrote a `src-dotnet/tests/CLAUDE.md` (with an `@path` import) that Claude Code uses to generate better tests
 - [ ] You created (or planned) a `~/.claude/CLAUDE.md` and know when to use `CLAUDE.local.md`
 
 ---

@@ -60,7 +60,7 @@ This guide is for facilitators running the 2-day, 15-lab Claude Code workshop. I
 claude --version
 claude doctor                 # install type, PATH, auto-update status
 claude -p "Reply with OK"     # proves auth works without opening the UI
-dotnet test                   # .NET: builds, 11 tests skipped, 0 failed
+dotnet test src-dotnet        # .NET: builds, 11 tests skipped, 0 failed
 # or
 cd src-springboot && mvn -q test
 ```
@@ -474,7 +474,7 @@ Recap Day 1 in one slide: memory → TDD → plan → refactor → rewind → gi
 | No permission prompts appear | The session is in **Auto** or **Accept edits** mode, or the command is pre-approved in `.claude/settings.json`. Shift+Tab to **Manual**. |
 | Subagent or skill doesn't appear | Check its location and frontmatter. If its `.claude/agents/` or `.claude/skills/` directory was just created, restart the session. |
 | Claude ignores CLAUDE.md conventions | Check `/memory` to confirm the file is loaded. Keep the file short and specific. Move "must" rules to hooks or permissions. |
-| `.NET` build issues | `dotnet --version` should be 9.x. Run `dotnet restore`, then `dotnet build`. |
+| `.NET` build issues | `dotnet --version` should be 9.x. Run `dotnet restore src-dotnet`, then `dotnet build src-dotnet`. |
 | Spring Boot build issues | `java -version` should be 21. Run `mvn -v`, then `mvn clean test` from `src-springboot/`. |
 
 ---

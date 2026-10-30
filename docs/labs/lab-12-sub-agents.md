@@ -46,12 +46,12 @@ Claude Code already delegates to built-in subagents without being asked:
 Try it:
 
 ```
-Use the Explore subagent (very thorough) to map how a Task flows from the HTTP endpoint to the repository in both src/ and src-springboot/. Return a short table per stack.
+Use the Explore subagent (very thorough) to map how a Task flows from the HTTP endpoint to the repository in both src-dotnet/ and src-springboot/. Return a short table per stack.
 ```
 
 While it runs, notice that Claude keeps working (subagents spawned from the main conversation start **in the background** by default). Run `/tasks` to see running subagents, the model each uses, and open their transcripts.
 
-> Explore and Plan skip CLAUDE.md to stay fast and small. Custom subagents **do** load CLAUDE.md and the project's rules, which is why the shipped agents can say "read `src/CLAUDE.md`" and rely on it.
+> Explore and Plan skip CLAUDE.md to stay fast and small. Custom subagents **do** load CLAUDE.md and the project's rules, which is why the shipped agents can say "read `src-dotnet/CLAUDE.md`" and rely on it.
 
 ---
 
@@ -88,7 +88,7 @@ The body is the subagent's **entire** system prompt. It does not receive Claude 
 ### A.2 Invoke by Natural Language
 
 ```
-Use the architecture-reviewer subagent to review src/TaskManager.Domain and src-springboot/taskmanager-domain for layer violations and primitive obsession.
+Use the architecture-reviewer subagent to review src-dotnet/src/TaskManager.Domain and src-springboot/taskmanager-domain for layer violations and primitive obsession.
 ```
 
 Read the report. It should follow the agent's output format (Summary → ✅ Strengths → ⚠️ Concerns → 🚫 Violations → Recommendations → Suggested Handoffs) and cite real files.
@@ -105,7 +105,7 @@ An @-mention **guarantees** that a specific subagent runs, rather than leaving t
 
 Or type it directly: `@agent-test-strategist plan tests for the Task status transitions in both stacks`.
 
-Compare the plan to the conventions in `src/CLAUDE.md` and `src-springboot/CLAUDE.md`. The test names should follow `MethodName_StateUnderTest_ExpectedBehavior` / `methodName_stateUnderTest_expectedBehavior`, and the plan should treat the skipped stub tests as gaps.
+Compare the plan to the conventions in `src-dotnet/CLAUDE.md` and `src-springboot/CLAUDE.md`. The test names should follow `MethodName_StateUnderTest_ExpectedBehavior` / `methodName_stateUnderTest_expectedBehavior`, and the plan should treat the skipped stub tests as gaps.
 
 ### A.4 Automatic Delegation
 

@@ -75,7 +75,7 @@ The `description` is the **most important field**. Claude reads it (not the body
 
 | Weak | Strong |
 |---|---|
-| `Reviews architecture.` | `Read-only Clean Architecture and DDD reviewer for the TaskManager .NET (src/) and Spring Boot (src-springboot/) stacks. Use proactively after changes that add a reference or import between layers, introduce a new entity, value object, repository, or endpoint, or when a user story or design needs an architecture check before implementation.` |
+| `Reviews architecture.` | `Read-only Clean Architecture and DDD reviewer for the TaskManager .NET (src-dotnet/) and Spring Boot (src-springboot/) stacks. Use proactively after changes that add a reference or import between layers, introduce a new entity, value object, repository, or endpoint, or when a user story or design needs an architecture check before implementation.` |
 
 Tips:
 - Include trigger phrases like **"Use proactively when…"** or **"after…"** to encourage automatic delegation.
@@ -117,9 +117,9 @@ A subagent starts with a fresh context: it doesn't see your conversation. Tell i
 
 ```markdown
 ## Sources of Truth
-- `CLAUDE.md`, `src/CLAUDE.md`, `src-springboot/CLAUDE.md`
+- `CLAUDE.md`, `src-dotnet/CLAUDE.md`, `src-springboot/CLAUDE.md`
 - `.claude/rules/dotnet.md`, `.claude/rules/springboot.md`
-- Existing tests under `tests/` and `src-springboot/**/src/test/`
+- Existing tests under `src-dotnet/tests/` and `src-springboot/**/src/test/`
 ```
 
 Project CLAUDE.md files are loaded for subagents, but listing the specific rule files and folders keeps reviews grounded in *this* repo instead of generic advice. A repo-specific **layer map** (as in `architecture-reviewer`) is even better.
@@ -183,7 +183,7 @@ sequenceDiagram
 
 Ways to invoke:
 - **Automatic:** describe the work; Claude matches it to a `description`.
-- **By name in a prompt:** "Use the architecture-reviewer subagent to review `src/TaskManager.Domain/...`".
+- **By name in a prompt:** "Use the architecture-reviewer subagent to review `src-dotnet/src/TaskManager.Domain/...`".
 - **@-mention:** `@agent-architecture-reviewer` guarantees that agent runs.
 - **Whole session:** `claude --agent architecture-reviewer` runs the main thread with that agent's prompt, tools, and model.
 - **Chain:** "Use backlog-generator, then architecture-reviewer, then test-strategist" — each step's Handoff tells Claude what to pass along.

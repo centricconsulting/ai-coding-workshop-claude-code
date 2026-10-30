@@ -96,8 +96,8 @@ This is the main exercise: **the plan you produce here is what Lab 5 starts from
 #### 🔷 .NET Prompt
 
 ```
-/plan Read src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and src/CLAUDE.md.
-I want to modernize LegacyTaskProcessor to follow the conventions in src/CLAUDE.md
+/plan Read src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and src-dotnet/CLAUDE.md.
+I want to modernize LegacyTaskProcessor to follow the conventions in src-dotnet/CLAUDE.md
 (guard clauses, no abbreviations, ILogger instead of Console, Object Calisthenics)
 without changing its observable behavior.
 Draft a phased plan: what order should the work happen in, what does each phase

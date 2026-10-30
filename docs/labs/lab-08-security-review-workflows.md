@@ -72,14 +72,14 @@ You're going to add a small, realistic feature to TaskManager — task assignmen
 #### 🔷 .NET Prompt
 
 ```
-Following the conventions in src/CLAUDE.md, add a task-assignment feature:
+Following the conventions in src-dotnet/CLAUDE.md, add a task-assignment feature:
 
 1. Add an AssignedToUserId (nullable string) and OrganizationId (string) property
-   to the Task entity in src/TaskManager.Domain/Tasks/Task.cs, plus an Assign(string userId)
+   to the Task entity in src-dotnet/src/TaskManager.Domain/Tasks/Task.cs, plus an Assign(string userId)
    method that sets AssignedToUserId. Keep existing constructors/factory methods working
    (default OrganizationId if needed) so earlier labs' code still compiles.
 2. Add a minimal API endpoint PUT /tasks/{id}/assign in
-   src/TaskManager.Api/Extensions/EndpointExtensions.cs that accepts a userId in the
+   src-dotnet/src/TaskManager.Api/Extensions/EndpointExtensions.cs that accepts a userId in the
    request body, loads the task with ITaskRepository.FindByIdAsync, calls Assign, and
    saves with SaveChangesAsync. Return 404 if the task doesn't exist.
 
@@ -109,7 +109,7 @@ Review what Claude Code proposes before it writes. You should see exactly what w
 
 > This is a deliberately introduced training bug — you're building it on purpose so the next steps have something real to find and fix. In a real codebase, this exact pattern (existence check without an ownership/tenancy check) is one of the most common ways broken access control ships to production.
 
-Build to confirm it compiles (`dotnet build` / `mvn -q compile` from `src-springboot`), then **commit it** to your personal branch — `/security-review` reviews committed branch changes:
+Build to confirm it compiles (`dotnet build src-dotnet` / `mvn -q compile` from `src-springboot`), then **commit it** to your personal branch — `/security-review` reviews committed branch changes:
 
 ```bash
 git add -A && git commit -m "feat(tasks): add task assignment endpoint (lab 8, intentionally insecure)"
@@ -138,7 +138,7 @@ auth middleware yet, so read the caller's organization from an X-Organization-Id
 request header behind a small ICurrentUser-style abstraction, so it can later be
 swapped for authenticated claims. Put the rule in the domain/application layer, not
 only in the endpoint, and add tests for the allowed and forbidden cases. Follow the
-conventions in src/CLAUDE.md.
+conventions in src-dotnet/CLAUDE.md.
 ```
 
 #### 🟩 Spring Boot Prompt
@@ -215,7 +215,7 @@ Assume /security-review has already been run as a baseline.
 /security-checklist
 ```
 
-Confirm it shows up in the `/` menu and in `/skills`, runs, and produces output that references both the generic security categories and the two TaskManager-specific risk areas. Try `/security-checklist src/TaskManager.Api` (🟩 `src-springboot/taskmanager-api`) to scope it with `$ARGUMENTS`.
+Confirm it shows up in the `/` menu and in `/skills`, runs, and produces output that references both the generic security categories and the two TaskManager-specific risk areas. Try `/security-checklist src-dotnet/src/TaskManager.Api` (🟩 `src-springboot/taskmanager-api`) to scope it with `$ARGUMENTS`.
 
 Commit `.claude/skills/security-checklist/` — skills in `.claude/skills/` are shared with everyone who clones the repo.
 

@@ -19,8 +19,8 @@ Every Claude Code response is built from tool calls:
 You: "Add a method to validate email addresses"
 
 Claude Code:
-  1. Read(src/TaskManager.Domain/Tasks/Task.cs)  ← sees the model
-  2. Read(src/CLAUDE.md)                          ← loads conventions
+  1. Read(src-dotnet/src/TaskManager.Domain/Tasks/Task.cs)  ← sees the model
+  2. Read(src-dotnet/CLAUDE.md)                          ← loads conventions
   3. Edit(Task.cs, ...)                           ← makes the change
   4. Bash(dotnet test)                            ← verifies it works
   5. Reports results to you
@@ -168,7 +168,7 @@ claude
 
 **Headless** (`-p` / `--print`):
 ```bash
-claude -p "List all TODO comments in src/"
+claude -p "List all TODO comments in src-dotnet/"
 claude -p "..." --output-format json --max-turns 5
 ```
 No session opens. Claude Code reads, processes, prints to stdout, exits.
@@ -234,11 +234,11 @@ This workshop has two parallel stacks:
 | | .NET | Spring Boot |
 |---|---|---|
 | Build | `dotnet build` | `mvn clean test` |
-| Test | `dotnet test` | `mvn test` (from `src-springboot/`) |
-| Entry | `src/` | `src-springboot/` |
-| Config | `src/CLAUDE.md` | `src-springboot/CLAUDE.md` |
+| Test | `dotnet test` (from `src-dotnet/`) | `mvn test` (from `src-springboot/`) |
+| Entry | `src-dotnet/` | `src-springboot/` |
+| Config | `src-dotnet/CLAUDE.md` | `src-springboot/CLAUDE.md` |
 
-Claude Code always loads the root `CLAUDE.md`, and pulls in `src/CLAUDE.md`
+Claude Code always loads the root `CLAUDE.md`, and pulls in `src-dotnet/CLAUDE.md`
 or `src-springboot/CLAUDE.md` (plus matching `.claude/rules/`) when it works in that tree.
 
 You can work in either stack for all labs. The concepts are identical.

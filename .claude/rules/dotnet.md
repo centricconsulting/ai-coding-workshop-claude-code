@@ -1,17 +1,17 @@
 ---
 paths:
-  - "src/**/*.cs"
-  - "tests/**/*.cs"
+  - "src-dotnet/src/**/*.cs"
+  - "src-dotnet/tests/**/*.cs"
   - "**/*.csproj"
 ---
 
 # .NET Rules (C# / Clean Architecture / DDD)
 
-These rules complement `src/CLAUDE.md`, which holds the layer map, build commands, and testing conventions. They load only when Claude reads or edits .NET files.
+These rules complement `src-dotnet/CLAUDE.md`, which holds the layer map, build commands, and testing conventions. They load only when Claude reads or edits .NET files.
 
 ## Before Writing Code
 
-- Write or update the failing test first (TDD). Unit tests live in `tests/TaskManager.UnitTests`, integration tests in `tests/TaskManager.IntegrationTests`.
+- Write or update the failing test first (TDD). Unit tests live in `src-dotnet/tests/TaskManager.UnitTests`, integration tests in `src-dotnet/tests/TaskManager.IntegrationTests`.
 - Check which layer the file belongs to. Dependencies point inward: Api → Application → Domain; Infrastructure implements Domain interfaces.
 - Do not add NuGet packages without asking.
 
@@ -40,4 +40,4 @@ These rules complement `src/CLAUDE.md`, which holds the layer map, build command
 
 ## Verification
 
-Run `dotnet build` and `dotnet test` before declaring a change done. Commit with a Conventional Commit message (`feat:`, `fix:`, `test:`, `refactor:`).
+Run `dotnet build src-dotnet` and `dotnet test src-dotnet` (from the repo root) before declaring a change done. Commit with a Conventional Commit message (`feat:`, `fix:`, `test:`, `refactor:`).

@@ -40,6 +40,8 @@ Dependencies flow **inward only**: Api → Application → Domain. Infrastructur
 
 ## Common Commands
 
+Run these from `src-dotnet/` (where `TaskManager.sln` lives); from the repo root, pass the folder instead (`dotnet test src-dotnet`). Paths in this file are relative to `src-dotnet/`.
+
 ```bash
 dotnet build                          # Build all projects
 dotnet test                           # Run all tests

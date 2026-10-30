@@ -197,7 +197,7 @@ without you copying and pasting anything from the browser.
 **With GitHub MCP:**
 ```
 Find open issues labeled "enhancement" and for each one,
-check whether there's already code in src/ that addresses it.
+check whether there's already code in src-dotnet/ that addresses it.
 ```
 
 Claude Code does the GitHub query and the code analysis in one task.

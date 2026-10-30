@@ -31,7 +31,7 @@
     },
 
     // Claude Code native installer -> ~/.local/bin/claude (auto-updates; no Node.js needed)
-    "postCreateCommand": "curl -fsSL https://claude.ai/install.sh | bash && npm install -g @marp-team/marp-cli && dotnet build TaskManager.sln && mvn clean install -f src-springboot/pom.xml -DskipTests && dotnet dev-certs https --trust",
+    "postCreateCommand": "curl -fsSL https://claude.ai/install.sh | bash && npm install -g @marp-team/marp-cli && dotnet build src-dotnet/TaskManager.sln && mvn clean install -f src-springboot/pom.xml -DskipTests && dotnet dev-certs https --trust",
 
     "customizations": {
         "vscode": {

@@ -25,7 +25,7 @@ A **Skill** is a directory containing a `SKILL.md` file. Its short description i
 ## Prerequisites
 
 - Completed Labs 1–10
-- Familiarity with the Clean Architecture layers described in `src/CLAUDE.md` and `src-springboot/CLAUDE.md`
+- Familiarity with the Clean Architecture layers described in `src-dotnet/CLAUDE.md` and `src-springboot/CLAUDE.md`
 
 ---
 
@@ -171,7 +171,7 @@ The description and `when_to_use` should cause Claude to load the skill on its o
 
 ### C.1 The Target Problem
 
-Both `src/CLAUDE.md` and `src-springboot/CLAUDE.md` document the same rule: **dependencies flow inward only.**
+Both `src-dotnet/CLAUDE.md` and `src-springboot/CLAUDE.md` document the same rule: **dependencies flow inward only.**
 
 - .NET: `Api → Application → Domain`, with `Infrastructure` implementing `Domain` interfaces
 - Spring Boot: `web → application → domain`, with `infrastructure` implementing `domain` interfaces
@@ -189,7 +189,7 @@ Aim for frontmatter like:
 ```yaml
 ---
 name: clean-architecture-boundary-check
-description: Verifies that a proposed or existing code change respects Clean Architecture dependency direction (dependencies flow inward only toward Domain). Use whenever adding a reference, import, or dependency between layers in src/ (.NET) or src-springboot/ (Spring Boot), or when asked to review a change for architecture violations.
+description: Verifies that a proposed or existing code change respects Clean Architecture dependency direction (dependencies flow inward only toward Domain). Use whenever adding a reference, import, or dependency between layers in src-dotnet/ (.NET) or src-springboot/ (Spring Boot), or when asked to review a change for architecture violations.
 argument-hint: "[file-or-folder]"
 ---
 ```
@@ -203,12 +203,12 @@ Ask Claude Code to draft the instructions, pointing it at the source of truth:
 ```
 Now write the SKILL.md body. It should teach Claude Code to:
 1. Use $ARGUMENTS as the file or folder to check; if empty, check the files changed in the current git diff
-2. Identify which layer each file belongs to (Domain, Application, Infrastructure, API/web) based on its path, for both src/ (.NET) and src-springboot/ (Spring Boot)
-3. Check whether the change introduces a dependency that violates the inward-only rule from src/CLAUDE.md and src-springboot/CLAUDE.md (e.g., Domain referencing Infrastructure or API types, Application referencing API/web types)
+2. Identify which layer each file belongs to (Domain, Application, Infrastructure, API/web) based on its path, for both src-dotnet/ (.NET) and src-springboot/ (Spring Boot)
+3. Check whether the change introduces a dependency that violates the inward-only rule from src-dotnet/CLAUDE.md and src-springboot/CLAUDE.md (e.g., Domain referencing Infrastructure or API types, Application referencing API/web types)
 4. Report a clear pass/fail with the specific offending import or reference cited
 5. Suggest the correct fix (usually: introduce or use a Domain-level interface/abstraction) when a violation is found
 
-Use src/CLAUDE.md and src-springboot/CLAUDE.md as the source of truth for what "inward only" means in this repo.
+Use src-dotnet/CLAUDE.md and src-springboot/CLAUDE.md as the source of truth for what "inward only" means in this repo.
 ```
 
 Review the generated body. It should reference concrete layer names and paths from this repo, not generic architecture advice.
@@ -236,7 +236,7 @@ I want to add a method to the Application layer that calls an ITaskRepository in
 Finally, invoke it **directly** with an argument:
 
 ```
-/clean-architecture-boundary-check src/TaskManager.Application
+/clean-architecture-boundary-check src-dotnet/src/TaskManager.Application
 ```
 
 ---
@@ -263,13 +263,13 @@ Project skills are versioned and shared automatically, so they need the same dis
 - **Ownership**: Treat skills like `CLAUDE.md` and review them through the normal PR process. A misleading description can make Claude activate the wrong instructions at the wrong time.
 - **Review**: Check the *description* as carefully as the body. An overly broad description causes false triggers. An overly narrow one means the skill never fires.
 - **Permissions**: Review `allowed-tools` carefully, because it pre-approves tools without prompting.
-- **Versioning**: Skills evolve with the code they describe. If the layer boundaries in `src/CLAUDE.md` change, `clean-architecture-boundary-check/SKILL.md` must change too.
+- **Versioning**: Skills evolve with the code they describe. If the layer boundaries in `src-dotnet/CLAUDE.md` change, `clean-architecture-boundary-check/SKILL.md` must change too.
 - **Discoverability**: Point teammates to `/skills`, and list shared skills somewhere visible during onboarding.
 
 Discuss with your table:
 
 ```
-Where should the line be between "this belongs in CLAUDE.md or a rule" and "this belongs in a skill"? Use the clean-architecture-boundary-check skill we just built as the example — why is this a skill and not just a paragraph in src/CLAUDE.md or .claude/rules/dotnet.md?
+Where should the line be between "this belongs in CLAUDE.md or a rule" and "this belongs in a skill"? Use the clean-architecture-boundary-check skill we just built as the example — why is this a skill and not just a paragraph in src-dotnet/CLAUDE.md or .claude/rules/dotnet.md?
 ```
 
 ---
@@ -286,7 +286,7 @@ Where should the line be between "this belongs in CLAUDE.md or a rule" and "this
 
 ## Extension Challenge
 
-1. Add a second skill, `.claude/skills/test-naming-convention-check/SKILL.md`. It verifies that test method names follow this repo's conventions: `MethodName_StateUnderTest_ExpectedBehavior` for .NET and `methodName_stateUnderTest_expectedBehavior` for Spring Boot (see the Testing Conventions sections of `src/CLAUDE.md` and `src-springboot/CLAUDE.md`). Test it against a real test file in `tests/` or `src-springboot/*/src/test/`.
+1. Add a second skill, `.claude/skills/test-naming-convention-check/SKILL.md`. It verifies that test method names follow this repo's conventions: `MethodName_StateUnderTest_ExpectedBehavior` for .NET and `methodName_stateUnderTest_expectedBehavior` for Spring Boot (see the Testing Conventions sections of `src-dotnet/CLAUDE.md` and `src-springboot/CLAUDE.md`). Test it against a real test file in `src-dotnet/tests/` or `src-springboot/*/src/test/`.
 2. Make a forked variant: add `context: fork` and `agent: Explore` to a copy of your boundary checker so it scans the whole codebase in an isolated context and returns only a summary. Compare the context usage (`/context`) with the inline version.
 3. Add `disable-model-invocation: true` to a skill and confirm it disappears from automatic use but still works as `/name`.
 
@@ -311,7 +311,7 @@ Where should the line be between "this belongs in CLAUDE.md or a rule" and "this
 
 **Skill body doesn't match this repo's actual structure**
 
-- If Claude Code generated generic Clean Architecture advice, ask it to revise the body to cite `src/CLAUDE.md` and `src-springboot/CLAUDE.md` explicitly
+- If Claude Code generated generic Clean Architecture advice, ask it to revise the body to cite `src-dotnet/CLAUDE.md` and `src-springboot/CLAUDE.md` explicitly
 
 ---
 

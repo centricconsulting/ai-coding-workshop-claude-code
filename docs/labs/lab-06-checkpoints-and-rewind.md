@@ -98,7 +98,7 @@ Establish a checkpoint you'll want to return to:
 #### 🔷 .NET Prompt
 
 ```
-Read src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs as it stands
+Read src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs as it stands
 now, after the Lab 5 refactor. Confirm the characterization tests still pass.
 ```
 

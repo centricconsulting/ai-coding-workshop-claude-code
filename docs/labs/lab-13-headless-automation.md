@@ -38,7 +38,7 @@ Programmatic Claude Code is part of the **Claude Agent SDK** (formerly the "Clau
 ### A.1 Basic Usage
 
 ```bash
-claude -p "What are the top 3 issues in src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs?"
+claude -p "What are the top 3 issues in src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs?"
 ```
 
 No interactive session opens. Claude Code reads the file, analyzes it, prints the result to stdout, and exits.
@@ -54,10 +54,10 @@ No interactive session opens. Claude Code reads the file, analyzes it, prints th
 git log --oneline -20 | claude -p "Summarize the themes of these recent commits in 3 bullets."
 
 # Pipe output OUT to a file
-claude -p "List all public interfaces in the src/ directory." > interfaces.txt
+claude -p "List all public interfaces in the src-dotnet/ directory." > interfaces.txt
 
 # Use the output in a script
-ISSUES=$(claude -p "Are there any TODO comments in the src/ directory? List them, or print NONE.")
+ISSUES=$(claude -p "Are there any TODO comments in the src-dotnet/ directory? List them, or print NONE.")
 if [ "$ISSUES" != "NONE" ]; then
   echo "Found TODOs: $ISSUES"
 fi
@@ -75,10 +75,10 @@ Use `--output-format` to control the response shape:
 
 ```bash
 # Full JSON envelope
-claude -p "How many test projects are in tests/?" --output-format json | jq .
+claude -p "How many test projects are in src-dotnet/tests/?" --output-format json | jq .
 
 # Just the answer
-claude -p "How many test projects are in tests/?" --output-format json | jq -r '.result'
+claude -p "How many test projects are in src-dotnet/tests/?" --output-format json | jq -r '.result'
 
 # What did that cost?
 claude -p "Summarize CLAUDE.md in one sentence." --output-format json | jq '.total_cost_usd'
@@ -136,7 +136,7 @@ Review the result with `git diff` — and remember `/rewind` doesn't help you he
 
 ```bash
 # Start a task
-claude -p "Read src/TaskManager.Domain and describe the current domain model."
+claude -p "Read src-dotnet/src/TaskManager.Domain and describe the current domain model."
 
 # Continue in the next command
 claude -p "Now suggest 3 improvements to the domain model based on what you read." --continue
@@ -399,7 +399,7 @@ Headless mode removes the human-in-the-loop — which means the safety responsib
 ## Extension Exercise
 
 Write a shell script that:
-1. Uses `claude -p ... --output-format json` to list all public interfaces in the `src/` directory and captures the `session_id`
+1. Uses `claude -p ... --output-format json` to list all public interfaces in the `src-dotnet/` directory and captures the `session_id`
 2. Uses `--resume "$SESSION_ID"` to check whether each interface has a corresponding implementation
 3. Outputs a summary: "X of Y interfaces have implementations" and the total cost from `total_cost_usd`
 
