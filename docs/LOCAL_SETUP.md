@@ -194,7 +194,7 @@ cd /path/to/ai-coding-workshop-claude-code/src-springboot
 mvn clean test
 ```
 
-Expected: `BUILD SUCCESS`, all tests pass.
+Expected: `BUILD SUCCESS`, with about 100 tests, all passing and none skipped.
 
 ---
 

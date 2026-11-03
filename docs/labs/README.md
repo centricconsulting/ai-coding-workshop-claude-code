@@ -248,7 +248,7 @@ Keyboard: **Shift+Tab** cycles permission modes, **Esc** interrupts, **Esc Esc**
 
 1. Fork the repo, clone your fork, and create your branch: `git checkout -b workshop/your-name`
 2. Verify Claude Code: `claude --version` and `claude doctor`
-3. Verify your stack: `dotnet build src-dotnet && dotnet test src-dotnet` (expect 1 passed, 11 skipped, 0 failed) or `cd src-springboot && mvn clean test`
+3. Verify your stack: `dotnet build src-dotnet && dotnet test src-dotnet` (expect 1 passed, 11 skipped, 0 failed) or `cd src-springboot && mvn clean test` (expect about 100 tests, all passing)
 4. Start with [Lab 1](lab-01-first-contact.md)
 
 New to choosing between CLAUDE.md, rules, skills, subagents, hooks, and MCP? See the [Customization Decision Guide](../guides/customization-decision-guide.md).

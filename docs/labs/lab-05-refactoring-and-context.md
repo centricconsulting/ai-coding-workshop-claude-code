@@ -149,7 +149,7 @@ Continue refactoring LegacyTaskProcessor:
 - Replace the magic numbers for type (1, 2) with an enum
 - Use StringBuilder (or a stream) instead of string concatenation in loops
 - Stop swallowing exceptions; inject a logger (ILogger<T> / SLF4J) and log failures
-- Extract the file write into an ITaskOutputWriter abstraction
+- Extract the file write into an ITaskOutputWriter (.NET) / TaskOutputWriter (Spring Boot) abstraction
 - Remove Thread.Sleep
 Update LegacyBatchImportService to match. Run the characterization tests after each change.
 ```

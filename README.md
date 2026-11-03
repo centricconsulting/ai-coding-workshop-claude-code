@@ -306,7 +306,7 @@ This workshop is the Claude Code counterpart to Centric's GitHub Copilot worksho
    # .NET — expect 1 passed, 11 skipped, 0 failed (skipped = test stubs you'll implement)
    dotnet build src-dotnet && dotnet test src-dotnet
 
-   # Spring Boot
+   # Spring Boot — expect BUILD SUCCESS, about 100 tests, all passing
    cd src-springboot && mvn clean test
    ```
 

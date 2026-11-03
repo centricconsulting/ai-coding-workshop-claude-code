@@ -62,7 +62,7 @@ claude doctor                 # install type, PATH, auto-update status
 claude -p "Reply with OK"     # proves auth works without opening the UI
 dotnet test src-dotnet        # .NET: builds, 1 passed, 11 skipped, 0 failed
 # or
-cd src-springboot && mvn -q test
+cd src-springboot && mvn -q test   # Spring: BUILD SUCCESS, ~100 tests, all passing
 ```
 
 The 11 skipped .NET tests are intentional stubs that later labs fill in. They are not failures. The 1 passing test is a `/health` integration test that proves `WebApplicationFactory` works.
@@ -188,6 +188,8 @@ Both days end before 17:00 with about 15 minutes of slack. Day 1 keeps all of La
 - .NET `CS0104: 'Priority' is an ambiguous reference`: FakeItEasy also has a `Priority` type. Alias it: `using Priority = TaskManager.Domain.Tasks.Priority;`.
 - .NET `POST /tasks` returns 404: the route is still commented out in `EndpointExtensions.cs`, or the API wasn't restarted.
 - Spring: mapping errors after adding `priority` need the JPA entity and mapper updated together.
+- Spring: Step 3 named the class `NotificationService` too, or annotated it `@Service` and broke every `@SpringBootTest`. The prompt now says `DefaultNotificationService`, plain class.
+- Spring: `Unresolved compilation problem` / odd `ClassNotFoundException` from `mvn`: VS Code's Java extension shares `target/`. Run `mvn clean test`.
 
 **Checkpoint (end of Part 1, before lunch):** green tests and a commit. **(End of Part 2):** `POST /tasks` with priority and due date works end-to-end, and the ADR exists.
 
