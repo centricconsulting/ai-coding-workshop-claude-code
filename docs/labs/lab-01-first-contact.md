@@ -180,7 +180,7 @@ These are **tool calls** — real actions Claude Code takes on your filesystem o
 Run the .NET tests and tell me which ones pass and which ones fail.
 ```
 
-*(Spring Boot track: ask it to run the Maven tests instead.)*
+*(Spring Boot track: ask it to run the Maven tests instead. Expect `BUILD SUCCESS` with about 100 tests, all passing and none skipped; the Spring starter ships with real tests rather than stubs.)*
 
 **Expected result**: the build succeeds and the summary reports **1 passed, 11 skipped, 0 failed**. The passing test is a `/health` check; the skipped tests are stubs that you'll implement during the labs.
 
@@ -234,7 +234,7 @@ The key insight: **Claude Code's output is actions, not suggestions.** You revie
 - [ ] `claude --version` shows a version number
 - [ ] You authenticated and ran at least one conversation
 - [ ] Claude Code accurately described the project architecture from reading the codebase
-- [ ] `dotnet test` (or `mvn clean test`) ran through Claude Code — .NET shows 1 passed, 11 skipped, 0 failed
+- [ ] `dotnet test` (or `mvn clean test`) ran through Claude Code — .NET shows 1 passed, 11 skipped, 0 failed; Spring Boot shows about 100 passing tests and `BUILD SUCCESS`
 - [ ] You saw at least one permission prompt and understand why `dotnet` didn't trigger one
 - [ ] You can cycle permission modes with Shift+Tab
 - [ ] You can use `/help`, `/context`, `/model`, `/effort`, `/compact`, and `/clear`

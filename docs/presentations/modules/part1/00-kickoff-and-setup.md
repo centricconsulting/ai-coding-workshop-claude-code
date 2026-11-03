@@ -202,7 +202,7 @@ claude doctor       # Diagnose install & settings
 # .NET — expect 1 passed, 11 skipped, 0 failed
 dotnet --version && dotnet build src-dotnet && dotnet test src-dotnet
 
-# Spring Boot
+# Spring Boot — expect BUILD SUCCESS, ~100 tests passing
 java -version && cd src-springboot && mvn clean test
 ```
 

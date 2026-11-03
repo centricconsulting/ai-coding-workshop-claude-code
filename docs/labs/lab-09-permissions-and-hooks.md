@@ -351,7 +351,7 @@ exit 0
 
 Confirm and write. Then ask Claude to make a small change to `src-dotnet/src/TaskManager.Domain/Tasks/Task.cs` and check `git diff` — the file should come back consistently formatted.
 
-> **Spring Boot track**: use the same pattern with `*.java` and your formatter of choice (for example `mvn spotless:apply` if the project uses Spotless). Don't add new Maven plugins without asking.
+> **Spring Boot track**: this project has no Java formatter configured (no Spotless or similar), so read C.5 for the pattern and go straight to C.6, which has a Spring version. Don't add new Maven plugins without asking.
 
 ### C.6 Write a Test-Run Hook
 
@@ -370,6 +370,24 @@ f=$(jq -r '.tool_input.file_path // empty'); case "$f" in */tests/TaskManager.Un
 Now every time Claude Code changes a test file, the tests run automatically, and a failure comes straight back to Claude via exit code 2 — no prompt needed.
 
 > Don't add `--no-build` here: the file just changed, so the tests must be rebuilt.
+
+**🟩 Spring Boot version:** put the logic in `.claude/hooks/run-java-tests.sh` and register it the same way (PostToolUse, matcher `Edit|Write`). It maps the changed test file to its Maven module and runs just that module:
+
+```bash
+#!/bin/bash
+# .claude/hooks/run-java-tests.sh — PostToolUse hook for Edit|Write
+FILE_PATH=$(jq -r '.tool_input.file_path // empty')
+case "$FILE_PATH" in
+  */src-springboot/*/src/test/java/*.java)
+    MODULE=$(echo "$FILE_PATH" | sed -E 's#.*/src-springboot/([^/]+)/src/test/.*#\1#')
+    cd "$CLAUDE_PROJECT_DIR/src-springboot" &&
+      mvn -q -pl "$MODULE" -am test -Dsurefire.failIfNoSpecifiedTests=false >&2 || exit 2
+    ;;
+esac
+exit 0
+```
+
+Passing tests exit 0; a failing test exits 2 and Claude sees the assertion message. `-am` also builds the modules it depends on, so expect each run to take several seconds.
 
 ---
 

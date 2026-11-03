@@ -17,7 +17,7 @@ Both implementations model the same domain. The starter code has the basics: a `
 dotnet build src-dotnet
 dotnet test src-dotnet
 
-# Spring Boot
+# Spring Boot — a fresh checkout reports about 100 tests, all passing (none skipped)
 cd src-springboot
 mvn clean test
 ```

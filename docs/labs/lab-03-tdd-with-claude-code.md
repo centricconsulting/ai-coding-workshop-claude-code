@@ -106,7 +106,7 @@ Use FakeItEasy fakes of IEmailSender and ISmsSender. Write all the tests but do 
 #### 🟩 Spring Boot Prompt
 
 ```
-Write a comprehensive JUnit 5 test class for NotificationService following the conventions in src-springboot/CLAUDE.md. Cover:
+Write a comprehensive JUnit 5 test class, DefaultNotificationServiceTest, for the NotificationService interface (the implementation class will be DefaultNotificationService) following the conventions in src-springboot/CLAUDE.md. Cover:
 - sendEmail succeeds for a valid task
 - sendEmail throws IllegalArgumentException for a null task
 - sendSms succeeds for a valid task
@@ -155,7 +155,7 @@ Create a NotificationService class that implements INotificationService. Make al
 #### 🟩 Spring Boot Prompt
 
 ```
-Create a NotificationService class that implements the NotificationService interface. Make all the tests pass. Follow the conventions in src-springboot/CLAUDE.md. Use constructor injection.
+Create a DefaultNotificationService class that implements the NotificationService interface. Make all the tests pass. Follow the conventions in src-springboot/CLAUDE.md. Use constructor injection. Keep it a plain class for now (no @Service): there are no EmailSender/SmsSender adapters yet, so Spring couldn't wire it and every @SpringBootTest would fail to start.
 ```
 
 ### 3.1 Watch Claude Code Plan Before Writing
@@ -407,7 +407,7 @@ Implement backlog Item 3 using TDD.
    - TaskServiceTest: createTask with priority and dueDate saves a task with those values; an unknown priority throws IllegalArgumentException
    - TaskApiIntegrationTest (MockMvc): POST /api/tasks with priority "HIGH" and a future dueDate returns 201 and echoes both fields; priority "URGENT" returns 400 ProblemDetail; omitting priority defaults to MEDIUM
 2. Run the tests and show the failures.
-3. Then implement: add a TaskService.createTask overload taking priority and dueDate, add priority and dueDate to CreateTaskRequest and TaskResponse, and update TaskController's POST handler. GlobalExceptionHandler already maps IllegalArgumentException to 400.
+3. Then implement: add a TaskService.createTask overload taking priority and dueDate, add priority and dueDate to CreateTaskRequest and TaskResponse (keep a two-argument CreateTaskRequest(title, description) constructor so the existing tests still compile), and update TaskController's POST handler. GlobalExceptionHandler already maps IllegalArgumentException to 400.
 4. Run mvn -q test from src-springboot/.
 ```
 
@@ -540,6 +540,10 @@ Any test file with both `using FakeItEasy;` and `using TaskManager.Domain.Tasks;
 **.NET: `POST /tasks` returns 404**
 
 `Program.cs` already calls `MapTaskEndpoints()`, so the route is most likely still commented out in `EndpointExtensions.cs`, or the API wasn't restarted. Ask: *"Show me which routes MapTaskEndpoints registers."*
+
+**Spring: `mvn` reports `java.lang.Error: Unresolved compilation problem`, or a `ClassNotFoundException` for a class that exists**
+
+VS Code's Java extension (installed in the Spring dev container) compiles into the same `target/` folders as Maven, using a different compiler. Maven then treats those classes as up to date. Run `mvn clean test` to rebuild from scratch.
 
 **Spring: tests fail with a column or mapping error after adding priority**
 
