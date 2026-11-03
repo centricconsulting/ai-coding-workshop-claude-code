@@ -13,7 +13,7 @@ public static class EndpointExtensions
     public static WebApplication MapTaskEndpoints(this WebApplication app)
     {
         // Health check endpoint
-        app.MapGet("/health", () => new { Status = "Healthy", Message = "Task Manager API is ready for Lab 3!" })
+        app.MapGet("/health", () => new { Status = "Healthy", Message = "Task Manager API is running" })
             .WithName("HealthCheck")
             .WithOpenApi();
 

@@ -121,21 +121,30 @@ matching my exact style, just make it cleaner and more consistent everywhere
 you see room for it.
 ```
 
-Let Claude Code run with this. Because the instruction is broad ("across the whole file," "everywhere you see room for it") rather than scoped to one method or one concern, there's a good chance it touches more than you'd have approved turn-by-turn — restructuring exception handling in ways that change behavior, touching methods that didn't need it, or diverging from the characterization tests' expectations.
+Let Claude Code run with this. Because the instruction is broad ("across the whole file," "everywhere you see room for it") rather than scoped to one method or one concern, there's a good chance it touches more than you'd have approved turn-by-turn. In a validation run it rewrote most of the file, removed the `Thread.Sleep`, narrowed which exceptions are swallowed, and sealed the class, none of which you asked for.
 
 ### B.4 Confirm the Damage
 
-```bash
-git diff
-```
-
-Or ask Claude Code:
+Start with the tests:
 
 ```
 Run the characterization tests. Did anything break?
 ```
 
-You're looking for evidence that the "simplify error handling" edit went further than intended — failing tests, changed exception types, removed logging, or logic that no longer matches what the characterization tests expect.
+**They may well still pass. That's the lesson, not a reason to stop.** Characterization tests only pin down the behavior they assert; an over-broad edit can change timing, exception handling, or class shape without failing any of them. So read the diff too:
+
+```bash
+git diff --stat
+git diff
+```
+
+Then ask Claude to account for it:
+
+```
+List every behavior change in that edit, including ones the characterization tests don't cover.
+```
+
+You're looking for anything you didn't ask for: a failing test, a removed `Thread.Sleep`, changed exception types, a class that's now `sealed`, or methods restructured that had nothing to do with error handling. Whether or not a test failed, you're going to rewind.
 
 ### B.5 Rewind to the Last-Good Checkpoint
 
@@ -207,6 +216,8 @@ The comment in `LegacyTaskProcessor` is gone; `lab6-scratch.txt` is still there.
 | The edit was fine but the conversation is bloated | **Rewind → Summarize from here** | Frees context without touching files |
 | You're not sure how far back the problem started | **Rewind through checkpoints one at a time**, checking tests at each step | Checkpoints give you fine-grained per-turn history that git commits usually don't |
 
+> **Note**: this repo's `.claude/settings.json` denies `Bash(git reset --hard*)`, so if you ask Claude Code to run it, the request is refused. Run it yourself if you really mean it. That deny rule is one of the things you'll study in Lab 9.
+
 **The general rule**: reach for rewind first when the damage is recent and session-local — it's cheaper and more precise than any git operation. Reach for git when you need to cross a session boundary, need a durable record, or need to preserve rather than discard.
 
 ---
@@ -214,7 +225,7 @@ The comment in `LegacyTaskProcessor` is gone; `lab6-scratch.txt` is still there.
 ## Success Criteria
 
 - [ ] You identified a checkpoint right after Lab 5's refactor completed
-- [ ] You caused a deliberate over-broad edit that damaged the refactored file
+- [ ] You caused a deliberate over-broad edit and found what it changed, using the diff as well as the tests
 - [ ] You used rewind (not git) to restore to the last-good checkpoint
 - [ ] You can name the four restore/summarize options and when each is useful
 - [ ] You saw a Bash-made file survive a rewind and can explain why

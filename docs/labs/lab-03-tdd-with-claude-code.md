@@ -57,7 +57,9 @@ Following the Clean Architecture and conventions in src-dotnet/CLAUDE.md, design
 - Sending an SMS notification about a specific task
 - Sending both email and SMS together
 
-Don't implement anything yet — just the interface. Show me what you'd create and ask me to confirm before writing any files.
+The service will deliver through two ports, also in the Application layer: IEmailSender and ISmsSender, each with one method that sends a notification for a task. Design those too.
+
+Don't implement anything yet — just the interfaces. Show me what you'd create and ask me to confirm before writing any files.
 ```
 
 #### 🟩 Spring Boot Prompt
@@ -68,13 +70,15 @@ Following the Clean Architecture and conventions in src-springboot/CLAUDE.md, de
 - Sending an SMS notification about a specific task
 - Sending both email and SMS together
 
-Don't implement anything yet — just the interface. Show me what you'd create and ask me to confirm before writing any files.
+The service will deliver through two ports, also in the application layer: EmailSender and SmsSender, each with one method that sends a notification for a task. Design those too.
+
+Don't implement anything yet — just the interfaces. Show me what you'd create and ask me to confirm before writing any files.
 ```
 
 **Review the proposal.** Ask Claude Code to adjust anything that doesn't fit the codebase. Once satisfied, tell it:
 
 ```
-Looks good. Go ahead and create the interface file.
+Looks good. Go ahead and create the interface files.
 ```
 
 > **Key practice**: Asking Claude Code to *propose before writing* is a habit worth building. It's the agentic equivalent of "show me the plan before executing."
@@ -96,7 +100,7 @@ Write a comprehensive xUnit test class for INotificationService following the co
 - SendBothAsync calls both email and SMS
 - SendBothAsync throws if either channel fails
 
-Use FakeItEasy for any dependencies. Write all the tests but do NOT create the implementation. Place the test file in src-dotnet/tests/TaskManager.UnitTests/.
+Use FakeItEasy fakes of IEmailSender and ISmsSender. Write all the tests but do NOT create the implementation. Place the test file in src-dotnet/tests/TaskManager.UnitTests/.
 ```
 
 #### 🟩 Spring Boot Prompt
@@ -110,7 +114,7 @@ Write a comprehensive JUnit 5 test class for NotificationService following the c
 - sendBoth calls both email and SMS
 - sendBoth throws if either channel fails
 
-Use Mockito for any dependencies. Write all the tests but do NOT create the implementation.
+Use Mockito mocks of EmailSender and SmsSender. Write all the tests but do NOT create the implementation.
 ```
 
 ### 2.1 Review the Test File
@@ -199,14 +203,16 @@ This is the **safety net** of TDD — you can refactor confidently because the t
 
 ## Step 5: Review the Full Diff (5 min)
 
-Before committing, review everything Claude Code created.
+Before committing, review everything Claude Code created. The files are all new, so plain `git diff` shows nothing; stage them first:
 
 ```bash
-git diff
+git status                 # new files show as untracked
+git add -A src-dotnet/     # or: git add -A src-springboot/
+git diff --staged --stat
 ```
 
 You should see:
-- The new interface file
+- The new interface files (the service and its two sender ports)
 - The test file
 - The implementation file
 
@@ -359,6 +365,8 @@ Implement backlog Item 3, application layer, using TDD.
 
 Leave the GetTaskAsync / UpdateTaskStatusAsync stubs alone.
 ```
+
+> **Heads-up**: the existing stubs are named `AddTaskAsync_WithNullTitle…` and `AddTaskAsync_WithEmptyDescription…`. They don't match the three tests above. That's fine: replace all three. You'll also likely hit `CS0104: 'Priority' is an ambiguous reference` because FakeItEasy has its own `Priority` type. Claude fixes it with `using Priority = TaskManager.Domain.Tasks.Priority;`.
 
 > **Design choice**: Claude Code may suggest a dedicated `CreateTaskCommandHandler` instead of a `TaskService` method. Either is fine — pick one and you'll record why in Step 10.
 
@@ -524,6 +532,10 @@ Why are the tests passing? Show me what each test is actually asserting.
 **Plan mode won't let Claude Code save the backlog file**
 
 That's expected — edits are blocked until you approve the plan. Approve it, or press Shift+Tab to leave plan mode, then ask again.
+
+**.NET: `CS0104: 'Priority' is an ambiguous reference between 'FakeItEasy.Priority' and 'TaskManager.Domain.Tasks.Priority'`**
+
+Any test file with both `using FakeItEasy;` and `using TaskManager.Domain.Tasks;` sees two `Priority` types. Add an alias at the top of the file: `using Priority = TaskManager.Domain.Tasks.Priority;`.
 
 **.NET: `POST /tasks` returns 404**
 

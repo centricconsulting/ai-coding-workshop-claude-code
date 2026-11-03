@@ -62,5 +62,5 @@ dotnet run --project src/TaskManager.Api
 
 - Do not add `[ApiController]` or `ControllerBase` — this project uses Minimal APIs
 - Do not use `var` for non-obvious types
-- Do not use `null!` suppress — fix the nullability properly
+- Do not use `null!` suppress — fix the nullability properly (exception: a test that passes `null` on purpose to check a guard clause)
 - Do not add `using` statements for namespaces already covered by implicit usings (`<ImplicitUsings>enable</ImplicitUsings>`)

@@ -3,7 +3,7 @@ using TaskManager.Api.Extensions;
 namespace TaskManager.Api;
 
 /// <summary>
-/// Task Manager API for Lab 3: Code Generation & Refactoring
+/// Task Manager API, the exercise substrate for the workshop labs
 /// 
 /// This API is organized using extension methods for:
 /// - Service registration (Clean Architecture dependencies)
@@ -12,14 +12,10 @@ namespace TaskManager.Api;
 /// - Logging configuration
 /// - OpenTelemetry observability (tracing to console)
 /// 
-/// LAB 3 INSTRUCTIONS:
-/// Use Claude Code to scaffold minimal API endpoints in the EndpointExtensions class:
-/// 1. GET /tasks/{id} - Get task by ID
-/// 2. POST /tasks - Create new task  
-/// 3. PUT /tasks/{id}/status - Update task status
-/// 4. GET /tasks - Get all active tasks
-/// 
-/// Example prompt: "Implement the GetTaskByIdAsync endpoint handler with proper error handling"
+/// ENDPOINTS (EndpointExtensions):
+/// - POST /tasks is implemented in Lab 3, Part 2 (Requirements → Code)
+/// - GET /tasks/{id}, PUT /tasks/{id}/status, and GET /tasks are extension work
+///   (Lab 3 extension, Lab 5 integration tests)
 /// 
 /// OBSERVABILITY:
 /// The API includes OpenTelemetry tracing that outputs to console, giving developers

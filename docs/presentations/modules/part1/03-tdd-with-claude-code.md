@@ -88,14 +88,14 @@ Claude Code often changes multiple files in one step.
 ```
 Files modified:
   src-dotnet/src/TaskManager.Application/Services/NotificationService.cs  (+45 lines)
-  src-dotnet/src/TaskManager.Domain/Interfaces/INotificationService.cs    (+8 lines)
+  src-dotnet/src/TaskManager.Application/Notifications/INotificationService.cs (+8 lines)
   src-dotnet/tests/TaskManager.UnitTests/Services/NotificationServiceTests.cs (+62 lines)
 ```
 
 **Before accepting:**
 1. Read the test file — does it test what you asked?
 2. Read the implementation — does it match your conventions?
-3. Run `git diff` to see the full picture
+3. Run `git status`, then stage and `git diff --staged`: new files don't show in plain `git diff`
 
 **Never accept a multi-file change without reviewing all files.**
 

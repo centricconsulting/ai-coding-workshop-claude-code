@@ -36,7 +36,7 @@ A **permission mode** sets the overall level of autonomy for a session. Press **
 
 | Mode | What runs without asking | Typical use |
 |---|---|---|
-| `default` (shown as **Manual**) | Reads only — everything else prompts | Reviewing every action, sensitive work |
+| `manual` (shown as **Manual**; older alias `default`) | Reads only — everything else prompts | Reviewing every action, sensitive work |
 | `acceptEdits` | Reads, file edits, and common filesystem commands (`mkdir`, `mv`, `cp`…) in the working directory | Iterating on code you're reviewing |
 | `plan` | Reads and read-only exploration; no source edits | Exploring before changing (Lab 4) |
 | `auto` | Everything, with a background safety classifier reviewing actions | Long tasks, less prompt fatigue |
@@ -48,7 +48,7 @@ You can also start in a specific mode with `claude --permission-mode plan`, or s
 > **Note**: On current Claude Code versions, **auto** is the built-in starting mode for interactive sessions. To *see* the permission rules in this lab take effect, run this lab in **Manual** mode:
 >
 > ```bash
-> claude --permission-mode default
+> claude --permission-mode manual
 > ```
 
 ### A.2 Read the Workshop's Settings File

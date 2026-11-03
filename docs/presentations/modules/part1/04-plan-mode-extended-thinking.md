@@ -50,7 +50,7 @@ section { font-size: 27px; }
 
 | Mode | Status bar | Runs without asking | Copilot analogue |
 |---|---|---|---|
-| `default` (**Manual**) | `⏸ manual mode on` | Reads only | **Ask** — but can act once you approve |
+| `manual` (alias `default`) | `⏸ manual mode on` | Reads only | **Ask** — but can act once you approve |
 | `plan` | `⏸ plan mode on` | Reads + exploration; **edits blocked** | **Plan** |
 | `acceptEdits` | `⏵⏵ accept edits on` | Reads, edits, basic file commands | **Agent** |
 | `auto` | `⏵⏵ auto mode on` | Everything, with a safety classifier | **Agent**, hands-off |

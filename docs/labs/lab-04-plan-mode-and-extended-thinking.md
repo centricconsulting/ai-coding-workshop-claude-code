@@ -41,7 +41,7 @@ Along the way you'll learn the two dials that shape *every* Claude Code session:
 
 | Claude Code mode | Status bar | What runs without asking | Copilot analogue | Use it for |
 |---|---|---|---|---|
-| `default` (shown as **Manual**) | `⏸ manual mode on` | Reads only — every edit and command asks first | **Ask** (but Claude can still act once you approve) | Unfamiliar code, sensitive work |
+| `manual` (shown as **Manual**; older alias `default`) | `⏸ manual mode on` | Reads only — every edit and command asks first | **Ask** (but Claude can still act once you approve) | Unfamiliar code, sensitive work |
 | `plan` | `⏸ plan mode on` | Reads and exploration; **source edits are blocked** until you approve a plan | **Plan** | Multi-step or risky changes |
 | `acceptEdits` | `⏵⏵ accept edits on` | Reads, file edits, and common filesystem commands in the working directory | **Agent** (edits auto-applied) | Iterating on code you're reviewing as it lands |
 | `auto` | `⏵⏵ auto mode on` | Everything, with a background safety classifier blocking risky actions | **Agent** (fully autonomous) | Long tasks you trust; the built-in starting mode in recent versions |
@@ -58,7 +58,7 @@ Other ways in:
 
 ```bash
 claude --permission-mode plan      # start a session in plan mode
-claude --permission-mode default   # or: manual
+claude --permission-mode manual    # older docs call it: default
 ```
 
 ```
@@ -72,10 +72,10 @@ To make a mode the project default, set `"permissions": { "defaultMode": "plan" 
 Switch to **Manual** (`⏸ manual mode on`) and ask:
 
 ```
-Add a one-line XML doc comment to the TaskId class.
+Replace the XML doc comment on the TaskId class with one line: "Strongly-typed ID for a Task."
 ```
 
-(🟩 Spring: *"Add a one-line Javadoc comment to the TaskId class."*)
+(🟩 Spring: *"Replace the Javadoc on the TaskId record with one line: 'Strongly-typed ID for a Task.'"*)
 
 Claude Code proposes the edit and **asks** before writing. Choose **No** — and notice that you were the gate. Now press `Shift+Tab` to `⏵⏵ accept edits on`, repeat the request, and watch it apply immediately. Undo it:
 
@@ -98,7 +98,8 @@ This is the main exercise: **the plan you produce here is what Lab 5 starts from
 ```
 /plan Read src-dotnet/src/TaskManager.Infrastructure/Legacy/LegacyTaskProcessor.cs and src-dotnet/CLAUDE.md.
 I want to modernize LegacyTaskProcessor to follow the conventions in src-dotnet/CLAUDE.md
-(guard clauses, no abbreviations, ILogger instead of Console, Object Calisthenics)
+(guard clauses, no abbreviations, log the swallowed file-write exception with ILogger
+instead of ignoring it, Object Calisthenics)
 without changing its observable behavior.
 Draft a phased plan: what order should the work happen in, what does each phase
 touch, and what's the safety net (tests) for each phase before moving to the next?
@@ -110,7 +111,8 @@ touch, and what's the safety net (tests) for each phase before moving to the nex
 /plan Read src-springboot/taskmanager-infrastructure/src/main/java/com/example/taskmanager/infrastructure/legacy/LegacyTaskProcessor.java
 and src-springboot/CLAUDE.md.
 I want to modernize LegacyTaskProcessor to follow the conventions in src-springboot/CLAUDE.md
-(guard clauses, no abbreviations, SLF4J instead of System.out, constructor injection)
+(guard clauses, no abbreviations, log the swallowed exceptions with SLF4J instead of
+ignoring them, constructor injection)
 without changing its observable behavior.
 Draft a phased plan: what order should the work happen in, what does each phase
 touch, and what's the safety net (tests) for each phase before moving to the next?

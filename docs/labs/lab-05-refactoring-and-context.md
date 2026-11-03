@@ -90,7 +90,7 @@ Before changing anything, capture the current behavior with tests. This is how y
 Before we change any code, write characterization tests that document the current behavior of LegacyTaskProcessor and LegacyBatchImportService — even the bad parts (for example, Chk returning false until Init(true) is called). These tests should pass against the current implementation and will protect us during refactoring.
 ```
 
-🔷 .NET: put them in a new test class under `src-dotnet/tests/TaskManager.UnitTests/` (xUnit v3). 🟩 Spring Boot: put them under `src-springboot/taskmanager-infrastructure/src/test/java/` (JUnit 5).
+🔷 .NET: put them in a new test class under `src-dotnet/tests/TaskManager.UnitTests/` (xUnit v3). The unit test project doesn't reference `TaskManager.Infrastructure` yet, so Claude will add a project reference. That's expected; it isn't a new package. 🟩 Spring Boot: put them under `src-springboot/taskmanager-infrastructure/src/test/java/` (JUnit 5).
 
 ### 2.1 Run the Tests
 
@@ -99,6 +99,8 @@ Run the new tests and confirm they all pass against the current implementation.
 ```
 
 All tests should be green. If any fail, fix them — they need to match the current behavior, not the desired behavior.
+
+Expect them to be a little slow (each type-1 call sleeps 100 ms) and to leave `task_{id}.txt` files in the test output folder. That's the legacy code's file write, not a problem with your tests.
 
 > **Key practice**: Characterization tests are your safety net. They don't test correctness — they test *consistency*. If they pass now and still pass after refactoring, you haven't introduced regressions.
 
@@ -109,7 +111,7 @@ All tests should be green. If any fail, fix them — they need to match the curr
 ### Phase 1: Naming and Readability
 
 ```
-Refactor LegacyTaskProcessor to fix naming issues only — no logic changes. Replace abbreviations with full words, rename unclear variables and methods. Run the characterization tests after each rename to confirm nothing broke.
+Refactor LegacyTaskProcessor to fix naming issues only — no logic changes. Replace abbreviations with full words, rename unclear variables and methods. Update LegacyBatchImportService and the characterization tests to use the new names in the same step, so everything compiles. Then run the characterization tests to confirm nothing broke.
 ```
 
 After Claude Code makes the changes, review the diff:
@@ -182,18 +184,18 @@ Then check what the session has cost so far:
 
 ---
 
-## Step 4: Update Dependent Code (7 min)
+## Step 4: Check for Other Callers (7 min)
 
-Renaming methods means callers may be broken.
+Phase 1 updated `LegacyBatchImportService` and the tests alongside the renames. Now make sure nothing else was missed.
 
 ```
-Search the codebase for any code that calls LegacyTaskProcessor methods. LegacyBatchImportService is one — are there others? Update every caller to the new method names and run all tests.
+Search the whole codebase, including tests, for any remaining use of the old LegacyTaskProcessor names (Init, Chk, GetCount, GetLast, or whatever you renamed). LegacyBatchImportService was one caller. Are there others? Update anything you find and run all tests.
 ```
 
 Claude Code should:
 1. Search for usages with grep or file reads
-2. Identify affected files
-3. Update the callers
+2. Report any callers it finds (in this repo, there shouldn't be more)
+3. Update them
 4. Run all tests to confirm everything still compiles and passes
 
 This is multi-file coordination — Claude Code handles it naturally because it can both search and write.
@@ -267,8 +269,8 @@ The best practice is **small, focused tasks** with clear scope. Rather than "ref
 ## Extension Exercise
 
 Pick one more Object Calisthenics principle to apply:
-- **Wrap all primitives**: wrap `string taskId` in a `TaskId` value object
-- **First class collections**: wrap `List<Task>` in a `TaskCollection` type
+- **Wrap all primitives**: wrap the `int id` and `int type` parameters in small value types (a `LegacyRecordId`, and the enum from Phase 4)
+- **First class collections**: wrap the batch of `(Id, Data, Type)` records that `LegacyBatchImportService.ImportBatch` takes in a `LegacyRecordBatch` type
 - **No getters/setters**: replace property access with behavior methods
 
 Write new tests for the wrapped types, then implement.

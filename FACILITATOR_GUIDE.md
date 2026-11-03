@@ -185,6 +185,7 @@ Both days end before 17:00 with about 15 minutes of slack. Day 1 keeps all of La
 - Claude writes the implementation alongside the tests. Restate "tests only — do not implement" and reject the edit.
 - **False green**: tests pass against a stub. Ask Claude to show a test failing first.
 - Plan mode can't save the backlog file. Exit plan mode (Shift+Tab) before asking Claude to write it.
+- .NET `CS0104: 'Priority' is an ambiguous reference`: FakeItEasy also has a `Priority` type. Alias it: `using Priority = TaskManager.Domain.Tasks.Priority;`.
 - .NET `POST /tasks` returns 404: the route is still commented out in `EndpointExtensions.cs`, or the API wasn't restarted.
 - Spring: mapping errors after adding `priority` need the JPA entity and mapper updated together.
 
@@ -240,6 +241,7 @@ Both days end before 17:00 with about 15 minutes of slack. Day 1 keeps all of La
 **Common pitfalls**
 - `/rewind` shows no checkpoints: no file edits happened yet in this session.
 - A rewound file still breaks tests: a Bash command or build output changed something else.
+- "The tests still pass, so nothing broke": the over-broad edit usually changes behavior the characterization tests don't assert (in testing it removed `Thread.Sleep` and narrowed the `catch`). Point them at `git diff`. That gap is part of the lesson.
 
 **Checkpoint:** each participant restored a bad edit with `/rewind` and saw that a Bash-created file survived.
 

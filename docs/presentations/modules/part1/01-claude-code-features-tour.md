@@ -82,14 +82,14 @@ It depends on the **permission mode** — cycle with `Shift+Tab`:
 
 | Mode | Runs without asking |
 |---|---|
-| Manual (`default`) | Reads only |
+| Manual (`manual`) | Reads only |
 | `acceptEdits` | Reads + file edits |
 | `plan` | Reads only — no edits until you approve a plan |
 | `auto` | Everything, with background safety checks (the starting mode in current versions) |
 
 Plus your **rules** in `.claude/settings.json`: `allow` (e.g. `Bash(dotnet *)`), `ask` (e.g. `Bash(git push *)`), and `deny` — deny wins in every mode.
 
-**Not seeing prompts?** You're probably in `auto`. For Day 1, try `claude --permission-mode default` to watch every action. *(Day 2, Lab 9 goes deep.)*
+**Not seeing prompts?** You're probably in `auto`. For Day 1, try `claude --permission-mode manual` to watch every action. *(Day 2, Lab 9 goes deep.)*
 
 ---
 
