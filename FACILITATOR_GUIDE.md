@@ -436,6 +436,8 @@ Recap Day 1 in one slide: memory → TDD → requirements → code → plan → 
 
 ### Day 2 Wrap-Up (15 min)
 
+Deck: [`part2/08-wrapup-day2.md`](docs/presentations/modules/part2/08-wrapup-day2.md). It recaps Labs 8–15, covers where each setting belongs (managed, project, personal), and ends with a first-week plan.
+
 - Which customization would you adopt on your team on Monday?
 - What would you put in **managed** settings vs. project settings?
 - Point to the [Customization Decision Guide](docs/guides/customization-decision-guide.md), [Agent Design Guide](docs/guides/agent-design-guide.md), and the [Claude Code docs](https://code.claude.com/docs/en/overview).

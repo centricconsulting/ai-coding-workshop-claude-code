@@ -34,6 +34,7 @@ Presentations use [Marp](https://marp.app/) format. View with the [Marp VS Code 
 | 05 Headless & Automation | [05-headless-automation.md](modules/part2/05-headless-automation.md) | 15 min | Lab 13 |
 | 06 Output Styles *(self-study)* | [06-output-styles.md](modules/part2/06-output-styles.md) | 15 min | Lab 14 |
 | 07 Capstone — Team Configuration & Plugins | [07-capstone-team-config.md](modules/part2/07-capstone-team-config.md) | 15 min | Lab 15 |
+| 08 Day 2 Wrap-Up | [08-wrapup-day2.md](modules/part2/08-wrapup-day2.md) | 15 min | — |
 
 **Day 2 Total**: ~6 hours including lab time (Module 06 / Lab 14 is self-study and not counted)
 

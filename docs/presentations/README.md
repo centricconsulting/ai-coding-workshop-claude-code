@@ -80,6 +80,7 @@ See [index.md](index.md) for the full list of modules, durations, and delivery p
 | [05-headless-automation.md](modules/part2/05-headless-automation.md) | Headless & Automation | 15 min |
 | [06-output-styles.md](modules/part2/06-output-styles.md) | Output Styles & Custom Personas *(self-study)* | 15 min |
 | [07-capstone-team-config.md](modules/part2/07-capstone-team-config.md) | Capstone — Team Configuration & Plugins | 15 min |
+| [08-wrapup-day2.md](modules/part2/08-wrapup-day2.md) | Day 2 Wrap-Up & Next Steps | 15 min |
 
 ---
 
