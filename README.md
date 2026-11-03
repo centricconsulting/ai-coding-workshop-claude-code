@@ -250,7 +250,7 @@ This workshop is the Claude Code counterpart to Centric's GitHub Copilot worksho
 **🔷 .NET Solution** (`src-dotnet/` directory):
 - Clean Architecture: Domain / Application / Infrastructure / API layers
 - `LegacyTaskProcessor` for refactoring exercises
-- xUnit test stubs with FakeItEasy — `dotnet test` initially reports **11 skipped, 0 failed**; you implement them during the labs
+- xUnit test stubs with FakeItEasy — `dotnet test` initially reports **1 passed, 11 skipped, 0 failed**; you implement the skipped stubs during the labs
 - Starter domain: a `Task` with title, description, and status — priorities, due dates, and more are added during the labs
 
 **🟩 Spring Boot Solution** (`src-springboot/` directory):
@@ -303,7 +303,7 @@ This workshop is the Claude Code counterpart to Centric's GitHub Copilot worksho
 6. **Verify your stack**:
 
    ```bash
-   # .NET — expect 11 skipped, 0 failed (test stubs you'll implement)
+   # .NET — expect 1 passed, 11 skipped, 0 failed (skipped = test stubs you'll implement)
    dotnet build src-dotnet && dotnet test src-dotnet
 
    # Spring Boot

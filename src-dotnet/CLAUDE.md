@@ -36,7 +36,7 @@ Dependencies flow **inward only**: Api → Application → Domain. Infrastructur
 - Arrange / Act / Assert sections with blank line separators
 - Test method naming: `MethodName_StateUnderTest_ExpectedBehavior`
 - Never test implementation details — test observable behavior
-- Integration tests use `WebApplicationFactory<Program>`
+- Integration tests use `WebApplicationFactory<Program>` (`Microsoft.AspNetCore.Mvc.Testing`); `tests/TaskManager.IntegrationTests/HealthEndpointTests.cs` is the working example
 
 ## Common Commands
 
