@@ -29,6 +29,10 @@ You have uncommitted or recently-committed changes.
 
 # The `/code-review` Command
 
+<style scoped>
+section { font-size: 25px; }
+</style>
+
 ```
 /code-review          # /review is an alias
 ```
@@ -55,6 +59,14 @@ Not a security scanner — that's `/security-review` (next module).
 /code-review [low|medium|high|xhigh|max|ultra] [--fix] [--comment]
              [--max-findings n|all] [pr#|branch|path]
 ```
+
+---
+
+# Tuning `/code-review`: Common Recipes
+
+<style scoped>
+section { font-size: 23px; }
+</style>
 
 | You want… | Type |
 |---|---|
@@ -94,6 +106,10 @@ Fix them — or rerun with `--fix`. Then commit.
 ---
 
 # Conventional Commit Messages
+
+<style scoped>
+section { font-size: 25px; }
+</style>
 
 Instead of:
 ```
@@ -153,6 +169,10 @@ Review it: a comment that restates the method name is noise.
 ---
 
 # PR Descriptions from Session Context
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 After a long session, Claude Code knows:
 - What you changed and why
@@ -214,6 +234,10 @@ upstream git@github.com:centricconsulting/ai-coding-workshop-claude-code.git
 
 # The Pre-Commit Safety Net
 
+<style scoped>
+section { font-size: 26px; }
+</style>
+
 Summary of the full workflow:
 
 ```
@@ -239,6 +263,10 @@ git push origin workshop/your-name
 ---
 
 # Lab 7 Preview
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 ## What You'll Do
 

@@ -11,14 +11,21 @@ backgroundColor: #fff
 
 ---
 
-# What You Practiced on Day 1
+# What You Practiced on Day 1 (1/2)
 
 | Lab | Skill | Key Takeaway |
 |---|---|---|
-| Lab 1 | Agentic model | Claude Code reads and acts — it's not autocomplete |
+| Lab 1 | Agentic model | Direct an agent that reads, plans, and acts — not one suggestion at a time |
 | Lab 2 | CLAUDE.md | Project memory written once, applied every session |
 | Lab 3 | TDD | Tests as a feedback loop, not an afterthought |
 | Lab 4 | Plan Mode & effort levels | Plan before you touch files — zero-risk iteration |
+
+---
+
+# What You Practiced on Day 1 (2/2)
+
+| Lab | Skill | Key Takeaway |
+|---|---|---|
 | Lab 5 | Phased refactoring & context | Context limits are a design constraint — `/context`, `/compact` |
 | Lab 6 | Checkpoints & rewind | A session-level safety net, separate from git |
 | Lab 7 | Git workflow | `/code-review` before staging, not after pushing |
@@ -27,6 +34,10 @@ backgroundColor: #fff
 ---
 
 # Day 1 Command Cheat Sheet
+
+<style scoped>
+section { font-size: 22px; }
+</style>
 
 | Need | Command |
 |---|---|
@@ -56,6 +67,10 @@ This shift is what separates productive Claude Code users from frustrated ones.
 
 # What You Now Do Differently
 
+<style scoped>
+section { font-size: 27px; }
+</style>
+
 **CLAUDE.md** — you don't re-explain your project every session.
 The file does it for you.
 
@@ -74,7 +89,7 @@ in PR review. You find them — including security issues — before staging.
 
 ---
 
-# What Day 2 Covers
+# What Day 2 Covers (1/2)
 
 Day 1 was about **how to work with Claude Code**.
 
@@ -86,6 +101,13 @@ Day 2 is about **how to configure and extend it**:
 | 10 | MCP servers — connect Claude Code to external systems (`/mcp`) |
 | 11 | Skills — package reusable, on-demand instructions (`/skills`) |
 | 12 | Subagents — use and chain custom agents in `.claude/agents/` |
+
+---
+
+# What Day 2 Covers (2/2)
+
+| Lab | Topic |
+|---|---|
 | 13 | Headless mode & CI — `claude -p`, GitHub Actions |
 | 14 | Output styles — change how Claude Code communicates |
 | 15 | Capstone — design a team configuration and share it as a plugin (`/plugin`) |

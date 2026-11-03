@@ -226,6 +226,10 @@ Scaffold one with the `mcp-server-dev` plugin from `claude-plugins-official`.
 
 # MCP Architecture Decision
 
+<style scoped>
+section { font-size: 22px; }
+</style>
+
 Before building or configuring MCP, ask:
 
 | Question | If Yes → |
@@ -241,6 +245,10 @@ Before building or configuring MCP, ask:
 ---
 
 # Lab 10 Preview
+
+<style scoped>
+section { font-size: 23px; }
+</style>
 
 ## What You'll Do
 

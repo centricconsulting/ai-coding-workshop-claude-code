@@ -54,6 +54,10 @@ REFACTOR: Clean up
 
 # What "Directing a Workflow" Means
 
+<style scoped>
+section { font-size: 26px; }
+</style>
+
 **Wrong approach** (accepting completions):
 ```
 You: Write NotificationService with tests
@@ -98,6 +102,10 @@ Files modified:
 ---
 
 # Tests as a Feedback Loop
+
+<style scoped>
+section { font-size: 24px; }
+</style>
 
 Claude Code fixes its own test failures:
 
@@ -180,6 +188,10 @@ You need to think about the cases worth naming.
 
 # Integration Tests vs. Unit Tests
 
+<style scoped>
+section { font-size: 27px; }
+</style>
+
 **Unit tests** (most of Lab 3):
 ```csharp
 // FakeItEasy for mocks — fast, isolated
@@ -250,6 +262,10 @@ Then one line in `CLAUDE.md`: *"Read relevant ADRs in docs/adr/ before changing 
 ---
 
 # Lab 3 Preview
+
+<style scoped>
+section { font-size: 22px; }
+</style>
 
 ## Part 1 — Implement `NotificationService` using TDD:
 

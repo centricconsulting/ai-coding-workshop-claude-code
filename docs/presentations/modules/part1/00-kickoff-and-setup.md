@@ -19,7 +19,7 @@ backgroundColor: #fff
 
 ## What You'll Learn Today
 
-- Understand the **agentic model** — how Claude Code differs from completion tools
+- Understand the **agentic model** — directing an agent instead of accepting suggestions
 - Configure **CLAUDE.md** to encode your team's standards as project memory
 - Apply **Test-Driven Development** with Claude Code as a development partner
 - **Refactor legacy code** across multiple files safely
@@ -30,12 +30,14 @@ backgroundColor: #fff
 
 # The One Thing to Know Before We Start
 
-## Claude Code is an agent, not an autocomplete
+## Claude Code is an agentic harness
 
-**Completion-based tools**:
-> You select text → ask a question → receive a suggestion → accept or reject
+It runs Claude in a loop with tools to **read, edit, and execute** in your codebase — with permissions, hooks, and memory (CLAUDE.md) around it. Model + harness = the agent.
 
-**Claude Code:**
+**Suggestion-based assistance:**
+> You ask → receive a suggestion → accept or reject, one change at a time
+
+**Directing an agent:**
 > You describe a task → Claude Code reads your codebase → plans a series of actions → executes them — files written, commands run, tests executed
 
 The mental model shift: **you are directing a collaborator, not editing suggestions**
@@ -44,14 +46,23 @@ The mental model shift: **you are directing a collaborator, not editing suggesti
 
 # What This Means in Practice
 
-## With a completion tool
+<style scoped>
+section { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto 1fr; column-gap: 48px; align-content: start; }
+h1 { grid-column: 1 / -1; }
+h2:nth-of-type(1), ol:nth-of-type(1) { grid-column: 1; }
+h2:nth-of-type(2), ol:nth-of-type(2) { grid-column: 2; }
+h2 { grid-row: 2; }
+ol { grid-row: 3; }
+</style>
+
+## One suggestion at a time
 1. Open file
 2. Position cursor
 3. Prompt for suggestion
 4. Accept/reject
 5. Repeat for each change
 
-## With Claude Code
+## Directing Claude Code
 1. Describe what you want
 2. Claude Code reads relevant files
 3. Proposes changes (you review)
@@ -147,6 +158,10 @@ More specific instructions take precedence when there are conflicts.
 
 # Technology Overview
 
+<style scoped>
+section { font-size: 24px; }
+</style>
+
 ## Claude Code CLI
 
 ```bash
@@ -176,6 +191,10 @@ claude doctor       # Diagnose install & settings
 - **Repository forked** on GitHub, then cloned from the fork
 - **Upstream remote added**: `git remote add upstream https://github.com/centricconsulting/…`
 - **Personal branch**: `git checkout -b workshop/your-name`
+
+---
+
+# Session Setup
 
 ## Verify your stack
 
@@ -208,15 +227,15 @@ Watch how it reads multiple files before answering — not guessing from a promp
 
 # What Makes This Workshop Different
 
-## Compared to Completion-Based Tools
+## From accepting suggestions to directing an agent
 
-| Completion-Based Tools | Claude Code Workshop |
+| Suggestion-based workflow | Directing the Claude Code harness |
 |---|---|
-| Tool-per-action | Task-per-outcome |
-| Per-file-pattern instruction files | `CLAUDE.md` + `.claude/rules/` |
-| Custom agents | Subagents in `.claude/agents/` |
-| Prompt files | Skills in `.claude/skills/` |
-| Bilingual split | Language-agnostic config |
+| Ask for one change at a time | Describe a task-level outcome |
+| Re-explain conventions in each prompt | Encode them once in `CLAUDE.md` + `.claude/rules/` |
+| One assistant, one context | Delegate to subagents in `.claude/agents/` |
+| Reuse prompts by copy-paste | Package workflows as skills in `.claude/skills/` |
+| Separate guidance per stack | Language-agnostic harness config |
 
 ---
 

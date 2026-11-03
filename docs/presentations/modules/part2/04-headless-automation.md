@@ -63,6 +63,10 @@ Add `--json-schema` for validated output in `structured_output`.
 
 # Controlling a Headless Run
 
+<style scoped>
+section { font-size: 24px; }
+</style>
+
 Nobody can answer a permission prompt — decide **before** the run:
 
 | Flag | Purpose |
@@ -118,6 +122,10 @@ exit 0
 
 # CI Integration: `anthropics/claude-code-action@v1`
 
+<style scoped>
+section { font-size: 23px; }
+</style>
+
 Fastest setup: run **`/install-github-app`** inside Claude Code
 (installs the GitHub App, adds the secret, opens a PR with a workflow).
 
@@ -144,6 +152,10 @@ No `prompt` → **interactive mode**: Claude answers `@claude` mentions in issue
 
 # CI Integration: Nightly Quality Report
 
+<style scoped>
+section { font-size: 26px; }
+</style>
+
 ```bash
 #!/bin/bash
 # scripts/nightly-quality-report.sh
@@ -169,6 +181,10 @@ Runs in cron. Generates a report. No human required.
 ---
 
 # Safety in Headless Mode
+
+<style scoped>
+section { font-size: 25px; }
+</style>
 
 Headless removes the human-in-the-loop confirmation layer.
 **Safety responsibility shifts entirely to your configuration.**
@@ -208,6 +224,10 @@ Scope the task tightly enough that no clarification is needed.
 ---
 
 # Lab 13 Preview
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 ## What You'll Do
 

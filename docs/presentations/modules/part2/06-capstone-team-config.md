@@ -13,6 +13,21 @@ backgroundColor: #fff
 
 # Where We Are
 
+<style scoped>
+section { font-size: 26px; }
+</style>
+
+<style scoped>
+section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; align-content: start; }
+h1 { grid-column: 1 / -1; grid-row: 1; }
+p { grid-column: 1 / -1; }
+p:first-of-type { grid-row: 2; }
+table { grid-row: 3; display: table; width: 100%; }
+table:nth-of-type(1) { grid-column: 1; }
+table:nth-of-type(2) { grid-column: 2; }
+p:last-of-type { grid-row: 4; }
+</style>
+
 You've built the full Claude Code skill set:
 
 | Skill | Lab |
@@ -24,6 +39,9 @@ You've built the full Claude Code skill set:
 | Phased refactoring | 5 |
 | Checkpoints & rewind | 6 |
 | Git workflow integration | 7 |
+
+| Skill | Lab |
+|---|---|
 | Security review workflows | 8 |
 | Permissions & hooks | 9 |
 | MCP servers | 10 |
@@ -71,6 +89,10 @@ This is ambient intelligence: it shapes every interaction automatically.
 
 # The Configuration Stack
 
+<style scoped>
+section { font-size: 23px; }
+</style>
+
 ```
 CLAUDE.md (root)
   ↓ What this project is. Tech stack. Build + test. Conventions. Don't-do list.
@@ -100,6 +122,10 @@ Each layer narrows and specializes the one above it.
 
 # Choosing Your Scenario
 
+<style scoped>
+section { font-size: 24px; }
+</style>
+
 Pick the one closest to your real team:
 
 | Scenario | Stack | Key Challenge |
@@ -115,6 +141,10 @@ The goal is a configuration you could take to work on Monday.
 ---
 
 # Part B: Designing the CLAUDE.md Hierarchy
+
+<style scoped>
+section { font-size: 22px; }
+</style>
 
 For your scenario, answer per file:
 
@@ -145,6 +175,10 @@ Does it produce something consistent with your standards?
 2. What should never run without explicit approval? (deploy, push, migrate)
 3. What should be denied outright? (destructive deletes, prod DB)
 
+---
+
+# Part C: Hook Design
+
 **Hook design table** (input = JSON on stdin → `jq`):
 
 | Event | Matcher | Script does | Why |
@@ -160,6 +194,10 @@ or JSON `{"hookSpecificOutput":{"permissionDecision":"deny",...}}`.
 ---
 
 # Part D: MCP Integration Design
+
+<style scoped>
+section { font-size: 22px; }
+</style>
 
 For each external system your team uses, decide:
 
@@ -180,6 +218,10 @@ and benefits from structured, typed interaction.
 
 # Part E: Build Your Own Subagent or Skill
 
+<style scoped>
+section { font-size: 25px; }
+</style>
+
 | Build a… | When | File |
 |---|---|---|
 | **Subagent** | Own context window, restricted tools, different model | `.claude/agents/<name>.md` |
@@ -196,6 +238,10 @@ Customization Decision Guide, Agent Design Guide.
 ---
 
 # Part F: Package It as a Plugin
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 ```
 team-plugin/
@@ -218,6 +264,10 @@ claude plugin install taskmanager-team@taskmanager-team-marketplace
 ---
 
 # Part G: Team Guide & Governance
+
+<style scoped>
+section { font-size: 22px; }
+</style>
 
 A configuration no one understands will be ignored or broken.
 
