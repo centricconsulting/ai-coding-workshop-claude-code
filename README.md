@@ -179,7 +179,7 @@ Module numbers here match each module's lab number exactly (Module 9 pairs with 
 Presentations use [Marp](https://marp.app/) format. View in VS Code with the [Marp extension](https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode).
 
 - **[Day 1 Modules](docs/presentations/modules/part1/)** — 9 standalone modules
-- **[Day 2 Modules](docs/presentations/modules/part2/)** — 8 standalone modules
+- **[Day 2 Modules](docs/presentations/modules/part2/)** — 9 standalone modules
 - **[Presentations Catalog](docs/presentations/index.md)** — delivery patterns and timing
 
 ### Participant Guides

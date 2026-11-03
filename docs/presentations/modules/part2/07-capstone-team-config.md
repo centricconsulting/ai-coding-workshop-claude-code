@@ -318,7 +318,7 @@ a few well-tested specialists for high-value workflows, a plugin to distribute t
 
 ---
 
-# Workshop Complete
+# The Full Platform
 
 You now have the full Claude Code platform:
 
@@ -342,4 +342,4 @@ and ship one specialist in a team plugin. Lab 15 is the starting point.
 ---
 
 <!-- Navigation -->
-[← 13 Headless & Automation](05-headless-automation.md) | **Day 2 Module 15** | Workshop Complete
+[← 13 Headless & Automation](05-headless-automation.md) | **Day 2 Module 15** | [Next: Day 2 Wrap-Up →](08-wrapup-day2.md)
