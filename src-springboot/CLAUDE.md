@@ -14,10 +14,12 @@
 domain/         ← Entities, value objects, domain interfaces (no Spring dependencies)
 application/    ← Use cases, command/query handlers, application services
 infrastructure/ ← Repository implementations, external service adapters
-web/            ← @RestController endpoints, request/response DTOs
+api/            ← @RestController endpoints, request/response DTOs (the web layer)
 ```
 
-Dependencies flow **inward only**: web → application → domain. Infrastructure implements domain interfaces.
+Dependencies flow **inward only**: api → application → domain. Infrastructure implements domain interfaces.
+
+Each layer is a Maven module: `taskmanager-domain`, `taskmanager-application`, `taskmanager-infrastructure`, `taskmanager-api`.
 
 ## Java Conventions
 
@@ -49,12 +51,11 @@ mvn clean package                       # Build JAR
 
 ## Key Files
 
-- `src/main/java/.../domain/Task.java` — core aggregate
-- `src/main/java/.../application/tasks/commands/` — command handlers
-- `src/main/java/.../application/tasks/queries/` — query handlers
-- `src/main/java/.../infrastructure/repositories/` — in-memory implementations
-- `src/main/java/.../web/TaskController.java` — REST endpoints
-- `src/main/java/.../infrastructure/legacy/LegacyTaskProcessor.java` — intentionally messy, used for Lab 5
+- `taskmanager-domain/.../domain/tasks/Task.java` — core aggregate (`TaskId`, `TaskStatus`, and the `TaskRepository` port alongside)
+- `taskmanager-application/.../application/services/TaskService.java` — application service (commands/handlers are added during labs)
+- `taskmanager-infrastructure/.../infrastructure/persistence/` — JPA entities, mappers, and the `JpaTaskRepositoryAdapter`
+- `taskmanager-api/.../api/controllers/TaskController.java` — REST endpoints (`GlobalExceptionHandler` in `api/exception/`)
+- `taskmanager-infrastructure/.../infrastructure/legacy/LegacyTaskProcessor.java` — intentionally messy, used for Lab 5
 
 ## What NOT to Do
 

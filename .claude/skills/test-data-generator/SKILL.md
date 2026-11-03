@@ -19,7 +19,7 @@ Request: $ARGUMENTS
 
 ## Step 1: Read the current domain model
 
-The domain evolves during the labs (priorities, due dates, assignments, and so on), so read the entity before generating anything:
+The domain evolves during the labs (priorities, due dates, assignments, and so on), so read the entity before generating anything. Use Glob and Read to find and open the files (they're pre-approved for this skill); don't shell out to `find`:
 
 - .NET: `src-dotnet/src/TaskManager.Domain/` (for example `Tasks/Task.cs`, `Tasks/TaskId.cs`, `Tasks/TaskStatus.cs`)
 - Spring Boot: `src-springboot/taskmanager-domain/src/main/java/com/example/taskmanager/domain/`

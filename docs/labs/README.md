@@ -76,7 +76,7 @@ Use `/code-review` (alias `/review`) for pre-commit code review. Generate conven
 ### [Lab 8: Security Review Workflows](lab-08-security-review-workflows.md)
 **Duration**: 30–35 min
 
-Introduce a realistic authorization vulnerability, find it with `/security-review` (requires an `origin` remote — your fork), fix it at the root cause, and build a project-specific security review skill.
+Introduce a realistic cross-tenant authorization gap, see why `/security-review` (requires an `origin` remote — your fork) doesn't report it, build a project-specific `/security-checklist` skill that does, and fix the gap at the root cause.
 
 **Key Concept**: `/security-review` is a dedicated, deeper gate than `/code-review` — and Day 2 opens with it, reviewing the branch you built on Day 1.
 

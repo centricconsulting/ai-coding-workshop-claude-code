@@ -90,28 +90,25 @@ PUT /tasks/{id}/assign
 - No auth in the API yet → caller's org is simulated via an `X-Organization-Id` header
 - **First pass: no check that the requester belongs to the task's organization**
 
-Any caller who knows (or guesses) a task ID from another org can reassign it.
+Any caller who knows a task ID from another org can reassign it.
 
 ---
 
-# Find It, Fix It
+# Will the Generic Review Find It?
 
 ```
 /security-review
 ```
 
-→ Finding: assignment endpoint verifies existence, not authorization.
+→ Usually **not reported**. No auth, unguessable GUID IDs, no list endpoint:
+it scores the gap below its confidence bar (3/10 and 7/10 in validation runs).
 
-**Fix**: add a check — requester's organization must match the task's
-`OrganizationId` (or `organizationId`) before the reassignment is allowed.
-Reject with `403 Forbidden` otherwise.
+**Ask it why.** Its reasoning is sound for a generic tool: it weighs how
+exploitable something is *today*.
 
-```
-/security-review
-```
-→ Confirm the finding is gone.
-→ Expect a new one: *org ID trusted from a client header*. Correct!
-  That's the lab's known limitation — the real fix is authentication.
+Your team's rule doesn't depend on that:
+**every operation on a Task checks that the caller owns it.**
+A generic reviewer can't know that rule. A project skill can.
 
 ---
 
@@ -174,6 +171,11 @@ one senior engineer's head, repeated in code review comments forever.
 
 Same checks, every time, for anyone on the team — encoded once, run automatically.
 
+→ Flags the gap: *assign checks the task exists, never that the caller owns it*.
+
+**Fix** (403 unless orgs match, behind an `ICurrentUser` abstraction), then
+re-run `/security-checklist` and `/security-review`: both clean.
+
 ---
 
 # Where Security Review Fits in PR Prep
@@ -217,10 +219,11 @@ section { font-size: 22px; }
 ## What You'll Do
 
 1. Recap `/code-review` vs. `/security-review`
-2. Add assignment fields + endpoint with a real cross-tenant authorization gap; commit it
-3. Run `/security-review`, review the finding, fix the actual issue
-4. Build `.claude/skills/security-checklist/SKILL.md`
-5. Discuss where security review sits in PR prep, and the plugin / GitHub Action options
+2. Add task assignment with a cross-tenant authorization gap; commit it
+3. Run `/security-review` and read why it doesn't report the gap
+4. Build `.claude/skills/security-checklist/SKILL.md`; use it to find the gap
+5. Fix the actual issue, then re-run both checks
+6. Discuss where security review sits in PR prep, and the plugin / GitHub Action options
 
 ---
 
@@ -229,7 +232,7 @@ section { font-size: 22px; }
 👉 Open [docs/labs/lab-08-security-review-workflows.md](../../../labs/lab-08-security-review-workflows.md)
 
 **Goal for the next 30 minutes:**
-- One real finding, fixed at the root cause
+- A gap the generic review missed, found by your skill and fixed at the root cause
 - `.claude/skills/security-checklist/SKILL.md` created and runnable
 - A clear answer to "where does security review fit in PR prep?"
 
