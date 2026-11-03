@@ -115,7 +115,9 @@ Now ask without naming any agent:
 I'm about to add a dependency from TaskService in the Application layer to a new EmailSender class in Infrastructure. Is that OK?
 ```
 
-The `architecture-reviewer` description says "use proactively after changes that add a reference or import between layers", so Claude should delegate on its own. If it doesn't, that's a description-tuning problem. Revisit it in Part C.
+The `architecture-reviewer` description says "use proactively after changes that add a reference or import between layers", so Claude may delegate on its own.
+
+> **Expect a surprise:** if you built `clean-architecture-boundary-check` in Lab 11, Claude will often run that **skill** instead. In a validation run it did exactly that. Both descriptions claim the same trigger, so Claude picks one. That's the overlap problem from Troubleshooting below. Compare the two descriptions, decide which should own this question (see C.3), and use `@agent-architecture-reviewer` when you want the subagent for sure.
 
 ---
 
@@ -140,6 +142,8 @@ We need a new feature: Team Leads can assign a task to a team member, and the as
 
 Wait for each subagent to finish before starting the next, and give me a one-paragraph summary at the end.
 ```
+
+The chain takes several minutes; in a validation run it took about 7 minutes and roughly $1.50 of usage. Keep working or watch `/tasks` while it runs.
 
 ### B.2 Inspect the Handoffs
 

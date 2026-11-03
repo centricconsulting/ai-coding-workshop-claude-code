@@ -158,7 +158,7 @@ For your scenario, identify 2–3 hooks that would save real time or enforce rea
 # Hook input is JSON on stdin
 COMMAND=$(jq -r '.tool_input.command // empty')
 
-if echo "$COMMAND" | grep -qE '(^|[;&|[:space:]])git[[:space:]]+push'; then
+if echo "$COMMAND" | grep -qE '(^|[;&|[:space:]])git[[:space:]]+push([[:space:]]|$)'; then
   echo "Blocked by team policy: Claude may not run 'git push'. Ask a human to push." >&2
   exit 2   # exit 2 = block the tool call; stderr is shown to Claude
 fi
@@ -443,6 +443,7 @@ cp -r team-plugin team-marketplace/plugins/taskmanager-team
 ```json
 {
   "name": "taskmanager-team-marketplace",
+  "description": "TaskManager team plugins",
   "owner": { "name": "Your Team" },
   "plugins": [
     {

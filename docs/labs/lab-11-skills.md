@@ -174,7 +174,7 @@ The description and `when_to_use` should cause Claude to load the skill on its o
 Both `src-dotnet/CLAUDE.md` and `src-springboot/CLAUDE.md` document the same rule: **dependencies flow inward only.**
 
 - .NET: `Api → Application → Domain`, with `Infrastructure` implementing `Domain` interfaces
-- Spring Boot: `web → application → domain`, with `infrastructure` implementing `domain` interfaces
+- Spring Boot: `api → application → domain` (modules `taskmanager-api`, `taskmanager-application`, `taskmanager-domain`), with `taskmanager-infrastructure` implementing `domain` interfaces
 
 It's easy for a code change to quietly violate this. For example, a Domain entity might reference an Infrastructure repository class, or an Application handler might import an API DTO. The check is tedious to repeat by hand on every change but easy to describe once, which makes it a good candidate for a skill instead of restating the rule in every prompt.
 

@@ -281,21 +281,23 @@ Recap Day 1 in one slide: memory → TDD → requirements → code → plan → 
 
 ### Lab 8: Security Review Workflows (30–35 min)
 
-**Goal:** Use `/security-review`, fix a real vulnerability, and build a project-specific `/security-checklist` skill.
+**Goal:** See why `/security-review` misses a project-specific rule, build a `/security-checklist` skill that catches it, and fix the vulnerability.
 
 **Talking points**
 - `/code-review` covers general quality; **`/security-review`** is a single pass focused on vulnerability classes (injection, secrets, broken auth, unsafe input).
 - `/security-review` reviews the **commits on your branch** compared with `origin`'s default branch. Uncommitted work isn't included.
-- A custom skill adds *your* domain knowledge (field names, invariants) on top of a generic review. This previews Lab 11 later in the day.
+- **The planted bug usually isn't reported by `/security-review`.** In validation it was dropped at 3/10 and 7/10 confidence (it reports at 8/10+): no auth, GUID IDs, no list endpoint. That's the lesson: a generic reviewer weighs today's exploitability; your team's rule ("every task operation checks ownership") is something only a project skill knows. Have participants ask it *why* it didn't report the assign path.
+- A custom skill adds *your* domain knowledge (field names, invariants) on top of a generic review. This previews Lab 11 later in the day. The skill prompt's "report every match even without auth" line is what makes it catch the gap.
 - CI options: the Claude Code GitHub Action and headless runs (Lab 13).
 - It opens Day 2 on purpose: participants review the branch they built on Day 1, and the move from *reviewing* for risk to *preventing* it leads straight into Lab 9.
 
 **Common pitfalls**
 - `ambiguous argument` or "nothing to review": no `origin` remote, or `origin/HEAD` isn't set. Fix with `git fetch origin && git remote set-head origin --auto`. Participants who cloned upstream instead of a fork need to add their fork as `origin`.
-- Nothing found on the deliberately vulnerable code: the code isn't committed yet.
+- "`/security-review` found nothing, so I'm stuck": that's expected; move on to Part C. If it says "nothing to review", the code isn't committed yet.
+- `/security-checklist` misses the gap: the skill body is missing the "report every match even without authentication" instruction.
 - Claude fixes the vulnerability before the participant reviews it. Ask for findings only first.
 
-**Checkpoint:** a vulnerability found, fixed, and re-reviewed; `/security-checklist` appears in the `/` menu.
+**Checkpoint:** `/security-checklist` found the gap `/security-review` didn't report; the gap is fixed and both checks re-run clean.
 
 ---
 
@@ -370,6 +372,8 @@ Recap Day 1 in one slide: memory → TDD → requirements → code → plan → 
 
 **Common pitfalls**
 - No automatic delegation: sharpen the `description` with "Use proactively when…".
+- A.4 runs the Lab 11 `clean-architecture-boundary-check` skill instead of `architecture-reviewer`: both descriptions claim the same trigger. Use it to discuss skill vs. subagent; `@agent-architecture-reviewer` forces the agent.
+- The B.1 chain takes several minutes (about 7 min and roughly $1.50 in validation). Start it, then discuss while it runs.
 - The subagent can't do something: check its `tools` list. The architecture reviewer deliberately can't run git, so pass it file paths.
 - Chain loses information: make each agent's final message contain its full output.
 
@@ -391,6 +395,7 @@ Recap Day 1 in one slide: memory → TDD → requirements → code → plan → 
 - Auth error in `-p`: headless runs use the same credentials. In CI, set `ANTHROPIC_API_KEY` or `CLAUDE_CODE_OAUTH_TOKEN`.
 - Does nothing or "permission denied": headless runs can't answer prompts. Pre-approve tools with `--allowedTools`.
 - Cost or time overruns in CI: always set `--max-turns` and/or `--max-budget-usd`.
+- "My MCP server ran without asking": headless runs connect `.mcp.json` servers **without** the approval prompt. In validation, a still-pending Lab 10 `filesystem` server connected (14 tools) in a plain `claude -p`. Make this the Part E safety point, and suggest `claude mcp remove filesystem --scope project` after Lab 10.
 
 **Checkpoint:** a scripted run producing JSON output, plus a sketched CI job.
 

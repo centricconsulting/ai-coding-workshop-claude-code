@@ -27,7 +27,7 @@ Read these before judging anything. If they disagree with your general knowledge
 | Domain | `TaskManager.Domain` | `taskmanager-domain` module, `com.example.taskmanager.domain` |
 | Application | `TaskManager.Application` | `taskmanager-application` module |
 | Infrastructure | `TaskManager.Infrastructure` | `taskmanager-infrastructure` module (JPA entities, adapters, legacy code) |
-| API | `TaskManager.Api` (Minimal APIs) | `taskmanager-api` module (`@RestController`, DTOs). `src-springboot/CLAUDE.md` calls this layer `web/` |
+| API | `TaskManager.Api` (Minimal APIs) | `taskmanager-api` module (`@RestController`, DTOs), package `…taskmanager.api` |
 
 Dependencies flow **inward only**: API → Application → Domain. Infrastructure implements interfaces declared in Domain (for example `ITaskRepository` / `TaskRepository`). Domain depends on nothing.
 

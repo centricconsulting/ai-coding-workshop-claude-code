@@ -6,19 +6,19 @@
 **Learning Objectives**:
 - Distinguish `/code-review` (correctness gate, alias `/review`) from `/security-review` (security-focused pass)
 - Recognize a realistic authorization vulnerability in a multi-tenant-style domain
-- Run `/security-review`, evaluate its finding, and fix the underlying issue
-- Build a project-specific **skill** (`/security-checklist`) that layers domain knowledge on top of a generic review
+- Understand why a generic security review can miss a project-specific rule, and read its reasoning
+- Build a project-specific **skill** (`/security-checklist`) that encodes those rules, and use it to find and fix the gap
 - Know the team/CI options: the `security-guidance` plugin and the `anthropics/claude-code-security-review` GitHub Action
 
-> **Note**: `/security-review` is a single pass purpose-built for vulnerability classes (injection, secrets, broken auth, unsafe input handling) rather than general code quality. It reviews the **commits on your current branch compared with `origin`'s default branch** — so it needs an `origin` remote, and changes must be committed to show up.
+> **Note**: `/security-review` is a single pass purpose-built for vulnerability classes (injection, secrets, broken auth, unsafe input handling) rather than general code quality. It reviews the **commits on your current branch compared with `origin`'s default branch** — so it needs an `origin` remote, and changes must be committed to show up. It deliberately reports only findings it's confident are exploitable, which is the point of Part B.
 
 ---
 
 ## Overview
 
-Lab 7 introduced `/code-review` as a pre-commit gate for correctness bugs. Security isn't its focus. This lab goes deeper. You'll add a small, deliberately flawed feature to TaskManager, run `/security-review` against it, fix what it finds, and then codify TaskManager-specific security knowledge into a skill so future reviews catch domain-specific risks automatically.
+Lab 7 introduced `/code-review` as a pre-commit gate for correctness bugs. Security isn't its focus. This lab goes deeper. You'll add a small, deliberately flawed feature to TaskManager, run `/security-review` against it, and see why a generic reviewer may not report it. Then you'll codify TaskManager's own security rules in a skill, use it to find the flaw, and fix it.
 
-> **About the starter code**: TaskManager's `Task` has no assignment or organization fields, and the API has no authentication. Part B adds both fields explicitly, and simulates the caller's identity with request headers. That simplification is itself a security smell — expect `/security-review` to point it out.
+> **About the starter code**: TaskManager's `Task` has no assignment or organization fields, and the API has no authentication. Part B adds both fields and simulates the caller's organization with an `X-Organization-Id` request header. That simplification matters: it's part of why a generic reviewer discounts the flaw.
 
 This is the first lab of Day 2. It reviews the branch you built on Day 1, then sets up Lab 9: first you *review* for risk, then you *prevent* it with permissions and hooks.
 
@@ -41,7 +41,7 @@ git rev-parse --abbrev-ref origin/HEAD   # should print origin/main
 
 If the second command fails, run `git fetch origin && git remote set-head origin --auto`.
 
-> ⚠️ **Don't install the `security-guidance` plugin until Part E.** It reviews Claude's edits as it works and would fix the deliberate vulnerability in Part B before you get to find it.
+> ⚠️ **Don't install the `security-guidance` plugin until Part F.** It reviews Claude's edits as it works and would fix the deliberate vulnerability in Part B before you get to find it.
 
 ---
 
@@ -55,6 +55,8 @@ If the second command fails, run `git fetch origin && git remote set-head origin
 - **Secrets** — hardcoded credentials, tokens, or connection strings
 - **Broken authentication/authorization** — missing or incorrect checks on who's allowed to do what to whose data
 
+It scores each candidate finding and reports only the ones it's confident are real, exploitable vulnerabilities. That keeps the noise down. It also means it judges risk against how the app works *today*, not against rules your team has decided on.
+
 ```
 /security-review
 ```
@@ -63,29 +65,33 @@ Run it now. It reviews every commit on your branch that isn't on `origin`'s defa
 
 ---
 
-## Part B: Introduce and Fix a Real Vulnerability (18 min)
+## Part B: Introduce a Cross-Tenant Gap (8 min)
 
-### B.1 Introduce a Cross-Tenant Authorization Gap
+### B.1 Add Task Assignment, Without an Ownership Check
 
-You're going to add a small, realistic feature to TaskManager — task assignment — with a deliberate flaw: it lets a caller reassign *any* task to *any* user, without checking that the requester and the task belong to the same organization. Neither the fields nor the endpoint exist yet; the prompts below create them. This is a textbook broken-access-control bug (OWASP A01): the code checks that the *task exists*, but never checks that the *requester is allowed to touch it*.
+You're going to add a small, realistic feature to TaskManager — task assignment — with a deliberate flaw: it lets a caller reassign *any* organization's task. Tasks belong to the caller's organization when they're created, but the assignment path checks only that the task *exists*, never that it belongs to the caller. This is a textbook broken-access-control bug (OWASP A01).
 
 #### 🔷 .NET Prompt
 
 ```
 Following the conventions in src-dotnet/CLAUDE.md, add a task-assignment feature:
 
-1. Add an AssignedToUserId (nullable string) and OrganizationId (string) property
-   to the Task entity in src-dotnet/src/TaskManager.Domain/Tasks/Task.cs, plus an Assign(string userId)
-   method that sets AssignedToUserId. Keep existing constructors/factory methods working
-   (default OrganizationId if needed) so earlier labs' code still compiles.
-2. Add a minimal API endpoint PUT /tasks/{id}/assign in
-   src-dotnet/src/TaskManager.Api/Extensions/EndpointExtensions.cs that accepts a userId in the
-   request body, loads the task with ITaskRepository.FindByIdAsync, calls Assign, and
-   saves with SaveChangesAsync. Return 404 if the task doesn't exist.
+1. Add an AssignedToUserId (nullable string) and OrganizationId (string) property to
+   the Task entity in src-dotnet/src/TaskManager.Domain/Tasks/Task.cs, plus an
+   Assign(string userId) method. Add a Task.Create overload that takes an
+   organizationId; keep the existing overloads working (default the organization)
+   so earlier labs' code still compiles.
+2. POST /tasks: read the caller's organization from an X-Organization-Id request
+   header and pass it through CreateTaskCommand, so each task belongs to the
+   caller's organization.
+3. Add TaskService.AssignTaskAsync(taskId, userId, organizationId) that loads the
+   task with ITaskRepository.FindByIdAsync, calls Assign, and saves with
+   SaveChangesAsync. Add PUT /tasks/{id}/assign in EndpointExtensions.cs that reads
+   X-Organization-Id, takes a userId in the body, and calls the service.
+   Return 404 if the task doesn't exist.
 
-There's no authentication in this API yet. For this first pass, don't add any
-authorization check beyond confirming the task exists — I want to see the simplest
-possible version first.
+For this first pass, don't compare the caller's organization with the task's
+OrganizationId — I want to see the simplest possible version first.
 ```
 
 #### 🟩 Spring Boot Prompt
@@ -93,83 +99,54 @@ possible version first.
 ```
 Following the conventions in src-springboot/CLAUDE.md, add a task-assignment feature:
 
-1. Add an assignedToUserId (nullable String) and organizationId (String) field to the
-   domain Task in taskmanager-domain, plus an assign(String userId) method that sets
-   assignedToUserId. Carry both fields through TaskEntity and TaskMapper in
-   taskmanager-infrastructure. Keep existing constructors/tests working.
-2. Add PUT /api/tasks/{id}/assign to TaskController that accepts a userId in the request
-   body, loads the task, calls assign, and saves it. Return 404 if it doesn't exist.
+1. Add assignedToUserId (nullable String) and organizationId (String) to the domain
+   Task in taskmanager-domain, plus an assign(String userId) method. Carry both
+   fields through TaskEntity and TaskMapper in taskmanager-infrastructure. Keep the
+   existing create overloads and tests working (default the organization).
+2. POST /api/tasks: read the caller's organization from an X-Organization-Id
+   request header and store it on the new task.
+3. Add TaskService.assignTask(taskId, userId, organizationId) that loads the task,
+   calls assign, and saves it. Add PUT /api/tasks/{id}/assign to TaskController that
+   reads X-Organization-Id, takes a userId in the body, and calls the service.
+   Return 404 if the task doesn't exist.
 
-There's no authentication in this API yet. For this first pass, don't add any
-authorization check beyond confirming the task exists — I want to see the simplest
-possible version first.
+For this first pass, don't compare the caller's organization with the task's
+organizationId — I want to see the simplest possible version first.
 ```
 
-Review what Claude Code proposes before it writes. You should see exactly what was asked for: the endpoint resolves the task by ID and reassigns it — with no check that the caller has any relationship to that task's organization. Any authenticated caller who knows (or guesses) a task ID from another organization can reassign it. That's the vulnerability.
+Review what Claude Code proposes before it writes. The assign path receives the caller's organization and then ignores it. Anyone who knows (or obtains) a task ID from another organization can reassign that task. That's the vulnerability.
 
-> This is a deliberately introduced training bug — you're building it on purpose so the next steps have something real to find and fix. In a real codebase, this exact pattern (existence check without an ownership/tenancy check) is one of the most common ways broken access control ships to production.
+> This is a deliberately introduced training bug. In a real codebase, this exact pattern (existence check without an ownership/tenancy check) is one of the most common ways broken access control ships to production.
 
-Build to confirm it compiles (`dotnet build src-dotnet` / `mvn -q compile` from `src-springboot`), then **commit it** to your personal branch — `/security-review` reviews committed branch changes:
+Build to confirm it compiles (`dotnet build src-dotnet` / `mvn -q compile` from `src-springboot`), then **commit it** — `/security-review` reviews committed branch changes. Use a neutral message; a commit that says "insecure" tips the reviewer off:
 
 ```bash
-git add -A && git commit -m "feat(tasks): add task assignment endpoint (lab 8, intentionally insecure)"
+git add -A && git commit -m "feat(tasks): assign tasks to users; tasks belong to the caller's organization"
 ```
 
-### B.2 Run `/security-review`
-
-```
-/security-review
-```
-
-Read the finding carefully. A good result names the specific gap: the assignment endpoint verifies the task exists but not that the requester belongs to the task's organization (or is otherwise authorized to reassign it) — cross-tenant/cross-user broken access control.
-
-### B.3 Fix the Underlying Issue
-
-Don't just patch symptoms — ask for the actual authorization check:
-
-#### 🔷 .NET Prompt
-
-```
-Fix the finding from /security-review: the PUT /tasks/{id}/assign endpoint doesn't
-verify the requester is authorized to reassign the task. Add an authorization check
-that confirms the requesting user's organization matches the task's OrganizationId
-before allowing the reassignment. Reject with 403 Forbidden otherwise. There's no
-auth middleware yet, so read the caller's organization from an X-Organization-Id
-request header behind a small ICurrentUser-style abstraction, so it can later be
-swapped for authenticated claims. Put the rule in the domain/application layer, not
-only in the endpoint, and add tests for the allowed and forbidden cases. Follow the
-conventions in src-dotnet/CLAUDE.md.
-```
-
-#### 🟩 Spring Boot Prompt
-
-```
-Fix the finding from /security-review: the PUT /tasks/{id}/assign endpoint doesn't
-verify the requester is authorized to reassign the task. Add an authorization check
-that confirms the requesting user's organization matches the task's organizationId
-before allowing the reassignment. Reject with 403 Forbidden otherwise. There's no
-Spring Security yet (don't add it), so read the caller's organization from an
-X-Organization-Id request header behind a small CurrentUser-style abstraction, so it
-can later be swapped for authenticated principals. Put the rule in the
-domain/application layer, not only in the controller, and add tests for the allowed
-and forbidden cases. Follow the conventions in src-springboot/CLAUDE.md.
-```
-
-### B.4 Re-run `/security-review` to Confirm
-
-Commit the fix, then:
+### B.2 Run `/security-review` — and Read Why
 
 ```
 /security-review
 ```
 
-The finding from B.2 should no longer appear. Expect a related finding instead: the organization ID is now trusted from a client-supplied header rather than an authenticated session. That's correct — and it's why the fix used an abstraction. Discuss it as a known limitation of the lab (real fix: authentication, out of scope today) rather than iterating on it. For any *other* new issue, keep iterating — this is the same fix-then-verify loop as `/code-review` in Lab 7, just aimed at a security-specific finding.
+**Expect it not to report the flaw**, or to mention it only as a candidate it dropped for low confidence. In validation runs it dropped this finding at 3/10 and 7/10 confidence (it reports at 8/10 and above), reasoning that the API has no authentication, task IDs are random GUIDs, and no endpoint lists other organizations' tasks.
+
+Ask it to show its work:
+
+```
+Did you consider PUT /tasks/{id}/assign? Walk me through why it was or wasn't reported.
+```
+
+That reasoning is sound *for a generic reviewer*: it weighs how exploitable something is right now. But your team has a rule that doesn't depend on today's exploitability: **every operation on a Task must check that the caller owns it.** A generic tool can't know that rule. The next part teaches it.
+
+> If `/security-review` *does* report the gap, great — note it and continue. The skill in Part C is still the reliable, repeatable check.
 
 ---
 
-## Part C: Build a Project-Specific Security Skill (7 min)
+## Part C: Build a Project-Specific Security Skill (8 min)
 
-Generic security review is valuable, but it doesn't know TaskManager's specific risk areas: multi-tenant authorization on task operations, and — per the project's domain — notification content handling. You're going to create the repo's first custom security artifact so every future review checks these automatically.
+A generic security review doesn't know TaskManager's specific rules: multi-tenant authorization on every task operation, and — per the project's domain — careful handling of notification content. You'll encode them in the repo's first custom security artifact, so every future review checks them.
 
 > **Commands vs. skills**: Claude Code has merged custom slash commands into **Skills**. A file at `.claude/commands/security-checklist.md` still works and still creates `/security-checklist`, but the recommended form is a skill directory, `.claude/skills/security-checklist/SKILL.md`. Skills use the same frontmatter, can hold supporting files (e.g. a longer checklist alongside `SKILL.md`), and can be invoked by Claude automatically — unless you set `disable-model-invocation: true`, which keeps this one an explicit, run-when-you-type-it command.
 
@@ -177,20 +154,21 @@ Generic security review is valuable, but it doesn't know TaskManager's specific 
 Create a skill at .claude/skills/security-checklist/SKILL.md. Frontmatter: name
 security-checklist, a one-line description, argument-hint "[path]",
 disable-model-invocation: true, and allowed-tools limited to Read, Grep, Glob, and
-Bash(git diff *) / Bash(git log *). The body should layer TaskManager-specific risk
-areas on top of a generic security review of the branch diff (or of $ARGUMENTS if a
-path is given):
+Bash(git diff *) / Bash(git log *). The body should layer TaskManager-specific rules
+on top of a generic security review of the branch diff (or of $ARGUMENTS if a path
+is given):
 
-- Any endpoint or handler that reads or mutates a Task must verify the requester's
-  organization matches the task's OrganizationId (multi-tenant authorization) —
-  flag any place that checks existence but not ownership
+- Any endpoint, service, or handler that reads or mutates a Task must verify the
+  requester's organization matches the task's OrganizationId (multi-tenant
+  authorization) — flag any place that checks existence but not ownership
 - Any code that renders or stores notification content (email/SMS body text) must
   treat task titles/descriptions as untrusted input — flag any place user-supplied
   text is interpolated into a message without sanitization
-- Anything a generic /security-review would already catch (secrets, injection,
-  missing input validation) is still in scope — the skill should tell the user to run
-  /security-review as a baseline, then apply these project-specific checks on top
-- Report each finding with file:line, risk, and a suggested fix
+- Report every match even if the app has no authentication yet: these are project
+  rules, not exploitability guesses
+- Generic issues (secrets, injection, missing input validation) are still in scope;
+  tell the user to run /security-review as the baseline
+- Report each finding with file:line, which rule, the risk, and a suggested fix
 ```
 
 Review the generated file before it's written — confirm it references the real entity/field names from B.1 (`OrganizationId` / `organizationId`, `AssignedToUserId` / `assignedToUserId`), not generic placeholders. It should look roughly like:
@@ -205,7 +183,7 @@ allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *)
 ---
 
 Review the changes on this branch (or $ARGUMENTS if given) for TaskManager-specific risks.
-Assume /security-review has already been run as a baseline.
+Report every rule match, even if the app has no authentication yet.
 ...
 ```
 
@@ -215,7 +193,7 @@ Assume /security-review has already been run as a baseline.
 /security-checklist
 ```
 
-Confirm it shows up in the `/` menu and in `/skills`, runs, and produces output that references both the generic security categories and the two TaskManager-specific risk areas. Try `/security-checklist src-dotnet/src/TaskManager.Api` (🟩 `src-springboot/taskmanager-api`) to scope it with `$ARGUMENTS`.
+Confirm it shows up in the `/` menu and in `/skills`. Its first finding should be the gap `/security-review` didn't report: the assign path checks that the task exists but never compares the caller's organization with the task's `OrganizationId`. (In validation, it flagged exactly that, with file and line.) Try `/security-checklist src-dotnet/src/TaskManager.Api` (🟩 `src-springboot/taskmanager-api`) to scope it with `$ARGUMENTS`.
 
 Commit `.claude/skills/security-checklist/` — skills in `.claude/skills/` are shared with everyone who clones the repo.
 
@@ -223,10 +201,61 @@ Commit `.claude/skills/security-checklist/` — skills in `.claude/skills/` are 
 
 ---
 
-## Part D: Where Security Review Fits in PR Prep (part of the 30 min, discussion)
+## Part D: Fix the Gap and Re-Check (8 min)
+
+### D.1 Fix the Underlying Issue
+
+Don't just patch the endpoint — put the authorization rule where it can't be bypassed:
+
+#### 🔷 .NET Prompt
+
+```
+Fix the finding from /security-checklist: TaskService.AssignTaskAsync doesn't verify
+the requester is allowed to reassign the task. Confirm the caller's organization
+matches the task's OrganizationId before reassigning; reject with 403 Forbidden
+otherwise. Read the caller's organization through a small ICurrentUser-style
+abstraction (backed by the X-Organization-Id header for now) so it can later be
+swapped for authenticated claims. Put the rule in the domain/application layer, not
+only in the endpoint, and add tests for the allowed and forbidden cases. Follow the
+conventions in src-dotnet/CLAUDE.md.
+```
+
+#### 🟩 Spring Boot Prompt
+
+```
+Fix the finding from /security-checklist: TaskService.assignTask doesn't verify the
+requester is allowed to reassign the task. Confirm the caller's organization matches
+the task's organizationId before reassigning; reject with 403 Forbidden otherwise.
+There's no Spring Security yet (don't add it), so read the caller's organization
+through a small CurrentUser-style abstraction backed by the X-Organization-Id header,
+so it can later be swapped for authenticated principals. Put the rule in the
+domain/application layer, not only in the controller, and add tests for the allowed
+and forbidden cases. Follow the conventions in src-springboot/CLAUDE.md.
+```
+
+### D.2 Re-run Both Checks
+
+Commit the fix, then:
+
+```
+/security-checklist
+```
+
+The multi-tenant finding should be gone. Then run the generic baseline once more:
+
+```
+/security-review
+```
+
+Expect no high-confidence findings. It may still note that the organization comes from a client-supplied header rather than an authenticated session. That's correct — and it's why the fix used an abstraction. Treat it as a known limitation of the lab (the real fix is authentication, out of scope today). For any *other* new issue, keep iterating: the same fix-then-verify loop as `/code-review` in Lab 7.
+
+---
+
+## Part E: Where Security Review Fits in PR Prep (part of the 30 min, discussion)
 
 Lab 7 established `/code-review` as a pre-commit gate. Where does `/security-review` (and now `/security-checklist`) fit relative to it?
 
+- **This lab's lesson first**: `/security-review` is a strong generic baseline, but it can't know your project's rules. Pair it with `/security-checklist` for anything that touches task data.
 - **Before `/code-review`**: catch the security issue early, before you've invested review time in a version of the code that has to change anyway
 - **After `/code-review`**: some teams treat security as the last gate before opening the PR — `/code-review` for correctness, then `/security-review` (which reads committed branch changes) right before pushing
 - **Both, at different points**: run `/security-checklist` whenever you touch anything that reads/writes Task data across a boundary — a new endpoint, a new handler — even mid-session, not just at PR time. Run `/code-review` as the general pre-commit gate regardless.
@@ -235,7 +264,7 @@ For TaskManager specifically: any change touching task assignment, task queries,
 
 ---
 
-## Part E: Team and CI Options (read / discuss, 3 min)
+## Part F: Team and CI Options (read / discuss, 3 min)
 
 Security review works best in layers. Beyond what you ran today:
 
@@ -254,9 +283,9 @@ If `/plugin install` reports `Marketplace "claude-plugins-official" not found`, 
 ## Success Criteria
 
 - [ ] You can state the difference between `/code-review` and `/security-review` in one sentence
-- [ ] You introduced the cross-tenant assignment vulnerability and confirmed `/security-review` found it
-- [ ] You fixed the underlying authorization gap (not just a surface patch) and re-ran `/security-review` clean
-- [ ] `.claude/skills/security-checklist/SKILL.md` exists with `disable-model-invocation: true`, references real TaskManager fields, and runs via `/security-checklist`
+- [ ] You introduced the cross-tenant assignment gap and can explain why `/security-review` did (or didn't) report it
+- [ ] `.claude/skills/security-checklist/SKILL.md` exists with `disable-model-invocation: true`, references real TaskManager fields, and found the gap via `/security-checklist`
+- [ ] You fixed the underlying authorization gap (not just a surface patch), and both `/security-checklist` and `/security-review` came back clean
 - [ ] You can explain where security review fits relative to `/code-review` in the PR-prep flow, and name one team/CI option (plugin or GitHub Action)
 
 ---
@@ -275,9 +304,13 @@ It diffs your branch against `origin`'s default branch. Check `git remote -v` sh
 
 **`/security-review` finds nothing on the deliberately vulnerable code**
 
-Confirm the change is committed (see above). Then make sure the endpoint code actually matches what was asked for in B.1 — read the diff and confirm there's genuinely no authorization check, only an existence check. If Claude Code added a check anyway (it sometimes will, unprompted, because it's the obviously-correct thing to do), ask it to remove just that check so the lab has something to find, or treat that as a teaching moment: sometimes Claude Code catches the gap before your review tooling does.
+That's expected in this lab (see B.2). First confirm the change is committed, then ask it why it didn't report the assign path, and move on to Part C. If B.1's code accidentally *does* compare organizations (Claude sometimes adds the check unprompted, because it's the obviously correct thing to do), ask it to remove just that check so `/security-checklist` has something to find — or treat it as a teaching moment.
 
-**The fix in B.3 breaks existing tests**
+**`/security-checklist` doesn't report the assign gap either**
+
+Check that the skill body says to report every rule match *even without authentication*. Without that line, Claude may apply the same exploitability judgment as `/security-review` and drop it.
+
+**The fix in D.1 breaks existing tests**
 
 That's expected if earlier labs' tests assumed unrestricted access. Ask Claude Code to update the affected tests to include a valid organization/user context, rather than removing the new check.
 
@@ -291,7 +324,7 @@ Check the path is exactly `.claude/skills/security-checklist/SKILL.md` (uppercas
 
 **Claude fixed the vulnerability before you could review it**
 
-If you installed the `security-guidance` plugin early, it reviews Claude's edits as it works. Disable it with `/plugin` for the lab, or treat it as a preview of Part E.
+If you installed the `security-guidance` plugin early, it reviews Claude's edits as it works. Disable it with `/plugin` for the lab, or treat it as a preview of Part F.
 
 **Not sure if a finding is a true positive**
 

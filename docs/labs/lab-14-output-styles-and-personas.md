@@ -233,6 +233,7 @@ Create a second output style, `.claude/output-styles/teaching-mode.md`, that doe
 **Style persists across unrelated sessions and that's surprising**
 
 - This is expected — your choice is saved to `.claude/settings.local.json` for this project (or `~/.claude/settings.json` if you set it there). Switch back explicitly with `/output-style default` when you're done
+- To try a style for one run without saving it anywhere, pass it as a session setting: `claude --settings '{"outputStyle":"code-reviewer"}'` (works with `-p` too)
 
 ---
 
