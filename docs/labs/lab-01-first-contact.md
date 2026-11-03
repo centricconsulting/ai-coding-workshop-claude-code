@@ -182,7 +182,7 @@ Run the .NET tests and tell me which ones pass and which ones fail.
 
 *(Spring Boot track: ask it to run the Maven tests instead.)*
 
-**Expected result**: the build succeeds and the summary reports **11 skipped, 0 failed**. The skipped tests are stubs that you'll implement during the labs.
+**Expected result**: the build succeeds and the summary reports **1 passed, 11 skipped, 0 failed**. The passing test is a `/health` check; the skipped tests are stubs that you'll implement during the labs.
 
 **Did you get a permission prompt?** Probably not — and that's worth understanding. This repository ships a `.claude/settings.json` that **pre-approves** `dotnet` and `mvn` commands. That file is the teaching artifact for Lab 9; it also denies dangerous commands like `rm -rf` and `git push --force`. Open it and take a quick look.
 
@@ -234,7 +234,7 @@ The key insight: **Claude Code's output is actions, not suggestions.** You revie
 - [ ] `claude --version` shows a version number
 - [ ] You authenticated and ran at least one conversation
 - [ ] Claude Code accurately described the project architecture from reading the codebase
-- [ ] `dotnet test` (or `mvn clean test`) ran through Claude Code — .NET shows 11 skipped, 0 failed
+- [ ] `dotnet test` (or `mvn clean test`) ran through Claude Code — .NET shows 1 passed, 11 skipped, 0 failed
 - [ ] You saw at least one permission prompt and understand why `dotnet` didn't trigger one
 - [ ] You can cycle permission modes with Shift+Tab
 - [ ] You can use `/help`, `/context`, `/model`, `/effort`, `/compact`, and `/clear`

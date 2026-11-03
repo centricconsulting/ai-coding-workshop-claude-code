@@ -60,12 +60,12 @@ This guide is for facilitators running the 2-day, 15-lab Claude Code workshop. I
 claude --version
 claude doctor                 # install type, PATH, auto-update status
 claude -p "Reply with OK"     # proves auth works without opening the UI
-dotnet test src-dotnet        # .NET: builds, 11 tests skipped, 0 failed
+dotnet test src-dotnet        # .NET: builds, 1 passed, 11 skipped, 0 failed
 # or
 cd src-springboot && mvn -q test
 ```
 
-The 11 skipped .NET tests are intentional stubs that later labs fill in. They are not failures.
+The 11 skipped .NET tests are intentional stubs that later labs fill in. They are not failures. The 1 passing test is a `/health` integration test that proves `WebApplicationFactory` works.
 
 ---
 
@@ -467,7 +467,7 @@ Recap Day 1 in one slide: memory → TDD → requirements → code → plan → 
 
 | Symptom | Fix |
 |---|---|
-| `dotnet test` shows 11 skipped | Expected. These are stubs completed during labs. |
+| `dotnet test` shows 1 passed, 11 skipped | Expected. The skipped tests are stubs completed during labs. |
 | `/security-review` fails with `ambiguous argument` | No `origin` remote or `origin/HEAD` unset: `git fetch origin && git remote set-head origin --auto`. It also only reviews **committed** branch changes. |
 | Hooks fail with `jq: command not found` | Install `jq` (`brew install jq`, `sudo apt-get install jq`, `winget install jqlang.jq`). It's preinstalled in the devcontainers. |
 | Hooks don't fire | Validate the settings JSON (`jq . .claude/settings.json`) and check `/hooks`. |

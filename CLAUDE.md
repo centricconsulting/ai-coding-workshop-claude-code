@@ -13,7 +13,7 @@ Both implementations model the same domain. The starter code has the basics: a `
 ## How to Build and Test
 
 ```bash
-# .NET — a fresh checkout reports 11 skipped stub tests (implemented during the labs), 0 failed
+# .NET — a fresh checkout reports 1 passed (a /health integration test), 11 skipped stub tests (implemented during the labs), 0 failed
 dotnet build src-dotnet
 dotnet test src-dotnet
 

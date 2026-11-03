@@ -273,7 +273,13 @@ Pick one more Object Calisthenics principle to apply:
 
 Write new tests for the wrapped types, then implement.
 
-🔷 .NET bonus: `src-dotnet/tests/TaskManager.IntegrationTests/UnitTest1.cs` contains skipped stubs marked "Lab 5" for the `POST /tasks`, `GET /tasks/{id}`, and `PUT` endpoints. If you've implemented those endpoints on your branch (the handlers are `TODO`s in `EndpointExtensions.cs`), ask Claude Code to implement the tests with `WebApplicationFactory` so the API has its own characterization safety net before future refactors.
+🔷 .NET: add API-level characterization tests. `src-dotnet/tests/TaskManager.IntegrationTests/UnitTest1.cs` contains skipped stubs marked "Lab 5", and `HealthEndpointTests.cs` beside it is a working `WebApplicationFactory<Program>` example to copy. Start with `CreateTask_WithValidData_ShouldReturn201`: you built `POST /tasks` in Lab 3 Part 2, so it can pass today.
+
+```
+Using HealthEndpointTests.cs as the pattern, implement CreateTask_WithValidData_ShouldReturn201 in UnitTest1.cs against POST /tasks. Remove its Skip, run it, and show me it passing. Don't change any production code.
+```
+
+The other stubs (`GET /tasks/{id}`, `PUT /tasks/{id}/status`, `GET /tasks`) need their endpoints first. Those handlers are still `TODO`s in `EndpointExtensions.cs`, so implement them test-first if you have time.
 
 ---
 

@@ -199,7 +199,7 @@ claude doctor       # Diagnose install & settings
 ## Verify your stack
 
 ```bash
-# .NET — expect 11 skipped, 0 failed
+# .NET — expect 1 passed, 11 skipped, 0 failed
 dotnet --version && dotnet build src-dotnet && dotnet test src-dotnet
 
 # Spring Boot

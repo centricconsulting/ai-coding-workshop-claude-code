@@ -139,7 +139,7 @@ dotnet build src-dotnet
 dotnet test src-dotnet
 ```
 
-Expected: `Build succeeded`, and the test summary shows **11 skipped, 0 failed** — the skipped tests are stubs you fill in during the labs.
+Expected: `Build succeeded`, and the test summary shows **1 passed, 11 skipped, 0 failed** — the skipped tests are stubs you fill in during the labs.
 
 ---
 
