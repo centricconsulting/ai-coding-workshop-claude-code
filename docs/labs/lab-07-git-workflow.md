@@ -253,4 +253,8 @@ Read git log --oneline origin/main..HEAD and generate a CHANGELOG entry followin
 
 ---
 
-**Next**: [Lab 8: Security Review Workflows](lab-08-security-review-workflows.md)
+**End of Day 1**
+
+Nice work — you've gone from first contact with Claude Code through TDD, a user story taken all the way to a working endpoint, planning, refactoring, context management, session recovery, and git workflow. See the Day 1 wrap-up for a recap of everything covered. Commit and push your branch before you leave: Lab 8 reviews it.
+
+**Day 2 begins with**: [Lab 8: Security Review Workflows](lab-08-security-review-workflows.md)

@@ -173,4 +173,4 @@ not a tool, not a standing rule, a *procedure on standby*.
 ---
 
 <!-- Navigation -->
-[← 10 MCP Servers](01-mcp-servers.md) | **Day 2 Module 11** | [Next: Custom Subagents →](03-sub-agents.md)
+[← 10 MCP Servers](02-mcp-servers.md) | **Day 2 Module 11** | [Next: Custom Subagents →](04-sub-agents.md)

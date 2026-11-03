@@ -29,7 +29,6 @@ backgroundColor: #fff
 | Lab 5 | Phased refactoring & context | Context limits are a design constraint — `/context`, `/compact` |
 | Lab 6 | Checkpoints & rewind | A session-level safety net, separate from git |
 | Lab 7 | Git workflow | `/code-review` before staging, not after pushing |
-| Lab 8 | Security review | `/security-review` + a project skill as a dedicated gate |
 
 ---
 
@@ -48,7 +47,6 @@ section { font-size: 22px; }
 | What it's costing | `/usage` (`/cost`) |
 | Undo Claude's edits | `/rewind` (`/checkpoint`, `/undo`), `Esc Esc` |
 | Review for bugs | `/code-review` (`/review`) — levels, `--fix`, `--comment` |
-| Review for vulnerabilities | `/security-review`, `/security-checklist` (your skill) |
 | Get back to yesterday's session | `claude --continue`, `/resume` |
 
 ---
@@ -84,8 +82,8 @@ You see the approach before anything changes, and iterate risk-free.
 scoped phases, compact on your terms, and have rewind as a session-level
 safety net if a phase overreaches (git for everything rewind can't see).
 
-**`/code-review` and `/security-review`** — you don't commit and discover issues
-in PR review. You find them — including security issues — before staging.
+**`/code-review`** — you don't commit and discover issues in PR review.
+You find them before staging.
 
 ---
 
@@ -93,10 +91,11 @@ in PR review. You find them — including security issues — before staging.
 
 Day 1 was about **how to work with Claude Code**.
 
-Day 2 is about **how to configure and extend it**:
+Day 2 opens with a security gate, then turns to **how to configure and extend it**:
 
 | Lab | Topic |
 |---|---|
+| 8 | Security review — `/security-review` and a project-specific security skill |
 | 9 | Permissions & hooks — permission modes, rules, `/permissions`, `/hooks` |
 | 10 | MCP servers — connect Claude Code to external systems (`/mcp`) |
 | 11 | Skills — package reusable, on-demand instructions (`/skills`) |
@@ -109,22 +108,21 @@ Day 2 is about **how to configure and extend it**:
 | Lab | Topic |
 |---|---|
 | 13 | Headless mode & CI — `claude -p`, GitHub Actions |
-| 14 | Output styles — change how Claude Code communicates |
+| 14 | Output styles — change how Claude Code communicates *(self-study)* |
 | 15 | Capstone — design a team configuration and share it as a plugin (`/plugin`) |
 
-You already met two Day 2 ideas today: the `/security-checklist` **skill**,
-and the `/code-review` **background subagent**.
+You already met one Day 2 idea today: the `/code-review` **background subagent**.
 
 ---
 
 # End of Day 1
 
-Nice work — that's the full foundation: agentic model, project memory, TDD,
-planning, phased refactoring, session recovery, git workflow, and security
-review.
+Nice work — that's the full foundation: agentic model, project memory, TDD
+from user story to working endpoint, planning, phased refactoring, session
+recovery, and git workflow.
 
 **Before Day 2:**
-- Make sure Day 1's work is committed (or at least not in a dirty, half-finished state)
+- Commit and push Day 1's work — Lab 8 opens Day 2 by reviewing your branch commits against `origin`
 - Have your GitHub fork ready — Labs 10, 13, and 15 need it
 - If you haven't already, skim the [Agent Governance Guide](../../../guides/agent-governance.md) — it'll make more sense after today, and Day 2 builds toward it
 
@@ -133,4 +131,4 @@ See you tomorrow for Day 2.
 ---
 
 <!-- Navigation -->
-[← 08 Security Review](08-security-review.md) | **Day 1 Wrap-Up** | [Day 2 Start: 09 Permissions & Hooks →](../part2/00-permissions-and-hooks.md)
+[← 07 Git Workflow](07-git-workflow.md) | **Day 1 Wrap-Up** | [Day 2 Start: 08 Security Review →](../part2/00-security-review.md)

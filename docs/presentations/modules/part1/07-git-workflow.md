@@ -299,17 +299,17 @@ If you finish early, go back and extend Labs 3 or 5.
 
 ---
 
-# Up Next: Security Review
+# Up Next: Day 1 Wrap-Up
 
-`/code-review` is a correctness gate. The next lab covers the
-category it deliberately leaves out — security.
+This is the last lab of Day 1: the feature you took from user story
+to code in Lab 3 is now committed and PR-ready.
 
-👉 [Lab 8: Security Review Workflows](../../../labs/lab-08-security-review-workflows.md)
+`/code-review` is a correctness gate. Day 2 opens with the category
+it deliberately leaves out: [Lab 8: Security Review](../../../labs/lab-08-security-review-workflows.md).
 
-Then Day 1 wraps up before we pick up Day 2 with permissions,
-MCP, skills, sub-agents, headless mode, and team configuration.
+Then permissions, MCP, skills, subagents, headless mode, and team configuration.
 
 ---
 
 <!-- Navigation -->
-[← 06 Checkpoints & Rewind](06-checkpoints-and-rewind.md) | **Day 1 Module 07** | [Next: Security Review →](08-security-review.md)
+[← 06 Checkpoints & Rewind](06-checkpoints-and-rewind.md) | **Day 1 Module 07** | [Next: Day 1 Wrap-Up →](08-wrapup-day1.md)

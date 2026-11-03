@@ -155,4 +155,4 @@ The main conversation is the orchestrator.
 ---
 
 <!-- Navigation -->
-[← 11 Skills](02-skills.md) | **Day 2 Module 12** | [Next: 13 Headless & Automation →](04-headless-automation.md)
+[← 11 Skills](03-skills.md) | **Day 2 Module 12** | [Next: 13 Headless & Automation →](05-headless-automation.md)

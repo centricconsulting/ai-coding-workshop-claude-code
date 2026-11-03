@@ -17,8 +17,8 @@ Module 07 / Lab 7: `/code-review` (alias `/review`) became your
 pre-commit gate for **correctness bugs** — and *incidentally*
 security issues if it happens to notice them.
 
-**This is the last module of Day 1.** Security deserves a dedicated pass,
-not a side effect of a general review.
+**Day 2 starts here.** Your Day 1 branch commits are the review target.
+Security deserves a dedicated pass, not a side effect of a general review.
 
 ---
 
@@ -157,7 +157,7 @@ Custom slash commands have been **merged into Skills**.
 | Claude can auto-invoke | ✅ unless disabled | ✅ unless `disable-model-invocation: true` |
 
 Old command files still work. New work: **use a skill.**
-(Day 2's Lab 11 goes deep on skills.)
+(Lab 11, later today, goes deep on skills.)
 
 ---
 
@@ -233,9 +233,9 @@ section { font-size: 22px; }
 - `.claude/skills/security-checklist/SKILL.md` created and runnable
 - A clear answer to "where does security review fit in PR prep?"
 
-**This is the last lab of Day 1** — Day 1 wrap-up comes next.
+**Next:** Lab 9 moves from *reviewing* for risk to *preventing* it with permissions and hooks.
 
 ---
 
 <!-- Navigation -->
-[← 07 Git Workflow](07-git-workflow.md) | **Day 1 Module 08** | [Next: Day 1 Wrap-Up →](09-wrapup-day1.md)
+[← Day 1 Wrap-Up](../part1/08-wrapup-day1.md) | **Day 2 Module 08** | [Next: 09 Permissions & Hooks →](01-permissions-and-hooks.md)

@@ -15,7 +15,7 @@ This guide is for facilitators running the 2-day, 15-lab Claude Code workshop. I
 - **Tell participants to pick one stack** (🔷 .NET or 🟩 Spring Boot) and stay with it. Mixed pairs work well: one drives, one reviews diffs.
 - **Pair weaker setups with working ones.** If someone's install or auth fails, pair them with a neighbor right away and fix it at the next break.
 - **Remind people to commit at the end of each lab** (Lab 7 teaches the workflow; before that, `git add -A && git commit -m "lab N"` is fine). Later labs build on earlier ones, and commits make Lab 6 (rewind vs. git) and Lab 8 (`/security-review` on branch commits) work.
-- **Watch the clock on Lab 3.** It's the longest lab (two parts, 90–100 min). Part 2 is the first item to move or cut if Day 1 runs late (see [Timing Adjustments](#timing-adjustments-and-fast-track-options)).
+- **Protect Lab 3 Part 2.** It's the longest lab (two parts, 90–100 min), and Part 2 is Day 1's requirements-to-code arc. If the morning runs long, drop Part 2's ADR step (Step 10) first, then use the other [Timing Adjustments](#timing-adjustments-and-fast-track-options) before cutting Part 2 itself.
 - **Expect variance in speed.** Every lab has an *Extension Exercise* or *Extension Challenge* for fast finishers.
 
 ---
@@ -73,7 +73,7 @@ The 11 skipped .NET tests are intentional stubs that later labs fill in. They ar
 
 Module durations combine a condensed slide intro with the upper end of the lab's stated duration. Breaks and lunch are extra. Start times assume a 9:00 start.
 
-### Day 1: Fundamentals (~7 hours of content)
+### Day 1: Fundamentals (~6 hours of content)
 
 | Time | Duration | Block | Lab |
 |---|---|---|---|
@@ -90,29 +90,30 @@ Module durations combine a condensed slide intro with the upper end of the lab's
 | 15:20 | 15 min | ☕ Break | |
 | 15:35 | 25 min | Module 6: Checkpoints & Rewind | Lab 6 (20) |
 | 16:00 | 30 min | Module 7: Git Workflow & PR Preparation | Lab 7 (20–25) |
-| 16:30 | 45 min | Module 8: Security Review Workflows | Lab 8 (30–35) |
-| 17:15 | 15 min | Day 1 Wrap-Up & Discussion | — |
-| **17:30** | **420 min + 90 min breaks** | | |
+| 16:30 | 15 min | Day 1 Wrap-Up & Discussion | — |
+| **16:45** | **375 min + 90 min breaks** | | |
 
 ### Day 2: Advanced Claude Code (~6 hours of content)
 
 | Time | Duration | Block | Lab |
 |---|---|---|---|
 | 9:00 | 10 min | Day 2 Kickoff & Recap | — |
-| 9:10 | 40 min | Module 9: Permissions, Safety & Hooks | Lab 9 (25–30) |
-| 9:50 | 45 min | Module 10: MCP Servers | Lab 10 (30–35) |
+| 9:10 | 45 min | Module 8: Security Review Workflows | Lab 8 (30–35) |
+| 9:55 | 40 min | Module 9: Permissions, Safety & Hooks | Lab 9 (25–30) |
 | 10:35 | 15 min | ☕ Break | |
-| 10:50 | 45 min | Module 11: Skills | Lab 11 (30–35) |
-| 11:35 | 50 min | Module 12: Custom Subagents & Agent Workflows | Lab 12 (35–40) |
-| 12:25 | 60 min | 🍽️ Lunch | |
-| 13:25 | 40 min | Module 13: Headless & Automation Mode | Lab 13 (25–30) |
-| 14:05 | 30 min | Module 14: Output Styles & Custom Personas | Lab 14 (20–25) |
-| 14:35 | 15 min | ☕ Break | |
-| 14:50 | 75 min | Module 15: Capstone — Team Configuration & Plugins | Lab 15 (60–65) |
-| 16:05 | 15 min | Day 2 Wrap-Up & Next Steps | — |
-| **16:20** | **350 min + 90 min breaks** | | |
+| 10:50 | 45 min | Module 10: MCP Servers | Lab 10 (30–35) |
+| 11:35 | 45 min | Module 11: Skills | Lab 11 (30–35) |
+| 12:20 | 60 min | 🍽️ Lunch | |
+| 13:20 | 50 min | Module 12: Custom Subagents & Agent Workflows | Lab 12 (35–40) |
+| 14:10 | 40 min | Module 13: Headless & Automation Mode | Lab 13 (25–30) |
+| 14:50 | 15 min | ☕ Break | |
+| 15:05 | 75 min | Module 15: Capstone — Team Configuration & Plugins | Lab 15 (60–65) |
+| 16:20 | 15 min | Day 2 Wrap-Up & Next Steps | — |
+| **16:35** | **365 min + 90 min breaks** | | |
 
-Day 1 is the longer day. If you need a 5:00 finish, use the [fast-track options](#timing-adjustments-and-fast-track-options) (moving Lab 3 Part 2 to Day 2 saves about 50 minutes).
+**Self-study:** Module 14 / Lab 14, Output Styles & Custom Personas (20–25 min). It's the least dependent lab. If Day 2 runs ahead, run it live between Modules 13 and 15 (the 16:35 finish becomes about 17:05).
+
+Both days end before 17:00 with about 15 minutes of slack. Day 1 keeps all of Lab 3, so it ends on a feature taken from user story to a committed, PR-ready endpoint. If a day still runs late, use the [fast-track options](#timing-adjustments-and-fast-track-options).
 
 ---
 
@@ -260,30 +261,11 @@ Day 1 is the longer day. If you need a 5:00 finish, use the [fast-track options]
 
 ---
 
-### Lab 8: Security Review Workflows (30–35 min)
-
-**Goal:** Use `/security-review`, fix a real vulnerability, and build a project-specific `/security-checklist` skill.
-
-**Talking points**
-- `/code-review` covers general quality; **`/security-review`** is a single pass focused on vulnerability classes (injection, secrets, broken auth, unsafe input).
-- `/security-review` reviews the **commits on your branch** compared with `origin`'s default branch. Uncommitted work isn't included.
-- A custom skill adds *your* domain knowledge (field names, invariants) on top of a generic review. This is a preview of Day 2's skills lab.
-- CI options: the Claude Code GitHub Action and headless runs (Lab 13).
-
-**Common pitfalls**
-- `ambiguous argument` or "nothing to review": no `origin` remote, or `origin/HEAD` isn't set. Fix with `git fetch origin && git remote set-head origin --auto`. Participants who cloned upstream instead of a fork need to add their fork as `origin`.
-- Nothing found on the deliberately vulnerable code: the code isn't committed yet.
-- Claude fixes the vulnerability before the participant reviews it. Ask for findings only first.
-
-**Checkpoint:** a vulnerability found, fixed, and re-reviewed; `/security-checklist` appears in the `/` menu.
-
----
-
 ### Day 1 Wrap-Up (15 min)
 
 - What surprised you about working with an agent rather than completions?
 - Which permission mode did you settle on, and why?
-- Ask everyone to **commit and push** their branch. Day 2 builds on it.
+- Ask everyone to **commit and push** their branch. Day 2 opens with Lab 8, which reviews those branch commits.
 
 ---
 
@@ -291,7 +273,27 @@ Day 1 is the longer day. If you need a 5:00 finish, use the [fast-track options]
 
 ### Day 2 Kickoff & Recap (10 min)
 
-Recap Day 1 in one slide: memory → TDD → plan → refactor → rewind → git → security. Then frame Day 2: **making Claude Code yours and your team's** with permissions, hooks, MCP, skills, subagents, automation, output styles, and plugins. Show the [decision flow](docs/guides/customization-decision-guide.md#decision-flow).
+Recap Day 1 in one slide: memory → TDD → requirements → code → plan → refactor → rewind → git. Then frame Day 2: a **security review** of Day 1's branch, then **making Claude Code yours and your team's** with permissions, hooks, MCP, skills, subagents, automation, and plugins (output styles are self-study). Show the [decision flow](docs/guides/customization-decision-guide.md#decision-flow).
+
+---
+
+### Lab 8: Security Review Workflows (30–35 min)
+
+**Goal:** Use `/security-review`, fix a real vulnerability, and build a project-specific `/security-checklist` skill.
+
+**Talking points**
+- `/code-review` covers general quality; **`/security-review`** is a single pass focused on vulnerability classes (injection, secrets, broken auth, unsafe input).
+- `/security-review` reviews the **commits on your branch** compared with `origin`'s default branch. Uncommitted work isn't included.
+- A custom skill adds *your* domain knowledge (field names, invariants) on top of a generic review. This previews Lab 11 later in the day.
+- CI options: the Claude Code GitHub Action and headless runs (Lab 13).
+- It opens Day 2 on purpose: participants review the branch they built on Day 1, and the move from *reviewing* for risk to *preventing* it leads straight into Lab 9.
+
+**Common pitfalls**
+- `ambiguous argument` or "nothing to review": no `origin` remote, or `origin/HEAD` isn't set. Fix with `git fetch origin && git remote set-head origin --auto`. Participants who cloned upstream instead of a fork need to add their fork as `origin`.
+- Nothing found on the deliberately vulnerable code: the code isn't committed yet.
+- Claude fixes the vulnerability before the participant reviews it. Ask for findings only first.
+
+**Checkpoint:** a vulnerability found, fixed, and re-reviewed; `/security-checklist` appears in the `/` menu.
 
 ---
 
@@ -392,7 +394,7 @@ Recap Day 1 in one slide: memory → TDD → plan → refactor → rewind → gi
 
 ---
 
-### Lab 14: Output Styles & Custom Personas (20–25 min)
+### Lab 14: Output Styles & Custom Personas (20–25 min, self-study by default)
 
 **Goal:** Change *how* Claude communicates with built-in and custom output styles.
 
@@ -485,12 +487,11 @@ Recap Day 1 in one slide: memory → TDD → plan → refactor → rewind → gi
 
 | Cut / move | Saves | Notes |
 |---|---|---|
-| Move **Lab 3 Part 2** to the start of Day 2 or make it homework | ~50 min on Day 1 | The lab itself suggests this. Day 2 labs don't depend on it, except that Lab 12's chain is more meaningful afterward. |
+| Skip **Lab 3 Part 2, Step 10** (the ADR) and assign it as homework | ~5 min on Day 1 | Keeps the user-story-to-endpoint arc intact. Try this first. |
 | Demo **Lab 6** instead of hands-on | ~15 min | Show `/rewind` live, then discuss the decision table. |
-| Combine **Labs 7 + 8** | ~15 min | Do `/code-review` and the commit, then go straight to `/security-review`; skip the PR description. |
+| Shorten **Lab 7**: skip the PR description | ~10 min | Keep `/code-review` and the conventional commit. |
 | Demo **Lab 10 Part B**; participants do Part C only | ~10 min | Also avoids the Node prerequisite in devcontainers. |
 | Shorten **Lab 13** to Parts A, B, and E | ~10 min | Keep the safety discussion; skip session persistence and CI. |
-| Make **Lab 14** homework | ~30 min | Least dependent lab. |
 | Capstone: build **either** a subagent **or** a skill, and present in a gallery walk | ~15 min | |
 
 ### Fast-track for experienced participants
@@ -521,7 +522,7 @@ By the end of the workshop each participant's branch should contain:
 - A fixed vulnerability and a `/security-checklist` skill (Lab 8)
 - Custom permission rules and hooks (Lab 9), and an MCP config (Lab 10)
 - A custom skill (Lab 11), a custom subagent and a backlog → review → test-plan chain (Lab 12)
-- A headless script or CI sketch (Lab 13), and a custom output style (Lab 14)
+- A headless script or CI sketch (Lab 13), and a custom output style if they did the Lab 14 self-study
 - A team plugin (Lab 15)
 
 ---

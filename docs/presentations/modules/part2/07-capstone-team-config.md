@@ -342,4 +342,4 @@ and ship one specialist in a team plugin. Lab 15 is the starting point.
 ---
 
 <!-- Navigation -->
-[← 14 Output Styles](05-output-styles.md) | **Day 2 Module 15** | Workshop Complete
+[← 13 Headless & Automation](05-headless-automation.md) | **Day 2 Module 15** | Workshop Complete

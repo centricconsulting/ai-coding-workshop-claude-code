@@ -13,11 +13,11 @@ backgroundColor: #fff
 
 # Where We Are
 
-You've completed Day 1: first contact, CLAUDE.md, TDD, plan mode, refactoring, checkpoints & rewind, git workflow, and security review.
+Day 1 covered first contact, CLAUDE.md, TDD, plan mode, refactoring, checkpoints & rewind, and git workflow. Lab 8 just added a security review gate.
 
-In Day 1, you *experienced* permission prompts — Claude Code pausing to ask before running a command.
+So far, you've *experienced* permission prompts — Claude Code pausing to ask before running a command.
 
-**Day 2 starts here: you stop experiencing permissions and start *designing* them.**
+**Now you stop experiencing permissions and start *designing* them.**
 
 ---
 
@@ -368,4 +368,4 @@ not random interruptions, but the boundary you designed.
 ---
 
 <!-- Navigation -->
-[← Day 1 Wrap-Up](../part1/09-wrapup-day1.md) | **Day 2 Module 09** | [Next: 10 MCP Servers →](01-mcp-servers.md)
+[← 08 Security Review](00-security-review.md) | **Day 2 Module 09** | [Next: 10 MCP Servers →](02-mcp-servers.md)

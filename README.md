@@ -12,13 +12,13 @@ Unlike completion-based tools, Claude Code is an agent that reads your codebase,
 
 ### Day 1: Fundamentals (6 hours)
 
-Learn to work with Claude Code as a development partner — setting up project memory with CLAUDE.md, turning requirements into code with TDD, choosing the right permission mode and planning large tasks in Plan Mode, refactoring code with a checkpoint safety net, and integrating Claude Code into your git workflow with a dedicated security review gate. Works with either **.NET 9** or **Spring Boot 3.x**.
+Learn to work with Claude Code as a development partner — setting up project memory with CLAUDE.md, turning requirements into code with TDD, choosing the right permission mode and planning large tasks in Plan Mode, refactoring code with a checkpoint safety net, and integrating Claude Code into your git workflow. Works with either **.NET 9** or **Spring Boot 3.x**.
 
 ### Day 2: Advanced Claude Code (6 hours)
 
-Master advanced Claude Code capabilities: the permissions and safety model, extending Claude Code with MCP servers and Skills, building and chaining custom subagents, headless/automation mode for CI pipelines, output styles, and a capstone where you build your own subagent or skill and package it as a plugin.
+Master advanced Claude Code capabilities: a dedicated security review gate, the permissions and safety model, extending Claude Code with MCP servers and Skills, building and chaining custom subagents, headless/automation mode for CI pipelines, and a capstone where you build your own subagent or skill and package it as a plugin. Output styles (Lab 14) are self-study.
 
-**Full workshop duration:** about 13 hours of instruction across two days (plus breaks)
+**Full workshop duration:** about 12 hours of instruction across two days (plus breaks)
 
 **What makes this workshop unique:**
 - **Agentic-first mental model** — teaches the trust-and-verify workflow, not just "how to prompt"
@@ -91,19 +91,19 @@ By the end of Day 1, participants will be able to:
 - **Recover from a bad edit** using checkpoints and rewind, without touching git
 - **Manage context** with `/compact`, session continuity, and scoped tasks
 - **Integrate with git** — conventional commits, PR descriptions, `/code-review`
-- **Run a dedicated security review** with `/security-review` before code goes out as a PR
 
 ### Day 2: Advanced Claude Code
 
 By the end of Day 2, participants will be able to:
 
+- **Run a dedicated security review** with `/security-review` before code goes out as a PR
 - **Navigate the permissions model** — allow/deny tool use, understand safety boundaries
 - **Automate workflows with hooks** — pre/post-tool hooks in `.claude/settings.json`
 - **Configure MCP servers** — extend Claude Code with GitHub MCP, filesystem MCP, and custom tools
 - **Package reusable procedures as Skills** — SKILL.md, progressive disclosure, when to use a skill vs. MCP vs. CLAUDE.md
 - **Build and chain custom subagents** — use the shipped `backlog-generator`, `architecture-reviewer`, and `test-strategist` agents, and design your own with least-privilege tools
 - **Use headless/automation mode** — `-p`, `--output-format`, `--continue`, CI pipeline integration
-- **Customize how Claude Code communicates** with output styles
+- **Customize how Claude Code communicates** with output styles *(self-study, Lab 14)*
 - **Design and share a team configuration** — encode standards in CLAUDE.md and rules, then package a subagent or skill as a plugin
 
 ---
@@ -112,7 +112,7 @@ By the end of Day 2, participants will be able to:
 
 Each numbered module below is a short slide intro *and* its matching hands-on lab, delivered back-to-back as one time block — the duration shown is the combined total (condensed intro plus the upper end of the lab's stated duration). See the [Presentations Catalog](docs/presentations/index.md) for full slide-only durations and the [Facilitator Guide](FACILITATOR_GUIDE.md) for an agenda with breaks and fast-track options.
 
-### Day 1: Fundamentals (~7 hours plus breaks)
+### Day 1: Fundamentals (~6 hours plus breaks)
 
 | Module | Duration |
 |---|---|
@@ -125,24 +125,25 @@ Each numbered module below is a short slide intro *and* its matching hands-on la
 | **Module 5**: Multi-File Refactoring & Context Management *(+ Lab 5)* | 60 min |
 | **Module 6**: Checkpoints & Rewind *(+ Lab 6)* | 25 min |
 | **Module 7**: Git Workflow & PR Preparation *(+ Lab 7)* | 30 min |
-| **Module 8**: Security Review Workflows *(+ Lab 8)* | 45 min |
 | Day 1 Wrap-Up & Discussion | 15 min |
-| **Day 1 total** | **420 min** |
+| **Day 1 total** | **375 min** |
 
 ### Day 2: Advanced Claude Code (~6 hours plus breaks)
 
 | Module | Duration |
 |---|---|
 | Day 2 Kickoff & Recap | 10 min |
+| **Module 8**: Security Review Workflows *(+ Lab 8)* | 45 min |
 | **Module 9**: Permissions, Safety & Hooks *(+ Lab 9)* | 40 min |
 | **Module 10**: MCP Servers *(+ Lab 10)* | 45 min |
 | **Module 11**: Skills *(+ Lab 11)* | 45 min |
 | **Module 12**: Custom Subagents & Agent Workflows *(+ Lab 12)* | 50 min |
 | **Module 13**: Headless & Automation Mode *(+ Lab 13)* | 40 min |
-| **Module 14**: Output Styles & Custom Personas *(+ Lab 14)* | 30 min |
 | **Module 15**: Capstone — Team Configuration & Plugins *(+ Lab 15)* | 75 min |
 | Day 2 Wrap-Up & Next Steps | 15 min |
-| **Day 2 total** | **350 min** |
+| **Day 2 total** | **365 min** |
+
+**Self-study:** Module 14, Output Styles & Custom Personas *(+ Lab 14, 20–25 min)*. It's the least dependent lab, so it's done after the workshop. Facilitators with spare time can run it between Modules 13 and 15.
 
 Module numbers here match each module's lab number exactly (Module 9 pairs with Lab 9, Module 15 with Lab 15, and so on) — the only exception is Lab 1, which has no dedicated module of its own and follows directly after the Day 1 intro.
 
@@ -152,7 +153,7 @@ Module numbers here match each module's lab number exactly (Module 9 pairs with 
 
 ### Lab Guides
 
-#### Day 1: Fundamentals (Labs 1–8)
+#### Day 1: Fundamentals (Labs 1–7)
 
 - **[Lab 1: First Contact](docs/labs/lab-01-first-contact.md)** (20–25 min) — Install, authenticate, first run, slash commands, permission modes and prompts
 - **[Lab 2: CLAUDE.md & Project Memory](docs/labs/lab-02-claude-md-memory.md)** (40–45 min) — Project/subdir/user hierarchy, `/init`, imports, path-scoped `.claude/rules/`
@@ -161,24 +162,24 @@ Module numbers here match each module's lab number exactly (Module 9 pairs with 
 - **[Lab 5: Multi-File Refactoring](docs/labs/lab-05-refactoring-and-context.md)** (45–50 min) — Legacy code, context management, `/context`, `/compact`
 - **[Lab 6: Checkpoints & Rewind](docs/labs/lab-06-checkpoints-and-rewind.md)** (20 min) — Session-level undo with `/rewind`, separate from git
 - **[Lab 7: Git Workflow & PR Preparation](docs/labs/lab-07-git-workflow.md)** (20–25 min) — Conventional commits, `/code-review`, PR descriptions
+
+#### Day 2: Advanced Claude Code (Labs 8–15)
+
 - **[Lab 8: Security Review Workflows](docs/labs/lab-08-security-review-workflows.md)** (30–35 min) — `/security-review`, a project-specific security skill
-
-#### Day 2: Advanced Claude Code (Labs 9–15)
-
 - **[Lab 9: Permissions, Safety & Hooks](docs/labs/lab-09-permissions-and-hooks.md)** (25–30 min) — Permission rules and modes, `.claude/settings.json`, hooks
 - **[Lab 10: MCP Servers](docs/labs/lab-10-mcp-servers.md)** (30–35 min) — Configure and use MCP servers (including GitHub's) with Claude Code
 - **[Lab 11: Skills](docs/labs/lab-11-skills.md)** (30–35 min) — SKILL.md, progressive disclosure, the shipped `test-data-generator` skill, building your own
 - **[Lab 12: Custom Subagents & Agent Workflows](docs/labs/lab-12-sub-agents.md)** (35–40 min) — Built-in subagents, the shipped `.claude/agents/`, chaining backlog → architecture review → test strategy
 - **[Lab 13: Headless & Automation Mode](docs/labs/lab-13-headless-automation.md)** (25–30 min) — `-p`, output formats, piping, CI integration with GitHub Actions
-- **[Lab 14: Output Styles & Custom Personas](docs/labs/lab-14-output-styles-and-personas.md)** (20–25 min) — Persistent tone/behavior customization
+- **[Lab 14: Output Styles & Custom Personas](docs/labs/lab-14-output-styles-and-personas.md)** (20–25 min, self-study) — Persistent tone/behavior customization
 - **[Lab 15: Capstone — Team Configuration](docs/labs/lab-15-capstone-team-config.md)** (60–65 min) — Design a team config, build your own subagent or skill, and package it as a plugin
 
 ### Presentation Decks
 
 Presentations use [Marp](https://marp.app/) format. View in VS Code with the [Marp extension](https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode).
 
-- **[Day 1 Modules](docs/presentations/modules/part1/)** — 10 standalone modules
-- **[Day 2 Modules](docs/presentations/modules/part2/)** — 7 standalone modules
+- **[Day 1 Modules](docs/presentations/modules/part1/)** — 9 standalone modules
+- **[Day 2 Modules](docs/presentations/modules/part2/)** — 8 standalone modules
 - **[Presentations Catalog](docs/presentations/index.md)** — delivery patterns and timing
 
 ### Participant Guides

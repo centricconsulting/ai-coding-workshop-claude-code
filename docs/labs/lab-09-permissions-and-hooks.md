@@ -22,7 +22,7 @@ Claude Code's permissions model is a safety boundary between "Claude Code can su
 
 ## Prerequisites
 
-- Completed Day 1 (Labs 1–8)
+- Completed Day 1 (Labs 1–7) and Lab 8
 - Familiar with the permission prompts from Lab 1
 - **`jq` installed** — every hook in this lab parses its JSON input with `jq`. Check with `jq --version`. If it's missing: `brew install jq` (macOS), `sudo apt-get install -y jq` (Debian/Ubuntu/dev container), or `winget install jqlang.jq` (Windows). Without `jq`, the hooks fail with a non-blocking `jq: command not found` error and do nothing.
 
