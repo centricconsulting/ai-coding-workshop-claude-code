@@ -96,7 +96,7 @@ Headless runs can't ask "May I?", so you decide permissions **before** the run s
 |---|---|---|
 | `--allowedTools` | Pre-approve specific tools/commands (permission rule syntax) | `--allowedTools "Read,Bash(dotnet test *)"` |
 | `--disallowedTools` | Deny or remove tools for this run | `--disallowedTools "Edit,Write"` |
-| `--permission-mode` | Baseline mode: `default`, `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions` | `--permission-mode dontAsk` |
+| `--permission-mode` | Baseline mode: `manual` (alias `default`), `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions` | `--permission-mode dontAsk` |
 | `--max-turns` | Cap the number of agentic turns (exits with an error when reached) | `--max-turns 5` |
 | `--max-budget-usd` | Stop once estimated spend reaches a limit | `--max-budget-usd 0.50` |
 | `--append-system-prompt` | Add instructions for this run only | `--append-system-prompt "Be terse."` |

@@ -9,7 +9,7 @@ namespace TaskManager.Application.Services;
 
 /// <summary>
 /// Application service for task management
-/// This will be used in Lab 2: Requirements → Backlog → Code
+/// AddTaskAsync is implemented in Lab 3, Part 2 (Requirements → Code); the other methods are extension work
 /// 
 /// Includes OpenTelemetry ActivitySource for observability demonstrations
 /// </summary>
@@ -27,7 +27,7 @@ public sealed class TaskService
 
     /// <summary>
     /// Add a new task to the system
-    /// TODO: This method will be implemented during Lab 2 with Claude Code assistance
+    /// TODO: This method will be implemented during Lab 3, Part 2 with Claude Code assistance
     /// 
     /// Note: Includes OpenTelemetry activity for observability demonstration
     /// </summary>
@@ -47,7 +47,7 @@ public sealed class TaskService
         // 6. Add activity tags for observability
         
         _logger.LogInformation("AddTaskAsync called with title: {Title}", title);
-        throw new NotImplementedException("This will be implemented during Lab 2");
+        throw new NotImplementedException("This will be implemented during Lab 3, Part 2");
     }
 
     /// <summary>

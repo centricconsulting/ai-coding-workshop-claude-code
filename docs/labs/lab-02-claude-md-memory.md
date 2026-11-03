@@ -172,7 +172,7 @@ paths:
 | Shipped rule | `paths:` | Loads when… |
 |---|---|---|
 | `dotnet.md` | `src-dotnet/src/**/*.cs`, `src-dotnet/tests/**/*.cs`, `**/*.csproj` | Claude reads/edits a C# or project file |
-| `springboot.md` | `src-springboot/**/*.java`, `pom.xml`, `*.{yml,yaml,properties}` | Claude reads/edits Java, POM, or config files in the Spring Boot tree |
+| `springboot.md` | `src-springboot/**/*.java`, `src-springboot/**/pom.xml`, `src-springboot/**/*.{yml,yaml,properties}` | Claude reads/edits Java, POM, or config files in the Spring Boot tree |
 | `follow-up-questions.md` | *(none)* | Every session, at launch |
 
 Notes:
@@ -208,9 +208,11 @@ Keep it under 15 lines.
 Now trigger it. Start a fresh session (`/clear`) and ask:
 
 ```
-Show me (don't write it yet) a small Effort value object (Small, Medium, Large)
-for the domain layer of my stack.
+Read the Task class in my stack's domain layer, then show me (don't write it yet)
+a small Effort value object (Small, Medium, Large) for that layer.
 ```
+
+The first half matters: a path-scoped rule stays out of context until Claude reads or edits a matching file. Reading `Task.cs` / `Task.java` is what pulls `domain-layer.md` in.
 
 Check the proposal against your rule: Is there a `FromName`/`fromString`? Does the error message list valid values? Then ask:
 
@@ -234,7 +236,7 @@ The `src-dotnet/tests/` directory currently has no `CLAUDE.md`. You'll write one
 Read the test projects in the src-dotnet/tests/ directory and describe the current test structure, what frameworks are used, and what testing patterns you observe.
 ```
 
-Claude Code will read the test project files and give you a summary. (Expect xUnit v3 + FakeItEasy, and test methods that are currently `Skip` stubs — `dotnet test` reports them as skipped until you implement them in Labs 3 and 5.)
+Claude Code will read the test project files and give you a summary. (Expect xUnit v3 + FakeItEasy, mostly `Skip` stubs that `dotnet test` reports as skipped until you implement them in Labs 3 and 5, and one passing `/health` integration test in `HealthEndpointTests.cs`.)
 
 ### D.2 Draft and Write `src-dotnet/tests/CLAUDE.md`
 

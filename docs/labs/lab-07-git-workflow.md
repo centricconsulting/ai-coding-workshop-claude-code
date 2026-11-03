@@ -17,7 +17,7 @@
 ## Prerequisites
 
 - Completed Labs 1–6
-- Uncommitted changes from Labs 3, 5, and 6 on your personal branch
+- Labs 3–6 committed on your personal branch, as each lab suggests. Step 1 reviews those commits; Step 2 creates the uncommitted changes you'll stage and commit in Steps 3–4.
 - `gh` CLI installed and authenticated (`gh auth status`) — needed only for the optional PR steps
 
 ---
@@ -118,7 +118,7 @@ git status
 git diff --stat
 ```
 
-Stage the files:
+You should see Step 2's doc-comment changes (plus any fixes from Step 1). Stage them:
 
 ```bash
 git add src-dotnet/      # .NET changes (src/ and tests/)
@@ -147,21 +147,23 @@ Claude Code will read the actual diff and produce a message grounded in what cha
 ### 4.1 Example Output
 
 ```
-refactor(legacy): modernize LegacyTaskProcessor with guard clauses and extracted methods
+docs: document NotificationService and LegacyTaskProcessor
 
-Replace nested conditionals with early-return guard clauses throughout LegacyTaskProcessor.
-Rename abbreviated members (Chk, _rdy, _cnt) and extract the case-inversion and
-sentence-case transforms into private methods. Update LegacyBatchImportService callers.
-Add characterization tests covering all existing behavior paths before refactoring.
+Add XML documentation comments to the public members of NotificationService and the
+refactored LegacyTaskProcessor. Cover the null-task guard clauses, that SendBothAsync
+stops at the first channel that fails, and the 50- and 500-character limits in the
+legacy processor.
 
-All characterization tests pass. No logic changes — behavior is preserved.
+No code changes.
 ```
+
+The story of the whole branch goes in the PR description in Step 5, which draws on every commit since `main`.
 
 Adjust the message if anything is off, then commit:
 
 ```bash
 git commit -m "$(cat <<'EOF'
-refactor(legacy): modernize LegacyTaskProcessor with guard clauses and extracted methods
+docs: document NotificationService and LegacyTaskProcessor
 
 ...your message body...
 EOF

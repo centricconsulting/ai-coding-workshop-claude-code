@@ -143,7 +143,7 @@ Press **Shift+Tab** a few times and watch the mode indicator below the prompt ch
 | **Accept edits** (`acceptEdits`) | File edits are auto-approved; other commands still ask |
 | **Plan** (`plan`) | Claude researches and proposes a plan without changing anything (Lab 4) |
 
-For Part D, cycle to **Manual** mode so you can see permission prompts. (You can also start a session in Manual mode with `claude --permission-mode default`.)
+For Part D, cycle to **Manual** mode so you can see permission prompts. (You can also start a session in Manual mode with `claude --permission-mode manual`.)
 
 ### C.3 Keyboard Shortcuts
 
@@ -266,7 +266,7 @@ Notice that Claude Code will read files from both directories before responding.
 - In a devcontainer, see `.devcontainer/README.md` for forwarding `CLAUDE_CODE_OAUTH_TOKEN` or `ANTHROPIC_API_KEY`
 
 **Never see a permission prompt**
-- You're probably in **Auto** mode — press Shift+Tab until the indicator shows Manual, or restart with `claude --permission-mode default`
+- You're probably in **Auto** mode — press Shift+Tab until the indicator shows Manual, or restart with `claude --permission-mode manual`
 - `dotnet`/`mvn` commands are pre-approved in `.claude/settings.json`; try a file write instead
 
 **Hook errors mentioning `jq`**

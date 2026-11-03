@@ -51,7 +51,7 @@ section { font-size: 22px; }
 
 | Mode | Runs without asking | Use for |
 |---|---|---|
-| `default` (**Manual**) | Reads only | Reviewing every action |
+| `manual` (alias `default`) | Reads only | Reviewing every action |
 | `acceptEdits` | Reads + file edits + `mkdir`/`mv`/`cp` | Iterating on code you review |
 | `plan` | Read-only exploration | Plan before you change (Lab 4) |
 | `auto` | Everything, checked by a safety classifier | Long tasks, less prompt fatigue |

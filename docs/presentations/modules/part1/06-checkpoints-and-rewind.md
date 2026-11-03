@@ -159,7 +159,7 @@ not a selective merge of good parts and bad parts.
 
 1. Confirm your Lab 5 refactor is the "last-good" state
 2. Ask for a deliberately over-broad follow-up edit
-3. Confirm it did real damage (failing characterization tests)
+3. Find what it changed: the tests may still pass, so read the diff too
 4. Rewind back to last-good — no git involved
 5. Diff before/after to confirm full recovery
 6. Watch a Bash-made file survive a rewind
@@ -171,7 +171,7 @@ not a selective merge of good parts and bad parts.
 👉 Open [docs/labs/lab-06-checkpoints-and-rewind.md](../../../labs/lab-06-checkpoints-and-rewind.md)
 
 **Goal for the next 20 minutes:**
-- A damaged multi-file edit, recovered using rewind alone
+- An over-broad edit, found in the diff and recovered using rewind alone
 - A clear mental model of rewind vs. `git stash` vs. `git reset --hard`
 
 ---
