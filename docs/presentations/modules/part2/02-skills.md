@@ -25,6 +25,10 @@ A Skill doesn't add a new capability the way MCP does. It packages a procedure â
 
 # The Extension-Mechanism Spectrum
 
+<style scoped>
+section { font-size: 26px; }
+</style>
+
 | Mechanism | Loaded | Best For |
 |---|---|---|
 | **CLAUDE.md** | Every turn | Context, conventions, project knowledge |
@@ -78,6 +82,10 @@ Request: $ARGUMENTS   Entity: $entity   Count: $count
 ---
 
 # Key Frontmatter
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 | Field | What it does |
 |---|---|
@@ -133,6 +141,10 @@ A forked skill that only contains guidelines (no task) returns nothing useful.
 ---
 
 # Lab 11 Preview
+
+<style scoped>
+section { font-size: 25px; }
+</style>
 
 ## What You'll Do
 

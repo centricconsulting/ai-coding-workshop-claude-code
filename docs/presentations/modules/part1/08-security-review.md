@@ -40,6 +40,10 @@ Correctness-focused. Security is not its job.
 
 # `/security-review`: Purpose-Built
 
+<style scoped>
+section { font-size: 27px; }
+</style>
+
 ```
 /security-review
 ```
@@ -113,6 +117,10 @@ Reject with `403 Forbidden` otherwise.
 
 # Beyond Generic: Project-Specific Risk
 
+<style scoped>
+section { font-size: 25px; }
+</style>
+
 `/security-review` doesn't know TaskManager's specific risk areas.
 
 This lab creates the repo's **first custom security artifact** — a skill:
@@ -182,6 +190,10 @@ always get `/security-checklist`, not just `/code-review`.
 ---
 
 # Security in Layers: Team & CI Options
+
+<style scoped>
+section { font-size: 22px; }
+</style>
 
 | Stage | Tool |
 |---|---|

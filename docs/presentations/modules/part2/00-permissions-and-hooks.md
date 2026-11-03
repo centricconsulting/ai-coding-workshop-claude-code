@@ -45,6 +45,10 @@ Permissions are enforced by **Claude Code**, not the model — CLAUDE.md can't g
 
 # Permission Modes — Your Autonomy Dial
 
+<style scoped>
+section { font-size: 22px; }
+</style>
+
 | Mode | Runs without asking | Use for |
 |---|---|---|
 | `default` (**Manual**) | Reads only | Reviewing every action |
@@ -104,6 +108,23 @@ Use `Edit(path)` / `Read(path)` for files — `Write(path)` rules never match.
 
 # What Belongs in Each List
 
+<style scoped>
+section { font-size: 27px; }
+</style>
+
+<style scoped>
+section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; align-content: start; }
+h1 { grid-column: 1 / -1; grid-row: 1; }
+p:nth-of-type(1) { grid-column: 1; grid-row: 2; }
+ul:nth-of-type(1) { grid-column: 1; grid-row: 3; }
+p:nth-of-type(2) { grid-column: 1; grid-row: 4; }
+ul:nth-of-type(2) { grid-column: 1; grid-row: 5; }
+p:nth-of-type(3) { grid-column: 2; grid-row: 2; }
+ul:nth-of-type(3) { grid-column: 2; grid-row: 3; }
+p:nth-of-type(4) { grid-column: 2; grid-row: 4 / span 2; }
+p:nth-of-type(5) { grid-column: 2; grid-row: 6; }
+</style>
+
 **Allow (no prompt needed):**
 - Build and test commands (`dotnet build`, `mvn test`)
 - Routine git (`git add`, `git commit`)
@@ -124,6 +145,10 @@ Need OS-level isolation for shell commands? `/sandbox` (macOS, Linux, WSL2).
 ---
 
 # Hooks: Deterministic Automation
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 Hooks run **your** command at fixed points in Claude Code's lifecycle.
 CLAUDE.md *asks* Claude to do something — a hook *guarantees* it.
@@ -150,6 +175,19 @@ Handler types: `command` · `http` · `mcp_tool` · `prompt` · `agent` (experim
 
 # Hook Events
 
+<style scoped>
+section { font-size: 22px; }
+</style>
+
+<style scoped>
+section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; align-content: start; }
+h1 { grid-column: 1 / -1; grid-row: 1; }
+table { grid-row: 2; align-self: start; display: table; width: 100%; }
+table:nth-of-type(1) { grid-column: 1; }
+table:nth-of-type(2) { grid-column: 2; }
+p { grid-column: 1 / -1; grid-row: 3; }
+</style>
+
 | Event | When it fires |
 |---|---|
 | `SessionStart` / `SessionEnd` | Session begins (or resumes/clears) / ends |
@@ -157,6 +195,9 @@ Handler types: `command` · `http` · `mcp_tool` · `prompt` · `agent` (experim
 | `PreToolUse` | Before a tool call — **can block it** |
 | `PermissionRequest` | A permission prompt is about to appear |
 | `PostToolUse` / `PostToolUseFailure` | After a tool call succeeds / fails |
+
+| Event | When it fires |
+|---|---|
 | `Notification` | Claude Code needs your attention |
 | `SubagentStart` / `SubagentStop` | A subagent starts / finishes |
 | `Stop` | Claude finishes responding |
@@ -192,6 +233,10 @@ There is **no** `$CLAUDE_TOOL_INPUT` variable — input only arrives on stdin.
 
 # Hook Output: Exit Codes
 
+<style scoped>
+section { font-size: 25px; }
+</style>
+
 | Exit | Meaning |
 |---|---|
 | `0` | Success — action proceeds (JSON on stdout is applied) |
@@ -214,6 +259,10 @@ Or exit 0 with a JSON decision:
 ---
 
 # Blocking Example: Protect Files
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 ```bash
 #!/bin/bash
@@ -259,6 +308,10 @@ f=$(jq -r '.tool_input.file_path // empty'); case "$f" in */tests/TaskManager.Un
 
 # When NOT to Write a Hook
 
+<style scoped>
+section { font-size: 26px; }
+</style>
+
 **Good hook candidates:**
 - Code formatters (idempotent, fast, non-interactive)
 - Audit logs (read-only side effect)
@@ -277,6 +330,10 @@ Hooks run with your user's permissions — review them like code.
 ---
 
 # Lab 9 Preview
+
+<style scoped>
+section { font-size: 26px; }
+</style>
 
 ## What You'll Do
 

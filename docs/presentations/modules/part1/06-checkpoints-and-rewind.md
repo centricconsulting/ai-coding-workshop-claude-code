@@ -40,6 +40,10 @@ It exists purely so *you* can undo what Claude did, *in this session*.
 
 # Rewind
 
+<style scoped>
+section { font-size: 27px; }
+</style>
+
 ```
 Esc Esc          (double-tap Escape on an empty prompt)
 /rewind          (aliases: /checkpoint, /undo)
@@ -118,6 +122,10 @@ This is a normal, recoverable outcome — not a crisis.
 ---
 
 # Decision Table: Which Tool, When
+
+<style scoped>
+section { font-size: 22px; }
+</style>
 
 | Situation | Best tool |
 |---|---|

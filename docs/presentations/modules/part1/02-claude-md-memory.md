@@ -54,6 +54,10 @@ Claude Code loads it automatically whenever it works in `src-dotnet/`.
 
 # The Memory Model
 
+<style scoped>
+section { font-size: 27px; }
+</style>
+
 | Scope | Location | Shared with |
 |---|---|---|
 | Managed policy | OS-level path set by IT | Whole organization |
@@ -91,6 +95,12 @@ paths:
 - File-scoped namespaces, sealed by default, guard clauses ...
 ```
 
+`paths` is the only frontmatter field rules use. Globs support `**` and `{a,b}`.
+
+---
+
+# Path-Scoped Rules in This Repo
+
 Shipped in this repo:
 
 | Rule | Loads when Claude touches… |
@@ -98,8 +108,6 @@ Shipped in this repo:
 | `dotnet.md` | `src-dotnet/src/**/*.cs`, `src-dotnet/tests/**/*.cs`, `**/*.csproj` |
 | `springboot.md` | `src-springboot/**/*.java`, `pom.xml`, `*.{yml,yaml,properties}` |
 | `follow-up-questions.md` | *(no `paths:` → every session)* |
-
-`paths` is the only frontmatter field rules use. Globs support `**` and `{a,b}`.
 
 ---
 
@@ -132,6 +140,10 @@ Git workflow: @docs/git-instructions.md
 ---
 
 # What Does NOT Belong in CLAUDE.md
+
+<style scoped>
+section { font-size: 23px; }
+</style>
 
 **Don't put these in CLAUDE.md:**
 
@@ -171,6 +183,10 @@ and write doc comments if you don't tell it not to.
 ---
 
 # Before and After: A Real Example
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 **Without CLAUDE.md** — Claude Code produces:
 

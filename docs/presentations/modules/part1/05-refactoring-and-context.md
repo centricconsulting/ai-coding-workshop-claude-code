@@ -13,6 +13,10 @@ backgroundColor: #fff
 
 # The Problem: Refactoring at Scale
 
+<style scoped>
+section { font-size: 22px; }
+</style>
+
 LegacyTaskProcessor has several problems:
 
 ```csharp
@@ -60,6 +64,10 @@ Claude Code:
 
 # The Phased Approach
 
+<style scoped>
+section { font-size: 26px; }
+</style>
+
 ```
 Phase 1: Characterize
   → Write tests for existing behavior (warts and all)
@@ -106,6 +114,20 @@ They're not testing good design — they're testing current behavior.
 
 # The Subtle Bug to Find
 
+<style scoped>
+section { font-size: 27px; }
+</style>
+
+<style scoped>
+section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; align-content: start; }
+h1 { grid-column: 1 / -1; grid-row: 1; }
+p:nth-of-type(1) { grid-column: 1; grid-row: 2; }
+pre { grid-column: 1; grid-row: 3 / span 3; align-self: start; }
+p:nth-of-type(2) { grid-column: 2; grid-row: 2 / span 2; }
+p:nth-of-type(3) { grid-column: 2; grid-row: 4; }
+p:nth-of-type(4) { grid-column: 2; grid-row: 5; }
+</style>
+
 `LegacyTaskProcessor` has a bug in `Chk()` (or `chk()`):
 
 ```csharp
@@ -133,6 +155,10 @@ A characterization test will expose this. The refactoring should fix it.
 
 # Context Management: See It First with `/context`
 
+<style scoped>
+section { font-size: 22px; }
+</style>
+
 A refactoring session builds up a lot of context:
 - Files read
 - Test output from multiple runs
@@ -156,6 +182,10 @@ But the automatic summary guesses what matters — details from
 
 # The Context Toolkit
 
+<style scoped>
+section { font-size: 22px; }
+</style>
+
 | Command | What it does |
 |---|---|
 | `/context` | Visualize what's filling the window |
@@ -175,6 +205,10 @@ Need continuity → compact. Starting something new → clear.
 ---
 
 # When to Use `/compact`
+
+<style scoped>
+section { font-size: 23px; }
+</style>
 
 **Good time to compact:**
 - After a phase completes (you've committed, tests pass)
@@ -196,6 +230,10 @@ The characterization tests are passing. Focus on `ProcessTask`."*
 
 # Reviewing Phase Diffs
 
+<style scoped>
+section { font-size: 27px; }
+</style>
+
 At each phase boundary, before committing:
 
 ```bash
@@ -215,6 +253,10 @@ For Phase 2 (rename only):
 ---
 
 # What "Minimal Change" Looks Like
+
+<style scoped>
+section { font-size: 25px; }
+</style>
 
 **Phase 2 extract: before**
 ```csharp
@@ -241,6 +283,10 @@ The logic is identical. The structure is readable. Tests still pass.
 ---
 
 # The Lab 5 Target
+
+<style scoped>
+section { font-size: 22px; }
+</style>
 
 By the end of Lab 5, `LegacyTaskProcessor` should:
 

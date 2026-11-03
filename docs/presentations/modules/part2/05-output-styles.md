@@ -39,6 +39,10 @@ Applies to every response until you switch it.
 
 # Where Output Styles Live
 
+<style scoped>
+section { font-size: 26px; }
+</style>
+
 ```
 .claude/output-styles/
   <style-name>.md
@@ -89,6 +93,10 @@ Good fit when the *same tone* should apply across many prompts and many sessions
 
 # Anatomy of a Custom Style
 
+<style scoped>
+section { font-size: 23px; }
+</style>
+
 ```markdown
 ---
 name: code-reviewer
@@ -114,6 +122,10 @@ Concrete rules beat vague ones — "no sentence over 15 words" changes behavior;
 
 # Standardize or Leave Personal?
 
+<style scoped>
+section { font-size: 23px; }
+</style>
+
 Output styles raise a governance question Skills don't: this is a *default persona for the whole session*, not a narrow procedure.
 
 | Question | Consider |
@@ -127,6 +139,10 @@ Output styles raise a governance question Skills don't: this is a *default perso
 ---
 
 # Setting Up the Capstone
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 By the end of Module 14, you have the **complete customization toolkit**:
 

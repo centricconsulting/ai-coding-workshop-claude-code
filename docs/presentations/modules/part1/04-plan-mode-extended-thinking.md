@@ -44,6 +44,10 @@ instead of reviewing a plan to decide what should happen.
 
 # Permission Modes = Interaction Models
 
+<style scoped>
+section { font-size: 27px; }
+</style>
+
 | Mode | Status bar | Runs without asking | Copilot analogue |
 |---|---|---|---|
 | `default` (**Manual**) | `⏸ manual mode on` | Reads only | **Ask** — but can act once you approve |
@@ -77,6 +81,10 @@ claude --permission-mode plan        # start in plan mode
 ---
 
 # Plan Mode: Edits Wait for Your Approval
+
+<style scoped>
+section { font-size: 25px; }
+</style>
 
 - ✅ Reads files, searches, explores
 - ✅ Shell commands: classifier-approved when auto mode is available, otherwise read-only commands only (others ask)

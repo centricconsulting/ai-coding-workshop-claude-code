@@ -32,6 +32,10 @@ Claude Code is not predicting text — it's **executing a plan**.
 
 # The Core Tools
 
+<style scoped>
+section { font-size: 22px; }
+</style>
+
 | Tool | What It Does |
 |---|---|
 | `Read` | Read a file (respects context window) |
@@ -70,6 +74,10 @@ Every action is **visible** — and, depending on your permission mode, **approv
 
 # What Gets Prompted vs. What Runs Freely
 
+<style scoped>
+section { font-size: 24px; }
+</style>
+
 It depends on the **permission mode** — cycle with `Shift+Tab`:
 
 | Mode | Runs without asking |
@@ -106,6 +114,10 @@ Turn 3: "Write tests for it"
 
 # Essential Slash Commands
 
+<style scoped>
+section { font-size: 24px; }
+</style>
+
 | Command | When to Use |
 |---|---|
 | `/help` | List all available commands (type `/` to browse) |
@@ -123,6 +135,10 @@ Turn 3: "Write tests for it"
 
 # Configuration Commands (Day 2)
 
+<style scoped>
+section { font-size: 27px; }
+</style>
+
 | Command | What it manages |
 |---|---|
 | `/permissions` | Allow / ask / deny rules |
@@ -138,6 +154,10 @@ Turn 3: "Write tests for it"
 ---
 
 # Models and Effort
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 ```
 /model            # picker: opus, sonnet, haiku, opusplan, ...
@@ -228,6 +248,10 @@ Directing Claude Code precisely enough that its output is right the first time.
 ---
 
 # The Bilingual Setup
+
+<style scoped>
+section { font-size: 27px; }
+</style>
 
 This workshop has two parallel stacks:
 
