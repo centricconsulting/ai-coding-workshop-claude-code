@@ -4,7 +4,7 @@ Presentations use [Marp](https://marp.app/) format. View with the [Marp VS Code 
 
 ---
 
-## Day 1: Fundamentals (~7 hours)
+## Day 1: Fundamentals (~6 hours)
 
 | Module | File | Duration | Labs Covered |
 |---|---|---|---|
@@ -16,10 +16,9 @@ Presentations use [Marp](https://marp.app/) format. View with the [Marp VS Code 
 | 05 Refactoring & Context | [05-refactoring-and-context.md](modules/part1/05-refactoring-and-context.md) | 15 min | Lab 5 |
 | 06 Checkpoints & Rewind | [06-checkpoints-and-rewind.md](modules/part1/06-checkpoints-and-rewind.md) | 15 min | Lab 6 |
 | 07 Git Workflow | [07-git-workflow.md](modules/part1/07-git-workflow.md) | 10 min | Lab 7 |
-| 08 Security Review | [08-security-review.md](modules/part1/08-security-review.md) | 15 min | Lab 8 |
-| 09 Day 1 Wrap-Up | [09-wrapup-day1.md](modules/part1/09-wrapup-day1.md) | 15 min | — |
+| 08 Day 1 Wrap-Up | [08-wrapup-day1.md](modules/part1/08-wrapup-day1.md) | 15 min | — |
 
-**Day 1 Total**: ~7 hours including lab time (slides are condensed to ~5–10 min intros when run back-to-back with labs — see the [README schedule](../../README.md#schedule) and [Facilitator Guide](../../FACILITATOR_GUIDE.md))
+**Day 1 Total**: ~6 hours including lab time (slides are condensed to ~5–10 min intros when run back-to-back with labs — see the [README schedule](../../README.md#schedule) and [Facilitator Guide](../../FACILITATOR_GUIDE.md))
 
 ---
 
@@ -27,21 +26,22 @@ Presentations use [Marp](https://marp.app/) format. View with the [Marp VS Code 
 
 | Module | File | Duration | Labs Covered |
 |---|---|---|---|
-| 00 Permissions, Safety & Hooks | [00-permissions-and-hooks.md](modules/part2/00-permissions-and-hooks.md) | 25 min | Lab 9 |
-| 01 MCP Servers | [01-mcp-servers.md](modules/part2/01-mcp-servers.md) | 20 min | Lab 10 |
-| 02 Skills | [02-skills.md](modules/part2/02-skills.md) | 20 min | Lab 11 |
-| 03 Custom Subagents & Agent Workflows | [03-sub-agents.md](modules/part2/03-sub-agents.md) | 20 min | Lab 12 |
-| 04 Headless & Automation | [04-headless-automation.md](modules/part2/04-headless-automation.md) | 15 min | Lab 13 |
-| 05 Output Styles | [05-output-styles.md](modules/part2/05-output-styles.md) | 15 min | Lab 14 |
-| 06 Capstone — Team Configuration & Plugins | [06-capstone-team-config.md](modules/part2/06-capstone-team-config.md) | 15 min | Lab 15 |
+| 00 Security Review | [00-security-review.md](modules/part2/00-security-review.md) | 15 min | Lab 8 |
+| 01 Permissions, Safety & Hooks | [01-permissions-and-hooks.md](modules/part2/01-permissions-and-hooks.md) | 25 min | Lab 9 |
+| 02 MCP Servers | [02-mcp-servers.md](modules/part2/02-mcp-servers.md) | 20 min | Lab 10 |
+| 03 Skills | [03-skills.md](modules/part2/03-skills.md) | 20 min | Lab 11 |
+| 04 Custom Subagents & Agent Workflows | [04-sub-agents.md](modules/part2/04-sub-agents.md) | 20 min | Lab 12 |
+| 05 Headless & Automation | [05-headless-automation.md](modules/part2/05-headless-automation.md) | 15 min | Lab 13 |
+| 06 Output Styles *(self-study)* | [06-output-styles.md](modules/part2/06-output-styles.md) | 15 min | Lab 14 |
+| 07 Capstone — Team Configuration & Plugins | [07-capstone-team-config.md](modules/part2/07-capstone-team-config.md) | 15 min | Lab 15 |
 
-**Day 2 Total**: ~6 hours including lab time
+**Day 2 Total**: ~6 hours including lab time (Module 06 / Lab 14 is self-study and not counted)
 
 ---
 
 ## Workshop Delivery Patterns
 
-### Full 2-Day Workshop (~13 hours plus breaks)
+### Full 2-Day Workshop (~12 hours plus breaks)
 Deliver Day 1 and Day 2 on consecutive days. Recommended default — matches the labs' Day 1/Day 2 framing and gives each day room for breaks and Q&A.
 
 ### Two Separate Sessions
@@ -58,19 +58,19 @@ Day 1 one week, Day 2 the following week. Participants can practice CLAUDE.md, P
 For teams already comfortable with Claude Code basics. Skip Day 1, start with Day 2. Requires participants to have CLAUDE.md experience.
 
 ### Hooks & Automation Focus (2 hours)
-- Module 00 Permissions & Hooks (25 min)
+- Module 01 Permissions & Hooks (25 min)
 - Lab 9: Permissions & Hooks (30 min)
-- Module 04 Headless (15 min)
+- Module 05 Headless (15 min)
 - Lab 13: Headless Mode (30 min)
 - Discussion: CI Integration patterns (20 min)
 
 ### Skills, Subagents & Plugins Focus (3.5 hours)
 For teams that want to build shareable customizations. Participants should already be comfortable with CLAUDE.md.
-- Module 02 Skills (20 min)
+- Module 03 Skills (20 min)
 - Lab 11: Skills (35 min)
-- Module 03 Custom Subagents (20 min)
+- Module 04 Custom Subagents (20 min)
 - Lab 12: Custom Subagents & Agent Workflows (40 min)
-- Module 06 Capstone (15 min)
+- Module 07 Capstone (15 min)
 - Lab 15: Capstone — build a subagent or skill and package it as a plugin (65 min)
 - Discussion (10 min)
 

@@ -435,4 +435,4 @@ Write a shell script that:
 
 ---
 
-**Next**: [Lab 14: Output Styles & Custom Personas](lab-14-output-styles-and-personas.md)
+**Next**: [Lab 15: Capstone — Team Configuration](lab-15-capstone-team-config.md). [Lab 14: Output Styles & Custom Personas](lab-14-output-styles-and-personas.md) is self-study; do it after the workshop.

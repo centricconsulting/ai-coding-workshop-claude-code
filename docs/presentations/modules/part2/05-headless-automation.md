@@ -260,4 +260,4 @@ Everything you've learned in this workshop applies — just without the REPL.
 ---
 
 <!-- Navigation -->
-[← 12 Sub-Agents](03-sub-agents.md) | **Day 2 Module 13** | [Next: 14 Output Styles →](05-output-styles.md)
+[← 12 Sub-Agents](04-sub-agents.md) | **Day 2 Module 13** | [Next: 15 Capstone →](07-capstone-team-config.md) · [14 Output Styles (self-study)](06-output-styles.md)

@@ -1,7 +1,9 @@
 # Lab 14: Output Styles & Custom Personas
 
 **Duration**: 20–25 minutes
-**Day**: 2 of 2 (Advanced)
+**Day**: 2 of 2 (Advanced) — **self-study**
+
+> **Self-study lab**: The default agenda skips this lab in class so Day 2 fits a standard day. It's the least dependent lab — nothing later builds on it — so work through it on your own after the workshop. Facilitators with spare time can run it live between Labs 13 and 15.
 
 **Learning Objectives**:
 - Understand output styles as a persistent, system-prompt-level customization

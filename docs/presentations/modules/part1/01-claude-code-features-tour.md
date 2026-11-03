@@ -293,9 +293,8 @@ Same engine, same `CLAUDE.md`, skills, and settings across local surfaces.
 | **05 Refactoring** | Large tasks need phases — and `/context` / `/compact` |
 | **06 Checkpoints & Rewind** | Recover from a bad edit without touching git |
 | **07 Git Workflow** | `/code-review` as a quality gate |
-| **08 Security Review** | `/security-review` + a project security skill |
 
-After Lab 1, you'll have hands-on time with all of these.
+Hands-on time with all of these after Lab 1. Security Review opens Day 2.
 
 ---
 

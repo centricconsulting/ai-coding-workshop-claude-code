@@ -71,16 +71,16 @@ Use `/code-review` (alias `/review`) for pre-commit code review. Generate conven
 
 ---
 
+## Day 2: Advanced Claude Code
+
 ### [Lab 8: Security Review Workflows](lab-08-security-review-workflows.md)
 **Duration**: 30–35 min
 
 Introduce a realistic authorization vulnerability, find it with `/security-review` (requires an `origin` remote — your fork), fix it at the root cause, and build a project-specific security review skill.
 
-**Key Concept**: `/security-review` is a dedicated, deeper gate than `/code-review` — and this is the last lab of Day 1.
+**Key Concept**: `/security-review` is a dedicated, deeper gate than `/code-review` — and Day 2 opens with it, reviewing the branch you built on Day 1.
 
 ---
-
-## Day 2: Advanced Claude Code
 
 ### [Lab 9: Permissions, Safety & Hooks](lab-09-permissions-and-hooks.md)
 **Duration**: 25–30 min
@@ -128,7 +128,7 @@ Run Claude Code non-interactively with `-p` (`--print`) and structured `--output
 ---
 
 ### [Lab 14: Output Styles & Custom Personas](lab-14-output-styles-and-personas.md)
-**Duration**: 20–25 min
+**Duration**: 20–25 min · **Self-study** (not run in class by default)
 
 Create and activate a custom output style, then compare its behavior against the default side by side. Discuss standardizing a style at the team level vs. leaving it personal.
 
@@ -163,13 +163,13 @@ Lab 5 (Refactoring + Context)
 Lab 6 (Checkpoints & Rewind)
     ↓
 Lab 7 (Git Workflow)
-    ↓
-Lab 8 (Security Review)
 ```
 
 ### Day 2: Advanced
 
 ```
+Lab 8 (Security Review)
+    ↓
 Lab 9 (Permissions & Hooks)
     ↓
 Lab 10 (MCP)
@@ -180,12 +180,12 @@ Lab 12 (Custom Subagents)
     ↓
 Lab 13 (Headless)
     ↓
-Lab 14 (Output Styles)
-    ↓
 Lab 15 (Capstone + Plugin)
     ↓
 Apply to Real Projects!
 ```
+
+**Self-study:** Lab 14 (Output Styles) — the least dependent lab; do it after the workshop.
 
 ---
 
@@ -203,18 +203,19 @@ Apply to Real Projects!
 | Lab 5 | 45 min | 50 min | 65 min |
 | Lab 6 | 20 min | 20 min | 30 min |
 | Lab 7 | 20 min | 25 min | 35 min |
-| Lab 8 | 30 min | 35 min | 45 min |
-| **Day 1 Total** | **290 min** | **330 min** | **440 min** |
+| **Day 1 Total** | **260 min** | **295 min** | **395 min** |
 | **Day 2** | | | |
+| Lab 8 | 30 min | 35 min | 45 min |
 | Lab 9 | 25 min | 30 min | 40 min |
 | Lab 10 | 30 min | 35 min | 50 min |
 | Lab 11 | 30 min | 35 min | 45 min |
 | Lab 12 | 35 min | 40 min | 55 min |
 | Lab 13 | 25 min | 30 min | 40 min |
-| Lab 14 | 20 min | 25 min | 35 min |
 | Lab 15 | 60 min | 65 min | 90 min |
-| **Day 2 Total** | **225 min** | **260 min** | **355 min** |
-| **Full Workshop** | **515 min** | **590 min** | **795 min** |
+| **Day 2 Total** | **235 min** | **270 min** | **365 min** |
+| **Self-study** | | | |
+| Lab 14 | 20 min | 25 min | 35 min |
+| **Full Workshop** (incl. Lab 14) | **515 min** | **590 min** | **795 min** |
 
 (Lab-only totals — module intros, kickoff, tour, and wrap-up add roughly 90 minutes per day; see the root [README schedule](../../README.md#schedule) for the day-by-day agenda and the [Facilitator Guide](../../FACILITATOR_GUIDE.md) for breaks and fast-track options.)
 

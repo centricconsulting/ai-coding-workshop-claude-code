@@ -1,7 +1,7 @@
 # Lab 8: Security Review Workflows
 
 **Duration**: 30–35 minutes
-**Day**: 1 of 2 (Fundamentals)
+**Day**: 2 of 2 (Advanced) — first lab of the day
 
 **Learning Objectives**:
 - Distinguish `/code-review` (correctness gate, alias `/review`) from `/security-review` (security-focused pass)
@@ -20,7 +20,7 @@ Lab 7 introduced `/code-review` as a pre-commit gate for correctness bugs. Secur
 
 > **About the starter code**: TaskManager's `Task` has no assignment or organization fields, and the API has no authentication. Part B adds both fields explicitly, and simulates the caller's identity with request headers. That simplification is itself a security smell — expect `/security-review` to point it out.
 
-This is the last lab of Day 1.
+This is the first lab of Day 2. It reviews the branch you built on Day 1, then sets up Lab 9: first you *review* for risk, then you *prevent* it with permissions and hooks.
 
 ### Choose Your Stack
 
@@ -299,8 +299,4 @@ Ask Claude Code directly: "Walk me through an actual exploit scenario for this f
 
 ---
 
-**End of Day 1**
-
-Nice work — you've gone from first contact with Claude Code through TDD, planning, refactoring, context management, session recovery, git workflow, and security review. See the Day 1 wrap-up for a recap of everything covered.
-
-**Day 2 begins with**: [Lab 9: Permissions, Safety & Hooks](lab-09-permissions-and-hooks.md)
+**Next**: [Lab 9: Permissions, Safety & Hooks](lab-09-permissions-and-hooks.md)

@@ -15,7 +15,7 @@ backgroundColor: #fff
 
 You've built the automation toolkit: MCP, Skills, Sub-Agents, headless mode (Module 13).
 
-**Module 14 is about tone, not capability.**
+**Module 14 is about tone, not capability.** It's **self-study** in the default agenda — work through it after the workshop (20–25 min).
 
 Every mechanism so far changes what Claude Code knows or can do. An output style changes how it talks — persistently, across the whole session.
 
@@ -188,4 +188,4 @@ made once, applied every session, until you change it.
 ---
 
 <!-- Navigation -->
-[← 13 Headless & Automation](04-headless-automation.md) | **Day 2 Module 14** | [Next: Capstone →](06-capstone-team-config.md)
+[← 13 Headless & Automation](05-headless-automation.md) | **Day 2 Module 14** | [Next: Capstone →](07-capstone-team-config.md)

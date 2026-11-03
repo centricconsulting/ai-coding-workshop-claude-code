@@ -3,7 +3,7 @@
 **Duration**: 90–100 minutes (Part 1: 45–50 min · Part 2: ~45 min)
 **Day**: 1 of 2 (Fundamentals)
 
-> **Timing note**: This lab now has two parts. Part 1 (TDD a `NotificationService`) is the core exercise. Part 2 (Requirements → Code) takes a user story all the way to a working endpoint. If you're short on time, finish Part 1 and treat Part 2 as homework or a Day 2 warm-up.
+> **Timing note**: This lab has two parts. Part 1 (TDD a `NotificationService`) runs before lunch. Part 2 (Requirements → Code) takes a user story all the way to a working endpoint right after lunch — it's the end-to-end arc of Day 1, so keep it. If you're short on time, skip Step 10 (the ADR) and finish it as homework.
 
 **Learning Objectives**:
 - Apply the full Red-Green-Refactor TDD cycle using Claude Code
@@ -417,7 +417,7 @@ curl -i -X POST http://localhost:8080/api/tasks \
 
 ---
 
-## Step 10: Record the Decision — an ADR (5 min)
+## Step 10: Record the Decision — an ADR (5 min · skip first if short on time)
 
 You made at least one real design decision: how to model `Priority` (value object vs. enum vs. string), and — on .NET — service method vs. command handler. Capture it so the next person (or the next Claude Code session) knows why.
 

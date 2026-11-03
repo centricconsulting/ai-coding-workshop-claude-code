@@ -282,4 +282,4 @@ and observe the GitHub MCP from a facilitator demo.
 ---
 
 <!-- Navigation -->
-[← 09 Permissions & Hooks](00-permissions-and-hooks.md) | **Day 2 Module 10** | [Next: 11 Skills →](02-skills.md)
+[← 09 Permissions & Hooks](01-permissions-and-hooks.md) | **Day 2 Module 10** | [Next: 11 Skills →](03-skills.md)
