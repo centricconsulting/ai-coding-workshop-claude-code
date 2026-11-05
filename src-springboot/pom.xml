@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.4</version>
+        <version>4.1.2</version>
         <relativePath/>
     </parent>
 
@@ -32,8 +32,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <testcontainers.version>1.19.7</testcontainers.version>
-        <springdoc.version>2.3.0</springdoc.version>
+        <springdoc.version>3.2.0</springdoc.version>
     </properties>
 
     <dependencyManagement>
@@ -55,14 +54,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- Testcontainers BOM -->
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>${testcontainers.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

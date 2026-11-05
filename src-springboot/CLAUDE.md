@@ -3,7 +3,7 @@
 ## Stack
 
 - **Java 21** with records and sealed interfaces
-- **Spring Boot 3.x** with Spring Web (REST)
+- **Spring Boot 4.x** with Spring Web (REST)
 - **JUnit 5** + **Mockito** for testing
 - **Maven** for build and dependency management
 - **Clean Architecture** with four packages

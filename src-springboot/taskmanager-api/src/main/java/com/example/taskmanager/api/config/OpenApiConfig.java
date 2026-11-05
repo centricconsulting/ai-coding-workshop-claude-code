@@ -18,7 +18,7 @@ import java.util.List;
  * - OpenAPI JSON: http://localhost:8080/v3/api-docs
  * - OpenAPI YAML: http://localhost:8080/v3/api-docs.yaml
  * 
- * Uses Springdoc OpenAPI v2.x for Spring Boot 3.x compatibility.
+ * Uses Springdoc OpenAPI v3.x for Spring Boot 4.x compatibility.
  */
 @Configuration
 public class OpenApiConfig {
@@ -40,7 +40,7 @@ public class OpenApiConfig {
                                 Architecture:
                                 - Domain-Driven Design with aggregates and value objects
                                 - Hexagonal Architecture (Ports & Adapters)
-                                - Spring Boot 3.x with Java 21
+                                - Spring Boot 4.x with Java 21
                                 - PostgreSQL database with Spring Data JPA
                                 """)
                         .version("1.0.0")

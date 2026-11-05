@@ -1,6 +1,6 @@
 # Task Manager - Spring Boot Implementation
 
-A production-ready RESTful API for task management built with Spring Boot 3.x, following Clean Architecture and Domain-Driven Design principles.
+A production-ready RESTful API for task management built with Spring Boot 4.x, following Clean Architecture and Domain-Driven Design principles.
 
 ## 🏗️ Architecture
 
@@ -292,7 +292,7 @@ Follow Clean Architecture boundaries:
 ## 📚 Technology Stack
 
 - **Java 21** (LTS)
-- **Spring Boot 3.2.4**
+- **Spring Boot 4.1.2**
 - **Spring Data JPA** + **Hibernate**
 - **PostgreSQL 16** (production) / **H2** (tests)
 - **Springdoc OpenAPI** (Swagger documentation)
@@ -309,7 +309,7 @@ This implementation demonstrates:
 - **Domain-Driven Design** tactical patterns
 - **Hexagonal Architecture** (Ports & Adapters)
 - **Test-Driven Development** with comprehensive test coverage
-- **Spring Boot 3.x** best practices
+- **Spring Boot 4.x** best practices
 - **RESTful API** design with proper HTTP semantics
 - **OpenAPI** documentation standards
 
