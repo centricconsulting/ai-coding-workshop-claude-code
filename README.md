@@ -12,7 +12,7 @@ Unlike completion-based tools, Claude Code is an agent that reads your codebase,
 
 ### Day 1: Fundamentals (6 hours)
 
-Learn to work with Claude Code as a development partner — setting up project memory with CLAUDE.md, turning requirements into code with TDD, choosing the right permission mode and planning large tasks in Plan Mode, refactoring code with a checkpoint safety net, and integrating Claude Code into your git workflow. Works with either **.NET 9** or **Spring Boot 3.x**.
+Learn to work with Claude Code as a development partner — setting up project memory with CLAUDE.md, turning requirements into code with TDD, choosing the right permission mode and planning large tasks in Plan Mode, refactoring code with a checkpoint safety net, and integrating Claude Code into your git workflow. Works with either **.NET 9** or **Spring Boot 4.x**.
 
 ### Day 2: Advanced Claude Code (6 hours)
 

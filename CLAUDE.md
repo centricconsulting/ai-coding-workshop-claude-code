@@ -6,7 +6,7 @@ This is a hands-on workshop codebase for learning AI-assisted software developme
 
 There are two parallel implementations:
 - `src-dotnet/` — .NET 9, Clean Architecture, Minimal APIs, xUnit v3 + FakeItEasy
-- `src-springboot/` — Spring Boot 3.x, Clean Architecture, REST, JUnit 5 + Mockito
+- `src-springboot/` — Spring Boot 4.x, Clean Architecture, REST, JUnit 5 + Mockito
 
 Both implementations model the same domain. The starter code has the basics: a `Task` aggregate (`TaskId`, title, description, `TaskStatus`) and a repository. Priorities, due dates, notifications, and assignments are added by participants during the labs — read the current code rather than assuming they exist.
 

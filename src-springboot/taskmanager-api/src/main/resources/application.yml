@@ -1,5 +1,5 @@
 # Task Manager API - Application Configuration
-# Spring Boot 3.x application configuration for development environment
+# Spring Boot 4.x application configuration for development environment
 
 spring:
   application:
@@ -43,8 +43,10 @@ spring:
   # Jackson Configuration
   jackson:
     default-property-inclusion: non_null
+    datatype:
+      datetime:
+        write-dates-as-timestamps: false
     serialization:
-      write-dates-as-timestamps: false
       indent-output: true
     deserialization:
       fail-on-unknown-properties: false

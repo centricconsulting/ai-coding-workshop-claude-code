@@ -3,12 +3,12 @@ package com.example.taskmanager.api;
 import com.example.taskmanager.api.dto.CreateTaskRequest;
 import com.example.taskmanager.api.dto.TaskResponse;
 import com.example.taskmanager.api.dto.UpdateTaskRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
@@ -57,7 +57,7 @@ class TaskApiIntegrationTest {
     private MockMvc mockMvc;
     
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
     
     @BeforeEach
     void setUp() {
