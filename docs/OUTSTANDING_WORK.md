@@ -1,10 +1,9 @@
 # Outstanding Work: Claude Code Workshop
 
-_Status as of 2026-11-05 (updated after #55, with #56 and #57 open). Pick up from here in a new session._
+_Status as of 2026-11-05 (updated after #57). Pick up from here in a new session._
 
 ## Where things stand
-- **Merged to main:** #38 (full refresh: current Claude Code features, alignment with the Copilot workshop, dev container fix, xunit.v3), #47 (.NET solution moved into `src-dotnet/`), #48 (slide overflow fixes and "directing an agent" framing across 16 decks), #49 (Day 1 timing: Lab 8 moved to Day 2, Lab 14 self-study, decks renumbered), #50 (.NET integration tests enabled with `Microsoft.AspNetCore.Mvc.Testing`), #51 (Day 2 wrap-up deck), #52, #53 and #55 (lab validation fixes).
-- **Open PRs:** #56 (repo hygiene files, #35) and #57 (Spring Boot 3.2.4 → 4.1.2, #46).
+- **Merged to main:** #38 (full refresh: current Claude Code features, alignment with the Copilot workshop, dev container fix, xunit.v3), #47 (.NET solution moved into `src-dotnet/`), #48 (slide overflow fixes and "directing an agent" framing across 16 decks), #49 (Day 1 timing: Lab 8 moved to Day 2, Lab 14 self-study, decks renumbered), #50 (.NET integration tests enabled with `Microsoft.AspNetCore.Mvc.Testing`), #51 (Day 2 wrap-up deck), #52, #53 and #55 (lab validation fixes), #56 (repo hygiene files) and #57 (Spring Boot 3.2.4 → 4.1.2, plus `spring-boot-h2console` for the dev profile).
 - **Issues:** audited and realigned to the 15-lab / Day 1–Day 2 layout. Milestones: Day 1 Ready, Day 2 Ready, Full Workshop Ready.
 - **Slide changes (merged in #48):**
   - Kickoff slides 2–4 and 13 reworded around "Claude Code is an agentic harness" and "suggestion-based vs. directing an agent".
@@ -26,8 +25,9 @@ _Status as of 2026-11-05 (updated after #55, with #56 and #57 open). Pick up fro
    - [ ] Day 2: #41 Lab 8, #27 Lab 9, #28 Lab 10 (also confirm GitHub MCP server tool names), #42 Lab 11 (also confirm the `/skills` `t` sort key), #29 Lab 12, #30 Lab 13, #43 Lab 14 (self-study), #31 Lab 15
 7. **Full dry run** (#37): facilitator runs all 15 labs end to end in the dev containers (.NET and Spring Boot).
 8. **Nice to have:**
-   - #35 repo hygiene: files added in PR #56. Still to do: Centric legal confirms the license (`LICENSE.md` is a placeholder) and fill in the Code of Conduct reporting contact (`TODO`).
-   - #46 Spring Boot upgrade: `src-springboot` moved to 4.1.2 in PR #57 (102 tests pass; verified in the `springboot-participant` dev container). Still to do: the same upgrade in the Copilot workshop (centricconsulting/ai-coding-workshop). Boot 4.0 OSS support ends 2026-12-31 and 4.1 on 2027-07-31 (from third-party sources; confirm on spring.io).
+   - #35 repo hygiene: files added in #56. Still to do: Centric legal confirms the license (`LICENSE.md` is a placeholder) and fill in the Code of Conduct reporting contact (`TODO`).
+   - #58 unknown paths return 500 instead of 404 (`GlobalExceptionHandler` catch-all; predates the Boot 4 upgrade).
+   - #46 Spring Boot upgrade: `src-springboot` moved to 4.1.2 in #57 (102 tests pass; verified in the `springboot-participant` dev container). Still to do: the same upgrade in the Copilot workshop (centricconsulting/ai-coding-workshop). Boot 4.0 OSS support ends 2026-12-31 and 4.1 on 2027-07-31 (from third-party sources; confirm on spring.io).
 
 ## Notes
 - The dev containers (dotnet-participant, springboot-participant, maintainer) all build. The lock files were regenerated in #38 because of the GitHub CLI signing-key rotation.
