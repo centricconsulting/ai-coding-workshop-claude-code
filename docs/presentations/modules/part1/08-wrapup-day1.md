@@ -15,10 +15,10 @@ backgroundColor: #fff
 
 | Lab | Skill | Key Takeaway |
 |---|---|---|
-| Lab 1 | Agentic model | Direct an agent that reads, plans, and acts — not one suggestion at a time |
-| Lab 2 | CLAUDE.md | Project memory written once, applied every session |
-| Lab 3 | TDD | Tests as a feedback loop, not an afterthought |
-| Lab 4 | Plan Mode & effort levels | Plan before you touch files — zero-risk iteration |
+| Lab&nbsp;1 | Agentic model | Direct an agent that reads, plans, and acts — not one suggestion at a time |
+| Lab&nbsp;2 | CLAUDE.md | Project memory written once, applied every session |
+| Lab&nbsp;3 | TDD | Make red-first the default with a rule; hooks (Day 2) enforce that tests run |
+| Lab&nbsp;4 | Plan Mode & effort levels | Plan before you touch files — zero-risk iteration |
 
 ---
 
@@ -26,9 +26,9 @@ backgroundColor: #fff
 
 | Lab | Skill | Key Takeaway |
 |---|---|---|
-| Lab 5 | Phased refactoring & context | Context limits are a design constraint — `/context`, `/compact` |
-| Lab 6 | Checkpoints & rewind | A session-level safety net, separate from git |
-| Lab 7 | Git workflow | `/code-review` before staging, not after pushing |
+| Lab&nbsp;5 | Phased refactoring & context | Context limits are a design constraint — `/context`, `/compact` |
+| Lab&nbsp;6 | Checkpoints & rewind | A session-level safety net, separate from git |
+| Lab&nbsp;7 | Git workflow | `/code-review` before staging, not after pushing |
 
 ---
 
@@ -72,8 +72,8 @@ section { font-size: 27px; }
 **CLAUDE.md** — you don't re-explain your project every session.
 The file does it for you.
 
-**TDD** — you don't review 500 lines of generated code hoping it's right.
-The tests tell you immediately.
+**TDD** — red-first is the default, not a habit you must remember.
+A rule makes Claude write the failing test first; hooks (Day 2) enforce that tests run.
 
 **Plan Mode** — you don't hand Claude Code a big task and hope.
 You see the approach before anything changes, and iterate risk-free.
@@ -96,7 +96,7 @@ Day 2 opens with a security gate, then turns to **how to configure and extend it
 | Lab | Topic |
 |---|---|
 | 8 | Security review — `/security-review` and a project-specific security skill |
-| 9 | Permissions & hooks — permission modes, rules, `/permissions`, `/hooks` |
+| 9 | Permissions & hooks — permission modes, rules, `/permissions`, `/hooks`, a test-run hook |
 | 10 | MCP servers — connect Claude Code to external systems (`/mcp`) |
 | 11 | Skills — package reusable, on-demand instructions (`/skills`) |
 | 12 | Subagents — use and chain custom agents in `.claude/agents/` |
@@ -117,13 +117,17 @@ You already met one Day 2 idea today: the `/code-review` **background subagent**
 
 # End of Day 1
 
+<style scoped>
+section { font-size: 25px; }
+</style>
+
 Nice work — that's the full foundation: agentic model, project memory, TDD
 from user story to working endpoint, planning, phased refactoring, session
 recovery, and git workflow.
 
 **Before Day 2:**
 - Commit and push Day 1's work — Lab 8 opens Day 2 by reviewing your branch commits against `origin`
-- Have your GitHub fork ready — Labs 10, 13, and 15 need it
+- Have a GitHub fork ready — Lab 10 Part C and Lab 13 D.2 use it (even if your main host is different)
 - If you haven't already, skim the [Agent Governance Guide](../../../guides/agent-governance.md) — it'll make more sense after today, and Day 2 builds toward it
 
 See you tomorrow for Day 2.

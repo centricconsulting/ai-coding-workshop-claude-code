@@ -68,7 +68,9 @@ The code options only appear when that checkpoint has tracked file changes to re
 | Needs a commit to exist? | No | No | Yes — resets *to* a commit |
 | Visible to teammates / in history? | No | No (until you pop it, and even then it's local) | No |
 | Survives closing Claude Code? | Yes, if you `/resume` that session (local, time-limited) | Yes, until popped or dropped | N/A — it's already applied |
-| Catches Bash / IDE edits? | No | Yes | Yes |
+| Catches Bash / IDE edits? | No | Yes* | Yes* |
+
+*Tracked files only. New (untracked) files are skipped by `git stash` unless you use `git stash -u`, and `git reset --hard` leaves them in place (preview them with `git clean -n`).
 
 Checkpoints are a **session-level** safety net. Git is a **commit-level** safety net. They solve different problems and you'll use both — checkpoints for "that last thing Claude Code did was wrong," git for "I want to go back to a known-good state from an earlier day."
 
@@ -121,7 +123,7 @@ matching my exact style, just make it cleaner and more consistent everywhere
 you see room for it.
 ```
 
-Let Claude Code run with this. Because the instruction is broad ("across the whole file," "everywhere you see room for it") rather than scoped to one method or one concern, there's a good chance it touches more than you'd have approved turn-by-turn. In a validation run it rewrote most of the file, removed the `Thread.Sleep`, narrowed which exceptions are swallowed, and sealed the class, none of which you asked for.
+Let Claude Code run with this. Because the instruction is broad ("across the whole file," "everywhere you see room for it") rather than scoped to one method or one concern, there's a good chance it touches more than you'd have approved turn-by-turn. In a validation run on .NET it rewrote most of the file, removed the `Thread.Sleep`, narrowed which exceptions are swallowed, and sealed the class, none of which you asked for. On Spring, look for the same kinds of change: the `Thread.sleep`, swallowed exceptions, a class made `final`.
 
 ### B.4 Confirm the Damage
 
@@ -144,7 +146,7 @@ Then ask Claude to account for it:
 List every behavior change in that edit, including ones the characterization tests don't cover.
 ```
 
-You're looking for anything you didn't ask for: a failing test, a removed `Thread.Sleep`, changed exception types, a class that's now `sealed`, or methods restructured that had nothing to do with error handling. Whether or not a test failed, you're going to rewind.
+You're looking for anything you didn't ask for: a failing test, a removed `Thread.Sleep` / `Thread.sleep`, changed exception types, a class that's now `sealed` (.NET) or `final` (Java), or methods restructured that had nothing to do with error handling. Whether or not a test failed, you're going to rewind.
 
 ### B.5 Rewind to the Last-Good Checkpoint
 
@@ -208,7 +210,7 @@ The comment in `LegacyTaskProcessor` is gone; `lab6-scratch.txt` is still there.
 | Situation | Best tool | Why |
 |---|---|---|
 | Claude Code's last edit (this turn or a few turns back) is wrong, mid-session | **Rewind** | Fastest, precise, no git ceremony |
-| You want to discard everything since your last commit, across any number of turns or tools | **`git reset --hard`** (⚠️ irreversible on uncommitted work) | Rewind is scoped to *this session's* checkpoints; git resets to a real commit regardless of session |
+| You want to discard everything since your last commit, across any number of turns or tools | **`git reset --hard`** (⚠️ irreversible on uncommitted work; new files stay, so check `git clean -n`) | Rewind is scoped to *this session's* checkpoints; git resets to a real commit regardless of session |
 | You want to set uncommitted work aside temporarily, keep it, come back later | **`git stash`** | Rewind discards; stash preserves for later retrieval |
 | The last change was small and you'd rather just describe the fix | **Ask Claude Code to undo/fix it directly** | Sometimes faster than rewinding — "revert just the exception handling change, keep everything else" |
 | The bad state spans a previous Claude Code *session* | **`/resume` + rewind**, or **Git** | Checkpoints are saved with the conversation, so `/resume` the session and rewind; for anything older or shared, use git |

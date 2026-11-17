@@ -159,7 +159,7 @@ More specific instructions take precedence when there are conflicts.
 # Technology Overview
 
 <style scoped>
-section { font-size: 24px; }
+section { font-size: 18px; }
 </style>
 
 ## Claude Code CLI
@@ -173,9 +173,12 @@ claude doctor       # Diagnose install & settings
 
 | Command | Purpose |
 |---|---|
-| `/help` · `/context` | List commands · see what fills the context window |
-| `/model` · `/effort` | Pick model · set reasoning effort |
-| `/compact` · `/clear` | Summarize history · fresh session |
+| `/help` | List commands |
+| `/context` | See what fills the context window |
+| `/model` | Pick model |
+| `/effort` | Set reasoning effort |
+| `/compact` | Summarize history |
+| `/clear` | Fresh session |
 | `/code-review` | Review changes (`/review` is an alias) |
 
 **Shift+Tab** cycles permission modes: Auto → Manual → Accept edits → Plan
@@ -184,11 +187,16 @@ claude doctor       # Diagnose install & settings
 
 # Session Setup
 
+<style scoped>
+section { font-size: 23px; }
+</style>
+
 ## What participants need
 
+- **Git installed**: `git --version`
 - **Claude Code installed**: `curl -fsSL https://claude.ai/install.sh | bash` (Windows: `irm https://claude.ai/install.ps1 | iex`) — or use the devcontainer
 - **Authenticated**: Claude subscription (`/login`) **or** Console API key (`ANTHROPIC_API_KEY`); `/status` shows which
-- **Repository forked** on GitHub, then cloned from the fork
+- **Repository forked** on GitHub (or mirrored to your git host, keeping a GitHub fork for Labs 7, 10 and 13), then cloned from your fork
 - **Upstream remote added**: `git remote add upstream https://github.com/centricconsulting/…`
 - **Personal branch**: `git checkout -b workshop/your-name`
 
@@ -208,6 +216,10 @@ java -version && cd src-springboot && mvn clean test
 
 ---
 
+<style scoped>
+section { font-size: 24px; }
+</style>
+
 # Lab 1 Preview: First Contact
 
 ## What you'll do
@@ -222,6 +234,8 @@ java -version && cd src-springboot && mvn clean test
 Ask Claude Code: *"What is this project?"*
 
 Watch how it reads multiple files before answering — not guessing from a prompt, but actually reading your code.
+
+👉 Open [docs/labs/lab-01-first-contact.md](../../../labs/lab-01-first-contact.md)
 
 ---
 

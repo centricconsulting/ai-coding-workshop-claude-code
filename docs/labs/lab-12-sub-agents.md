@@ -105,7 +105,7 @@ An @-mention **guarantees** that a specific subagent runs, rather than leaving t
 
 Or type it directly: `@agent-test-strategist plan tests for the Task status transitions in both stacks`.
 
-Compare the plan to the conventions in `src-dotnet/CLAUDE.md` and `src-springboot/CLAUDE.md`. The test names should follow `MethodName_StateUnderTest_ExpectedBehavior` / `methodName_stateUnderTest_expectedBehavior`, and the plan should treat the skipped stub tests as gaps.
+Compare the plan to the conventions in `src-dotnet/CLAUDE.md` and `src-springboot/CLAUDE.md`. The test names should follow `MethodName_StateUnderTest_ExpectedBehavior` (.NET) / `shouldDoX` with a readable `@DisplayName` (Spring Boot), and the plan should treat the skipped stub tests as gaps.
 
 ### A.4 Automatic Delegation
 

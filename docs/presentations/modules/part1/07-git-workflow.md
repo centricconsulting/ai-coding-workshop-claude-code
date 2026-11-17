@@ -65,14 +65,15 @@ Not a security scanner — that's `/security-review` (next module).
 # Tuning `/code-review`: Common Recipes
 
 <style scoped>
-section { font-size: 23px; }
+section { font-size: 21px; }
 </style>
 
 | You want… | Type |
 |---|---|
 | High-confidence findings only | `/code-review low` |
 | Broader coverage | `/code-review high` |
-| Just the legacy folder | `/code-review src-dotnet/src/TaskManager.Infrastructure/Legacy` |
+| One folder (.NET) | `/code-review src-dotnet/src/TaskManager.Infrastructure/Legacy` |
+| One folder (Spring) | `/code-review src-springboot/taskmanager-infrastructure/…/legacy` |
 | Review and apply fixes | `/code-review --fix` |
 | Review a PR, post inline comments | `/code-review 42 --comment` |
 | Deep multi-agent cloud review | `/code-review ultra` |
@@ -81,7 +82,7 @@ section { font-size: 23px; }
 
 ---
 
-# What `/code-review` Reports
+# What `/code-review` Reports (.NET)
 
 Example output:
 
@@ -95,6 +96,30 @@ Reviewed 4 files (branch + uncommitted changes)
    this behavior change intended?
 
 2. NotificationService.cs:31 — correctness
+   Exception from the sender is caught and swallowed; callers
+   can't tell a notification failed.
+```
+
+*(Illustrative — your findings will differ.)*
+
+Fix them — or rerun with `--fix`. Then commit.
+
+---
+
+# What `/code-review` Reports (Spring Boot)
+
+Example output:
+
+```
+Reviewed 4 files (branch + uncommitted changes)
+
+1. LegacyTaskProcessor.java:42 — correctness
+   validate() now returns true before init() is called; the
+   original chk() returned false. Characterization test
+   chk_beforeInit_returnsFalse was updated to match — was
+   this behavior change intended?
+
+2. DefaultNotificationService.java:31 — correctness
    Exception from the sender is caught and swallowed; callers
    can't tell a notification failed.
 ```
@@ -154,7 +179,7 @@ Claude Code will pick the right type if you ask it to.
 
 # Documentation Comments
 
-Same idea as the Copilot workshop's `/doc` step — just ask:
+Just ask (same idea as the Copilot workshop's `/doc` step, if you took it):
 
 ```
 Add XML documentation comments to the public members of
@@ -193,13 +218,13 @@ you've context-switched away from the code.
 
 ---
 
-# GitHub via the `gh` CLI
+# Optional: GitHub via the `gh` CLI
 
-Claude Code drives GitHub through `gh` — no special command needed:
+On GitHub, Claude Code drives pull requests through `gh` — no special command needed:
 
 ```
 Save the PR description to pr-body.md and open a PR against my
-fork's main with gh pr create --body-file pr-body.md.
+fork's main with gh pr create --repo <you>/<your-fork> --body-file pr-body.md.
 ```
 
 ```
@@ -209,15 +234,21 @@ Use gh to read the review comments on PR #12 and address each one.
 `/pr-comments` was **removed** — just ask Claude, as above.
 `/code-review 12 --comment` posts findings as inline PR comments.
 
+**Another host?** Use its CLI: GitLab `glab` (`/code-review --comment` posts to a merge request), Azure DevOps `az repos pr create`. Or paste `pr-body.md` into the web UI.
+
 ---
 
 # The Fork-First Workflow
 
-This workshop uses a **fork** (not just a branch) because:
+<style scoped>
+section { font-size: 25px; }
+</style>
 
-- Labs 10, 13, and 15 require a GitHub remote you control
-- The GitHub MCP server needs to query your fork's issues
-- CI patterns in Lab 13 need to push to your fork
+This workshop uses a **fork** (not just a branch) because these parts need a GitHub repo you control:
+
+- Lab 7 (optional step): `gh pr create`, then `/code-review <pr#> --comment`
+- Lab 10, Part C: the GitHub MCP server queries your fork's issues and PRs
+- Lab 13, D.2: the Claude GitHub Action runs on github.com repos only
 
 ```bash
 # Your fork
@@ -227,6 +258,8 @@ origin   git@github.com:your-name/ai-coding-workshop-claude-code.git
 # Upstream (read-only — never push here)
 upstream git@github.com:centricconsulting/ai-coding-workshop-claude-code.git
 ```
+
+**Using another git host?** Everything else works with any host. Keep a GitHub fork as well for the three items above.
 
 **If you haven't forked yet, do it before Lab 10.**
 

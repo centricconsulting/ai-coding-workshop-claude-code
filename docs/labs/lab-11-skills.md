@@ -286,7 +286,7 @@ Where should the line be between "this belongs in CLAUDE.md or a rule" and "this
 
 ## Extension Challenge
 
-1. Add a second skill, `.claude/skills/test-naming-convention-check/SKILL.md`. It verifies that test method names follow this repo's conventions: `MethodName_StateUnderTest_ExpectedBehavior` for .NET and `methodName_stateUnderTest_expectedBehavior` for Spring Boot (see the Testing Conventions sections of `src-dotnet/CLAUDE.md` and `src-springboot/CLAUDE.md`). Test it against a real test file in `src-dotnet/tests/` or `src-springboot/*/src/test/`.
+1. Add a second skill, `.claude/skills/test-naming-convention-check/SKILL.md`. It verifies that test method names follow this repo's conventions: `MethodName_StateUnderTest_ExpectedBehavior` for .NET and `shouldDoX` with a readable `@DisplayName` for Spring Boot (see the Testing Conventions sections of `src-dotnet/CLAUDE.md` and `src-springboot/CLAUDE.md`). Test it against a real test file in `src-dotnet/tests/` or `src-springboot/*/src/test/`.
 2. Make a forked variant: add `context: fork` and `agent: Explore` to a copy of your boundary checker so it scans the whole codebase in an isolated context and returns only a summary. Compare the context usage (`/context`) with the inline version.
 3. Add `disable-model-invocation: true` to a skill and confirm it disappears from automatic use but still works as `/name`.
 

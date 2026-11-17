@@ -28,7 +28,7 @@ No session. No REPL. No waiting.
 `-p` (long form `--print`) is how you run Claude Code non-interactively:
 
 ```bash
-claude -p "What are the top 3 issues in LegacyTaskProcessor.cs?"
+claude -p "What are the top 3 issues in LegacyTaskProcessor?"
 ```
 
 - No interactive session opens
@@ -50,10 +50,10 @@ Part of the **Claude Agent SDK** (formerly "Claude Code SDK") — also available
 git diff main | claude -p "Report any typos in this diff as file:line."
 
 # Save to a file
-claude -p "List all public interfaces in src-dotnet/." > interfaces.txt
+claude -p "List all public interfaces in the application layer." > interfaces.txt
 
 # Structured output for scripts
-claude -p "How many test projects are in src-dotnet/tests/?" --output-format json | jq -r '.result'
+claude -p "How many test classes are in this repo?" --output-format json | jq -r '.result'
 ```
 
 `--output-format text | json | stream-json` — JSON includes `result`, `session_id`, `total_cost_usd`.
@@ -71,7 +71,7 @@ Nobody can answer a permission prompt — decide **before** the run:
 
 | Flag | Purpose |
 |---|---|
-| `--allowedTools "Read,Bash(dotnet test *)"` | Pre-approve specific tools |
+| `--allowedTools "Read,Bash(dotnet test *)"` | Pre-approve specific tools (`Bash(mvn test *)` on Spring) |
 | `--disallowedTools "Edit,Write"` | Remove/deny tools |
 | `--permission-mode dontAsk` | Deny anything not explicitly allowed |
 | `--permission-mode acceptEdits` | Allow file edits without prompting |

@@ -65,7 +65,7 @@ Pick a prompt from the list, then an action:
 
 # What Checkpoints Don't See
 
-- **Bash-made changes** — formatters, builds, `sed`, `rm`, files your tests write
+- **Bash-made changes** — formatters, builds, `sed`, `rm`, files your tests write (rewind only undoes a Bash change to a file Claude already edited)
 - **External changes** — your IDE edits, other Claude Code sessions
 - **Subagent edits** — including a background `/code-review --fix`
 
@@ -75,12 +75,18 @@ For all of these: **git** is your undo.
 
 # Checkpoints vs. Git — Different Layers
 
+<style scoped>
+section { font-size: 24px; }
+</style>
+
 | | Checkpoints / Rewind | `git stash` | `git reset --hard` |
 |---|---|---|---|
 | Scope | Claude's edit-tool changes, this session | Uncommitted tree | Uncommitted tree, to a commit |
 | Granularity | Per prompt | One shot | One shot |
 | Needs a commit? | No | No | Yes |
-| Catches Bash/IDE edits? | No | Yes | Yes |
+| Catches Bash/IDE edits? | No | Yes* | Yes* |
+
+*Tracked files only. New (untracked) files need `git stash -u`, or `git clean` after a reset.
 
 **Checkpoints = session-level undo.**
 **Git = commit-level, durable undo.**
@@ -98,7 +104,7 @@ You: Also simplify the error handling across the whole file.
 Claude Code:
   [touches far more than intended]
   [changes exception types]
-  [characterization tests start failing]
+  [characterization tests may fail, or may not notice]
 ```
 
 Broad, vague instructions ("across the whole file," "everywhere") invite overreach.
@@ -109,10 +115,11 @@ This is a normal, recoverable outcome — not a crisis.
 # Recovering Without Git
 
 ```
-1. Run the characterization tests → confirm something broke
+1. Run the characterization tests and read git diff → confirm something changed
+   (the tests alone may still pass)
 2. Esc Esc  (or /rewind)
 3. Select the over-broad prompt → "Restore code and conversation"
-   (restores to just *before* that prompt ran)
+   (restores to just before that prompt ran)
 4. git diff → confirm the damaging edit is gone
 5. Run tests again → confirm green
 ```
@@ -130,7 +137,7 @@ section { font-size: 22px; }
 | Situation | Best tool |
 |---|---|
 | Claude Code's last edit(s) this session are wrong | **Rewind** |
-| Discard everything since your last commit | **`git reset --hard`** ⚠️ |
+| Discard everything since your last commit | **`git reset --hard`** ⚠️ (new files stay: `git clean -n` previews them) |
 | Set uncommitted work aside, keep it for later | **`git stash`** |
 | Small fix, faster to just describe it | **Ask Claude Code to undo/fix directly** |
 | Bad state is from a *previous* session | **`/resume` + rewind**, or **Git** |

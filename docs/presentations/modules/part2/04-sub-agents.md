@@ -37,7 +37,7 @@ Explore and Plan skip CLAUDE.md to stay fast. **Custom subagents load CLAUDE.md 
 
 # This Repo Ships Three Custom Subagents
 
-`.claude/agents/` — ported from the Copilot workshop's custom agents
+`.claude/agents/` — ported from the Copilot workshop's custom agents (if you took it)
 
 | Subagent | Role | Tools | Model |
 |---|---|---|---|
@@ -88,7 +88,7 @@ backlog-generator ──► architecture-reviewer ──► test-strategist ─�
  docs/backlog/*.md      ADR-worthy decisions       per stack
 ```
 
-- Copilot uses **handoff buttons**. In Claude Code, each subagent **returns to Claude**, which passes context to the next one
+- If you've used Copilot: it uses **handoff buttons**. In Claude Code, each subagent **returns to Claude**, which passes context to the next one
 - Subagents don't talk to each other directly. Files (`docs/backlog/`) are durable handoff artifacts
 - Each agent ends with a fixed output format and "Suggested Handoffs"
 

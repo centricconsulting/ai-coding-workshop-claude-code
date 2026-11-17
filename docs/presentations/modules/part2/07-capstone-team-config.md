@@ -97,7 +97,7 @@ section { font-size: 23px; }
 CLAUDE.md (root)
   ↓ What this project is. Tech stack. Build + test. Conventions. Don't-do list.
 
-src-dotnet/CLAUDE.md
+src-dotnet/CLAUDE.md  (or src-springboot/CLAUDE.md)
   ↓ Architecture layers. Domain vocabulary. Pattern rules. Key file locations.
 
 .claude/rules/*.md  (paths: frontmatter)
@@ -152,11 +152,11 @@ For your scenario, answer per file:
 What does Claude Code need to know to work in this repo at all?
 (Stack, build commands, conventions, what NOT to do)
 
-**src-dotnet/ CLAUDE.md:**
+**Stack folder CLAUDE.md** (`src-dotnet/` or `src-springboot/`):
 What does Claude Code need to know to write correct code here?
 (Architecture, naming, domain vocabulary, patterns)
 
-**`.claude/rules/tests.md`** (`paths: ["src-dotnet/tests/**"]`):
+**`.claude/rules/tests.md`** (`paths: ["<your tests folder>/**"]`):
 What does a good test look like here?
 (Naming, structure, coverage expectations, what's in scope)
 
@@ -179,12 +179,16 @@ Does it produce something consistent with your standards?
 
 # Part C: Hook Design
 
+<style scoped>
+section { font-size: 23px; }
+</style>
+
 **Hook design table** (input = JSON on stdin → `jq`):
 
 | Event | Matcher | Script does | Why |
 |---|---|---|---|
-| PostToolUse | `Edit\|Write` | `.cs` file? → `dotnet format` | Auto-format |
-| PostToolUse | `Edit\|Write` | test file? → `dotnet test --filter` | Instant feedback |
+| PostToolUse | `Edit\|Write` | source file? → run your formatter (e.g. `dotnet format`) | Auto-format |
+| PostToolUse | `Edit\|Write` | test file? → run its tests (`dotnet test --filter` / `mvn -pl <module> test`) | Instant feedback |
 | PreToolUse | `Bash` | `git push`? → stderr + **`exit 2`** | Block accidental push |
 | PostToolUse | `.*` | append to `audit.log` | Compliance |
 

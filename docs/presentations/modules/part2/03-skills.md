@@ -65,7 +65,7 @@ That's fine for a handful of always-relevant conventions. It stops scaling once 
 ```
 .claude/skills/test-data-generator/
   SKILL.md                  ← required
-  templates/TaskTestData.cs ← loaded only when referenced
+  templates/TaskTestData.cs, TaskTestData.java ← loaded only when referenced
 ```
 
 ```markdown

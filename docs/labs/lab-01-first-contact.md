@@ -11,6 +11,10 @@
 
 > **Note**: This lab starts with *understanding the tool*, not writing code — because Claude Code's agentic nature means you need to understand what it can do (and what it will ask permission for) before you hand it a task.
 
+### Choose Your Stack
+
+> Follow sections marked 🔷 for .NET or 🟩 for Spring Boot. You only need one stack. Everything unmarked (installation, slash commands, permission modes) is the same for both.
+
 ---
 
 ## Prerequisites
@@ -19,6 +23,8 @@
 - A Claude subscription (Pro, Max, Team, Enterprise) **or** a Claude Console API key — your facilitator will tell you which
 - Repository **forked** on GitHub and cloned from your fork
 - Personal branch created: `git checkout -b workshop/your-name`
+- 🔷 **.NET**: .NET 9 SDK (`dotnet --version`)
+- 🟩 **Spring Boot**: Java 21 JDK and Maven 3.9+ (`java -version`, `mvn --version`)
 
 > **Why fork?** Later labs (GitHub MCP in Lab 10, CI workflows in Lab 13, `/security-review` which needs an `origin` remote) require a remote you can push to and query. The fork is the foundation — set it up now.
 
@@ -85,25 +91,41 @@ claude
 
 Type this prompt:
 
+#### 🔷 .NET Prompt
+
 ```
-What is this project? Give me an overview of the architecture, the main domain concepts, and how the .NET and Spring Boot versions relate to each other.
+What is this project? Give me an overview of the architecture and the main domain concepts, focusing on src-dotnet/.
 ```
 
-**Watch what happens**: Claude Code will read multiple files before responding. You'll see tool calls appear as it explores the `src-dotnet/` directory and builds understanding — `CLAUDE.md` is already in its context because it loads automatically at session start. This is the agentic model in action — it's not guessing from a prompt, it's reading your actual code.
+#### 🟩 Spring Boot Prompt
+
+```
+What is this project? Give me an overview of the architecture and the main domain concepts, focusing on src-springboot/.
+```
+
+**Watch what happens**: Claude Code will read multiple files before responding. You'll see tool calls appear as it explores your stack's directory (`src-dotnet/` or `src-springboot/`) and builds understanding — `CLAUDE.md` is already in its context because it loads automatically at session start. This is the agentic model in action — it's not guessing from a prompt, it's reading your actual code.
 
 **Expected behavior**: Claude Code should accurately describe:
-- TaskManager as a workshop codebase with two parallel implementations
-- Clean Architecture with Domain/Application/Infrastructure/API layers
+- TaskManager as a workshop codebase with two parallel implementations (.NET and Spring Boot)
+- Clean Architecture with Domain/Application/Infrastructure/API layers (Maven modules in Spring Boot, projects in .NET)
 - The starter domain model: a `Task` with title, description, and status (priorities, due dates, and notifications are added during the labs)
 - The `.claude/` folder of shipped agents, skills, rules, and settings you'll use on Day 2
 
 ### B.3 Follow-Up: Ask About a Specific File
 
+#### 🔷 .NET Prompt
+
 ```
-Show me the LegacyTaskProcessor and explain what's wrong with it.
+Show me the LegacyTaskProcessor in src-dotnet/ and explain what's wrong with it.
 ```
 
-Claude Code will find and read `LegacyTaskProcessor` in whichever stack it finds first. Notice it gives you a specific, code-grounded answer — not a generic response.
+#### 🟩 Spring Boot Prompt
+
+```
+Show me the LegacyTaskProcessor in src-springboot/ and explain what's wrong with it.
+```
+
+Claude Code will find and read the file without being told where it lives. Notice it gives you a specific, code-grounded answer — not a generic response.
 
 ---
 
@@ -162,10 +184,20 @@ For Part D, cycle to **Manual** mode so you can see permission prompts. (You can
 
 When Claude Code takes an action, you see lines like:
 
+🔷 **.NET**
+
 ```
 ● Read(src-dotnet/src/TaskManager.Domain/Tasks/Task.cs)
 ● Bash(dotnet build)
 ● Write(src-dotnet/src/TaskManager.Application/Services/NotificationService.cs)
+```
+
+🟩 **Spring Boot**
+
+```
+● Read(src-springboot/taskmanager-domain/src/main/java/com/example/taskmanager/domain/tasks/Task.java)
+● Bash(mvn clean test)
+● Write(src-springboot/taskmanager-application/src/main/java/com/example/taskmanager/application/services/DefaultNotificationService.java)
 ```
 
 These are **tool calls** — real actions Claude Code takes on your filesystem or in your terminal. You control which of these are allowed (Day 2, Lab 9).
@@ -176,13 +208,21 @@ These are **tool calls** — real actions Claude Code takes on your filesystem o
 
 ### D.1 Ask Claude Code to Run the Tests
 
+#### 🔷 .NET Prompt
+
 ```
 Run the .NET tests and tell me which ones pass and which ones fail.
 ```
 
-*(Spring Boot track: ask it to run the Maven tests instead. Expect `BUILD SUCCESS` with about 100 tests, all passing and none skipped; the Spring starter ships with real tests rather than stubs.)*
-
 **Expected result**: the build succeeds and the summary reports **1 passed, 11 skipped, 0 failed**. The passing test is a `/health` check; the skipped tests are stubs that you'll implement during the labs.
+
+#### 🟩 Spring Boot Prompt
+
+```
+Run the Maven tests and tell me which ones pass and which ones fail.
+```
+
+**Expected result**: `BUILD SUCCESS` with about 100 tests, all passing and none skipped. The Spring starter ships with real tests rather than stubs.
 
 **Did you get a permission prompt?** Probably not — and that's worth understanding. This repository ships a `.claude/settings.json` that **pre-approves** `dotnet` and `mvn` commands. That file is the teaching artifact for Lab 9; it also denies dangerous commands like `rm -rf` and `git push --force`. Open it and take a quick look.
 
@@ -204,8 +244,8 @@ Choose **Yes**, then ask Claude to delete `scratch-notes.md` (or delete it yours
 ### D.3 Understand What Just Happened
 
 Claude Code:
-1. Determined the correct test command from `CLAUDE.md` (or by exploring `src-dotnet/`)
-2. Checked the command against your permission rules and mode — `dotnet` was pre-approved, the file write was not
+1. Determined the correct test command from `CLAUDE.md` (or by exploring your stack's directory)
+2. Checked the command against your permission rules and mode — `dotnet`/`mvn` was pre-approved, the file write was not
 3. Ran the action
 4. Parsed the output and gave you a human-readable summary
 
@@ -234,8 +274,8 @@ The key insight: **Claude Code's output is actions, not suggestions.** You revie
 - [ ] `claude --version` shows a version number
 - [ ] You authenticated and ran at least one conversation
 - [ ] Claude Code accurately described the project architecture from reading the codebase
-- [ ] `dotnet test` (or `mvn clean test`) ran through Claude Code — .NET shows 1 passed, 11 skipped, 0 failed; Spring Boot shows about 100 passing tests and `BUILD SUCCESS`
-- [ ] You saw at least one permission prompt and understand why `dotnet` didn't trigger one
+- [ ] Your stack's tests ran through Claude Code — 🔷 .NET shows 1 passed, 11 skipped, 0 failed; 🟩 Spring Boot shows about 100 passing tests and `BUILD SUCCESS`
+- [ ] You saw at least one permission prompt and understand why the test command (`dotnet` or `mvn`) didn't trigger one
 - [ ] You can cycle permission modes with Shift+Tab
 - [ ] You can use `/help`, `/context`, `/model`, `/effort`, `/compact`, and `/clear`
 

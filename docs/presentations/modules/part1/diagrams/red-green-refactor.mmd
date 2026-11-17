@@ -1,0 +1,24 @@
+%%{init: {"theme": "base", "themeVariables": {"fontFamily": "Arial", "fontSize": "22px", "lineColor": "#44546a", "edgeLabelBackground": "#ffffff"}, "flowchart": {"htmlLabels": false, "wrappingWidth": 300, "nodeSpacing": 60, "rankSpacing": 90, "padding": 24, "curve": "basis"}}}%%
+flowchart LR
+    R["`**RED**
+Write a failing test
+
+Claude writes the test`"]
+    G["`**GREEN**
+Make it pass
+
+Claude writes the implementation`"]
+    F["`**REFACTOR**
+Clean up
+
+Claude refactors`"]
+    R -- "run tests:<br/>must FAIL" --> G
+    G -- "run tests:<br/>must PASS" --> F
+    F -. "run tests: still PASS,<br/>then next behavior" .-> R
+
+    classDef red fill:#fde2e2,stroke:#d64545,stroke-width:3px,color:#1a1a1a
+    classDef green fill:#dff5e1,stroke:#2e9e4f,stroke-width:3px,color:#1a1a1a
+    classDef blue fill:#dfeafc,stroke:#2f6fd6,stroke-width:3px,color:#1a1a1a
+    class R red
+    class G green
+    class F blue

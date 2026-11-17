@@ -48,12 +48,14 @@ The instruction files live in several places, each with a different scope:
 
 | Scope | Location | Shared with |
 |---|---|---|
-| **Managed policy** | OS-level path set by IT (e.g., `/Library/Application Support/ClaudeCode/CLAUDE.md` on macOS) | Everyone in the organization |
+| **Managed policy** | OS-level path set by IT: macOS `/Library/Application Support/ClaudeCode/CLAUDE.md`; Linux and WSL `/etc/claude-code/CLAUDE.md`; Windows `C:\Program Files\ClaudeCode\CLAUDE.md` | Everyone in the organization |
 | **User** | `~/.claude/CLAUDE.md` (and `~/.claude/rules/`) | Only you, all projects |
 | **Project** | `./CLAUDE.md` **or** `./.claude/CLAUDE.md` | Your team, via git |
 | **Project rules** | `./.claude/rules/*.md` (optionally scoped with `paths:` frontmatter) | Your team, via git |
 | **Local** | `./CLAUDE.local.md` — keep it out of git | Only you, this project |
 | **Subdirectory** | `src-dotnet/CLAUDE.md`, `src-dotnet/tests/CLAUDE.md`, … | Your team, via git |
+
+> **Windows users:** `~` means your home folder: `/Users/you` on macOS, `/home/you` on Linux and WSL, `C:\Users\you` on Windows (also `%USERPROFILE%`). `~` works in PowerShell and Git Bash; in CMD, type `%USERPROFILE%` instead. So `~/.claude/CLAUDE.md` is `C:\Users\you\.claude\CLAUDE.md` on Windows.
 
 > 💡 Repos that already use `AGENTS.md` for other coding tools are supported too — see the [memory docs](https://code.claude.com/docs/en/memory) for how `AGENTS.md` and `CLAUDE.md` interact.
 
@@ -118,12 +120,28 @@ The test: *would this still be true and useful in 6 months?* If yes, it belongs.
 To see Claude Code *without* project memory, start a session in an empty folder outside the repo:
 
 ```bash
+# macOS / Linux / WSL
 mkdir -p ~/claude-scratch && cd ~/claude-scratch && claude
 ```
+
+```powershell
+# Windows PowerShell
+mkdir ~/claude-scratch; cd ~/claude-scratch; claude
+```
+
+#### 🔷 .NET Prompt
 
 ```
 Sketch a TaskService class for a .NET Clean Architecture Application layer.
 ```
+
+#### 🟩 Spring Boot Prompt
+
+```
+Sketch a TaskQueryService class that returns tasks for a given status, for a Spring Boot Clean Architecture application layer.
+```
+
+*(Spring has a `TaskService` already, so the Spring prompt asks for a different class.)*
 
 Note the response — Claude Code has to guess at conventions. Exit (`/exit`) and return to the workshop repo.
 
@@ -135,11 +153,21 @@ Back in the workshop repo, start a fresh session:
 cd <path-to-workshop-repo> && claude
 ```
 
+#### 🔷 .NET Prompt
+
 ```
 Look at src-dotnet/src/TaskManager.Application, then sketch a TaskService class for the .NET Application layer. Don't write any files — just show me the code.
 ```
 
 This time Claude Code should follow conventions from `CLAUDE.md`, `src-dotnet/CLAUDE.md`, and `.claude/rules/dotnet.md` (file-scoped namespaces, sealed classes, guard clauses, async patterns) without you restating them — the root file loads at launch, and the `src-dotnet/` file and `.cs` rule load automatically as soon as Claude reads a file under `src-dotnet/`.
+
+#### 🟩 Spring Boot Prompt
+
+```
+Look at src-springboot/taskmanager-application, then sketch a TaskQueryService class that returns tasks for a given status, for the Spring Boot application layer. Don't write any files — just show me the code.
+```
+
+This time Claude Code should follow conventions from `CLAUDE.md`, `src-springboot/CLAUDE.md`, and `.claude/rules/springboot.md` (constructor injection, guard clauses, SLF4J logging, no `System.out`) without you restating them — the root file loads at launch, and the `src-springboot/` file and Java rule load automatically as soon as Claude reads a file under `src-springboot/`.
 
 > **Key insight**: Memory removes the need to re-state your conventions in every prompt. You write it once; Claude Code reads it every session.
 
@@ -152,8 +180,15 @@ This time Claude Code should follow conventions from `CLAUDE.md`, `src-dotnet/CL
 ### C.1 Inspect the Shipped Rules
 
 ```bash
+# macOS / Linux / WSL
 ls .claude/rules/
 head -15 .claude/rules/dotnet.md
+```
+
+```powershell
+# Windows PowerShell
+ls .claude/rules/
+Get-Content .claude/rules/dotnet.md -TotalCount 15
 ```
 
 A path-scoped rule is a markdown file with a `paths:` list in YAML frontmatter:
@@ -184,11 +219,21 @@ Notes:
 
 In a fresh session (`/clear`), run `/context` and note which memory files are listed. Then:
 
+#### 🔷 .NET Prompt
+
 ```
 Read src-dotnet/src/TaskManager.Domain/Tasks/Task.cs and tell me which project instructions apply to this file and where each one came from.
 ```
 
-Claude should now cite `src-dotnet/CLAUDE.md` **and** `.claude/rules/dotnet.md` — neither was in context until it touched a matching file. (If you're on the Spring Boot track, read `src-springboot/taskmanager-domain/src/main/java/com/example/taskmanager/domain/tasks/Task.java` instead and look for `springboot.md`.)
+Claude should now cite `src-dotnet/CLAUDE.md` **and** `.claude/rules/dotnet.md` — neither was in context until it touched a matching file.
+
+#### 🟩 Spring Boot Prompt
+
+```
+Read src-springboot/taskmanager-domain/src/main/java/com/example/taskmanager/domain/tasks/Task.java and tell me which project instructions apply to this file and where each one came from.
+```
+
+Claude should now cite `src-springboot/CLAUDE.md` **and** `.claude/rules/springboot.md` — neither was in context until it touched a matching file.
 
 ### C.3 Add and Trigger Your Own Rule
 
@@ -228,9 +273,14 @@ Keep `domain-layer.md` — you'll use it again in Lab 3, Part 2 when you build a
 
 ## Part D: Writing a CLAUDE.md for a Subdirectory (8 min)
 
-The `src-dotnet/tests/` directory currently has no `CLAUDE.md`. You'll write one.
+You'll write a `CLAUDE.md` for your stack's tests. Neither location has one yet.
+
+- 🔷 **.NET**: `src-dotnet/tests/`
+- 🟩 **Spring Boot**: tests live inside each Maven module, so you'll use the application module's unit tests: `src-springboot/taskmanager-application/src/test/`
 
 ### D.1 Ask Claude Code to Explore the Tests
+
+#### 🔷 .NET Prompt
 
 ```
 Read the test projects in the src-dotnet/tests/ directory and describe the current test structure, what frameworks are used, and what testing patterns you observe.
@@ -238,7 +288,17 @@ Read the test projects in the src-dotnet/tests/ directory and describe the curre
 
 Claude Code will read the test project files and give you a summary. (Expect xUnit v3 + FakeItEasy, mostly `Skip` stubs that `dotnet test` reports as skipped until you implement them in Labs 3 and 5, and one passing `/health` integration test in `HealthEndpointTests.cs`.)
 
-### D.2 Draft and Write `src-dotnet/tests/CLAUDE.md`
+#### 🟩 Spring Boot Prompt
+
+```
+Read the tests under src-springboot/taskmanager-application/src/test/ and describe the current test structure, what frameworks are used, and what testing patterns you observe.
+```
+
+Claude Code will read `TaskServiceTest.java` and give you a summary. (Expect JUnit 5 + Mockito with `@ExtendWith(MockitoExtension.class)`, `@Mock`/`@InjectMocks`, `@Nested` classes grouping related tests, `@DisplayName` descriptions, and Arrange/Act/Assert comments.)
+
+### D.2 Draft and Write the Tests `CLAUDE.md`
+
+#### 🔷 .NET Prompt
 
 ```
 Based on what you found in the src-dotnet/tests/ directory, draft a CLAUDE.md for src-dotnet/tests/ that captures: the testing frameworks, the naming conventions, the project structure, and any important "don't do this" rules for tests in this codebase. Keep it short. If something is already covered by src-dotnet/CLAUDE.md (which loads alongside it) or .claude/rules/dotnet.md, reference it instead of repeating it.
@@ -256,13 +316,41 @@ Then:
 Write this as src-dotnet/tests/CLAUDE.md.
 ```
 
+#### 🟩 Spring Boot Prompt
+
+```
+Based on what you found in src-springboot/taskmanager-application/src/test/, draft a CLAUDE.md for that folder that captures: the testing frameworks, the naming conventions, the structure, and any important "don't do this" rules for tests in this codebase. Keep it short. If something is already covered by src-springboot/CLAUDE.md (which loads alongside it) or .claude/rules/springboot.md, reference it instead of repeating it.
+```
+
+Review the draft. It should include things like:
+- JUnit 5 with Mockito (`@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks`)
+- Test naming and grouping: `shouldDoX` method names with a readable `@DisplayName`, in `@Nested` classes. This should match the naming line in `src-springboot/CLAUDE.md`; if the two disagree, that is a conflict, so fix one
+- Arrange/Act/Assert sections
+- Not to mock things that don't need mocking (domain objects are built with `Task.create(...)`, not mocked)
+
+Then:
+
+```
+Write this as src-springboot/taskmanager-application/src/test/CLAUDE.md.
+```
+
 ### D.3 Use an `@path` Import
 
-`CLAUDE.md` files can pull in other files with `@path/to/file`. Relative paths resolve from the file containing the import, and imports can nest (up to four hops). `src-dotnet/CLAUDE.md` already loads whenever Claude works under `src-dotnet/`, so there's no need to import it. Instead, pull in the domain-layer rule you wrote in Part C, so tests for domain code follow it even when Claude is only reading test files. Ask Claude Code to add a line like this to `src-dotnet/tests/CLAUDE.md`:
+`CLAUDE.md` files can pull in other files with `@path/to/file`. Relative paths resolve from the file containing the import, and imports can nest (up to four hops). `src-dotnet/CLAUDE.md` (or `src-springboot/CLAUDE.md`) already loads whenever Claude works under that folder, so there's no need to import it. Instead, pull in the domain-layer rule you wrote in Part C, so tests for domain code follow it even when Claude is only reading test files. Ask Claude Code to add a line like this to your tests `CLAUDE.md`:
+
+🔷 **.NET** (`src-dotnet/tests/CLAUDE.md`):
 
 ```markdown
 Domain-layer rules: @../../.claude/rules/domain-layer.md
 ```
+
+🟩 **Spring Boot** (`src-springboot/taskmanager-application/src/test/CLAUDE.md`):
+
+```markdown
+Domain-layer rules: @../../../../.claude/rules/domain-layer.md
+```
+
+(The path is relative to the file that contains the import, so the Spring file is two folders deeper than the .NET one.)
 
 > ⚠️ Imports organize a file; they **don't** save context — the imported file loads in full alongside the one that imports it. To mention a path *without* importing it, wrap it in backticks: `` `@README.md` ``.
 
@@ -272,11 +360,21 @@ Domain-layer rules: @../../.claude/rules/domain-layer.md
 /clear
 ```
 
+#### 🔷 .NET Prompt
+
 ```
 Read src-dotnet/tests/TaskManager.UnitTests/UnitTest1.cs, then write a test for TaskService.GetTaskAsync returning null when the task doesn't exist. Show it to me; don't write the file.
 ```
 
 Reading a file under `src-dotnet/tests/` pulls `src-dotnet/tests/CLAUDE.md` (and its import) into context, so the test should follow those conventions without you needing to specify them.
+
+#### 🟩 Spring Boot Prompt
+
+```
+Read src-springboot/taskmanager-application/src/test/java/com/example/taskmanager/application/services/TaskServiceTest.java, then write a test for TaskService.findTask returning an empty Optional when the task doesn't exist. Show it to me; don't write the file.
+```
+
+Reading a file under `src-springboot/taskmanager-application/src/test/` pulls the `CLAUDE.md` you just wrote (and its import) into context, so the test should follow those conventions without you needing to specify them.
 
 ---
 
@@ -284,7 +382,7 @@ Reading a file under `src-dotnet/tests/` pulls `src-dotnet/tests/CLAUDE.md` (and
 
 ### E.1 User-Level `CLAUDE.md`
 
-Some preferences apply everywhere, not just this project. Run `/memory` and open **User memory** (`~/.claude/CLAUDE.md`) — it's created if it doesn't exist. A minimal starting point:
+Some preferences apply everywhere, not just this project. Run `/memory` and open **User memory** (`~/.claude/CLAUDE.md`; on Windows, `C:\Users\you\.claude\CLAUDE.md`) — it's created if it doesn't exist. A minimal starting point:
 
 ```markdown
 # Personal Claude Code Preferences
@@ -304,8 +402,16 @@ Some preferences apply everywhere, not just this project. Run `/memory` and open
 For preferences that only apply to *you* in *this* repo (your sandbox URL, preferred test data, "I'm on the Spring Boot track"), create `CLAUDE.local.md` at the repo root and keep it out of git:
 
 ```bash
+# macOS / Linux / WSL (or Git Bash)
 echo "CLAUDE.local.md" >> .git/info/exclude
 ```
+
+```powershell
+# Windows PowerShell (use Add-Content: ">>" can write UTF-16 in Windows PowerShell 5.1, which Git won't read)
+Add-Content .git/info/exclude "CLAUDE.local.md"
+```
+
+Check it worked: `git status` should not list `CLAUDE.local.md` once you've created it.
 
 ```markdown
 # My local notes
@@ -314,12 +420,20 @@ echo "CLAUDE.local.md" >> .git/info/exclude
 
 ### E.3 Auto Memory
 
-Auto memory is on by default. Claude decides on its own what's worth keeping (your corrections, preferences, project context it can't derive from code) and stores it in `~/.claude/projects/<project>/memory/` — a `MEMORY.md` index (first 200 lines / 25 KB load every session) plus topic files.
+Auto memory is on by default. Claude decides on its own what's worth keeping (your corrections, preferences, project context it can't derive from code) and stores it in `~/.claude/projects/<project>/memory/` (on Windows, under `C:\Users\you\.claude\projects\`) — a `MEMORY.md` index (first 200 lines / 25 KB load every session) plus topic files.
 
 Try it:
 
+🔷 **.NET**
+
 ```
 Remember that I prefer FakeItEasy's A.CallTo(...).MustHaveHappenedOnceExactly() over looser assertions.
+```
+
+🟩 **Spring Boot**
+
+```
+Remember that I prefer Mockito's verify(mock, times(1)) over looser verifications.
 ```
 
 Look for a "Saved … memory" message, then run `/memory` → open the auto memory folder to see what was written. Auto memory is plain markdown — edit or delete entries any time, or toggle the feature off from `/memory`.
@@ -350,7 +464,7 @@ Remember: all of these are **context, not enforcement**. To guarantee something 
 - [ ] You can explain the memory model (managed → user → project/rules → local → subdirectory, plus auto memory) and when each file loads
 - [ ] You used `/context` and `/memory` to see which memory files are active
 - [ ] You watched a path-scoped rule load and created `.claude/rules/domain-layer.md`
-- [ ] You wrote a `src-dotnet/tests/CLAUDE.md` (with an `@path` import) that Claude Code uses to generate better tests
+- [ ] You wrote a tests `CLAUDE.md` for your stack (`src-dotnet/tests/CLAUDE.md` or `src-springboot/taskmanager-application/src/test/CLAUDE.md`) with an `@path` import, and Claude Code uses it to generate better tests
 - [ ] You created (or planned) a `~/.claude/CLAUDE.md` and know when to use `CLAUDE.local.md`
 
 ---
@@ -366,7 +480,7 @@ Add a "Domain Vocabulary" section to the root `CLAUDE.md` that defines the bound
 **Claude Code isn't following CLAUDE.md conventions**
 - Run `/context` and check the **Memory files** list — is the file actually loaded?
 - Subdirectory `CLAUDE.md` files and path-scoped rules load only after Claude reads or edits a matching file; ask it to read one first
-- Verify the file is in the right place: `find . -name "CLAUDE.md"` and `ls .claude/rules/`
+- Verify the file is in the right place: `find . -name "CLAUDE.md"` and `ls .claude/rules/` (PowerShell: `Get-ChildItem -Recurse -Filter CLAUDE.md`)
 - Make instructions concrete and verifiable ("Use file-scoped namespaces", not "Write clean code")
 
 **A path-scoped rule never loads**

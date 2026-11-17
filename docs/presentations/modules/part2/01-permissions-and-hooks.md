@@ -86,20 +86,25 @@ For ordinary keys, **higher wins**. For permission **rules**, every level is mer
 
 # Allow / Ask / Deny
 
+<style scoped>
+section { font-size: 23px; }
+</style>
+
 ```json
 {
   "permissions": {
-    "allow": ["Bash(dotnet *)", "Bash(git diff *)", "Edit(src-dotnet/**)"],
+    "allow": ["Bash(dotnet *)", "Bash(mvn *)", "Bash(git diff *)",
+              "Edit(src-dotnet/**)", "Edit(src-springboot/**)"],
     "ask":   ["Bash(git push *)"],
     "deny":  ["Bash(git push --force*)", "Bash(rm -rf *)",
-              "Bash(dotnet ef *)", "Read(./.env)"],
+              "Bash(dotnet ef *)", "Bash(mvn flyway*)", "Read(./.env)"],
     "defaultMode": "default"
   }
 }
 ```
 
 Evaluated **deny → ask → allow** — first match wins, specificity doesn't.
-So `Bash(dotnet *)` never lets `dotnet ef …` through.
+So `Bash(dotnet *)` never lets `dotnet ef …` through (likewise `mvn flyway…` under `Bash(mvn *)`).
 
 `Bash(dotnet:*)` still works; `Bash(dotnet *)` is the current form.
 Use `Edit(path)` / `Read(path)` for files — `Write(path)` rules never match.
@@ -287,12 +292,16 @@ Test without Claude: `echo '{"tool_input":{"file_path":"x/.env"}}' | ./protect-f
 
 # Practical Hook Patterns
 
+<style scoped>
+section { font-size: 20px; }
+</style>
+
 **Audit log** (shipped in `.claude/settings.json`):
 ```bash
 jq -r '"[\(now | todate)] Bash: \(.tool_input.command)"' >> "${CLAUDE_PROJECT_DIR}/.claude/audit.log"
 ```
 
-**Format after edit** (`PostToolUse`, `Edit|Write`):
+**Format after edit** (`PostToolUse`, `Edit|Write`; .NET, since the Spring track has no formatter configured):
 ```bash
 f=$(jq -r '.tool_input.file_path // empty'); case "$f" in *.cs) cd "$CLAUDE_PROJECT_DIR/src-dotnet" &&
   dotnet format whitespace TaskManager.sln --include "${f#"$CLAUDE_PROJECT_DIR/src-dotnet"/}";; esac
@@ -303,6 +312,8 @@ f=$(jq -r '.tool_input.file_path // empty'); case "$f" in *.cs) cd "$CLAUDE_PROJ
 f=$(jq -r '.tool_input.file_path // empty'); case "$f" in */tests/TaskManager.UnitTests/*.cs)
   cd "$CLAUDE_PROJECT_DIR" && dotnet test src-dotnet/tests/TaskManager.UnitTests/ --nologo -v q >&2 || exit 2;; esac
 ```
+Spring: same pattern in `.claude/hooks/run-java-tests.sh` (you write it in Lab 9, C.6): it maps the changed test file to its Maven module and runs `mvn -q -pl <module> -am test`.
+**This is the hook that gives Day 1's TDD rule teeth:** a failing test goes straight back to Claude.
 
 ---
 
