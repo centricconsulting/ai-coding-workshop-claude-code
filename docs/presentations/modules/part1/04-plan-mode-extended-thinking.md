@@ -48,7 +48,7 @@ instead of reviewing a plan to decide what should happen.
 section { font-size: 27px; }
 </style>
 
-| Mode | Status bar | Runs without asking | Copilot analogue |
+| Mode | Status bar | Runs without asking | If you used Copilot |
 |---|---|---|---|
 | `manual` (alias `default`) | `⏸ manual mode on` | Reads only | **Ask** — but can act once you approve |
 | `plan` | `⏸ plan mode on` | Reads + exploration; **edits blocked** | **Plan** |
@@ -151,12 +151,6 @@ The real controls are **effort** (session) and **`ultrathink`** (one turn).
 
 # Effort: The Real Dial
 
-```
-/effort                  slider        /effort status    show current level
-/effort high             set level     /effort auto      reset to model default
-claude --effort low      at launch     /model  ← →       adjust in the picker
-```
-
 | Level | Good for |
 |---|---|
 | `low` | Quick, reviewed iterations — renames, sketches |
@@ -164,6 +158,19 @@ claude --effort low      at launch     /model  ← →       adjust in the picke
 | `high` | Bug fixes in existing code, edge cases matter |
 | `xhigh` | Deeper reasoning, higher token cost |
 | `max` | Hard autonomous problems; session-only, can overthink |
+
+---
+
+# Setting Effort
+
+| Command | What it does |
+|---|---|
+| `/effort` | Open the effort slider |
+| `/effort high` | Set a level directly |
+| `/effort status` | Show the current level |
+| `/effort auto` | Reset to the model default |
+| `claude --effort low` | Set it at launch |
+| `/model` then `←` `→` | Adjust it in the model picker |
 
 ---
 

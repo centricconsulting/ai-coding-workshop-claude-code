@@ -33,7 +33,7 @@ You: We don't write XML doc comments
 
 ---
 
-# CLAUDE.md Is Project Memory
+# CLAUDE.md Is Project Memory (.NET)
 
 ```markdown
 # src-dotnet/CLAUDE.md
@@ -48,6 +48,25 @@ You: We don't write XML doc comments
 ```
 
 Claude Code loads it automatically whenever it works in `src-dotnet/`.
+**You teach it once. It applies those lessons forever.**
+
+---
+
+# CLAUDE.md Is Project Memory (Spring Boot)
+
+```markdown
+# src-springboot/CLAUDE.md
+
+## Java Conventions
+- Java records for value objects and DTOs
+- Sealed interfaces for closed sets of variants
+- Guard clauses — no else branches
+- Constructor injection — never field @Autowired
+- SLF4J logging — never System.out
+- No abbreviations in identifiers
+```
+
+Claude Code loads it automatically whenever it works in `src-springboot/`.
 **You teach it once. It applies those lessons forever.**
 
 ---
@@ -85,7 +104,7 @@ Check what's loaded: `/context` → **Memory files**
 
 # Path-Scoped Rules: `.claude/rules/`
 
-```markdown
+```text
 ---
 paths:
   - "src-dotnet/src/**/*.cs"
@@ -108,6 +127,26 @@ Shipped in this repo:
 | `dotnet.md` | `src-dotnet/src/**/*.cs`, `src-dotnet/tests/**/*.cs`, `**/*.csproj` |
 | `springboot.md` | `src-springboot/**/*.java`, `pom.xml`, `*.{yml,yaml,properties}` |
 | `follow-up-questions.md` | *(no `paths:` → every session)* |
+
+---
+
+# How Files Load: A Worked Example
+
+<style scoped>
+section { font-size: 24px; }
+</style>
+
+You ask Claude to edit a file in your stack:
+
+| You touch | Loaded at launch | Loaded on demand |
+|---|---|---|
+| 🔷 .NET: a `.cs` file | root `CLAUDE.md`, `follow-up-questions.md` (no `paths:`) | `src-dotnet/CLAUDE.md`, `rules/dotnet.md` (`paths:` match) |
+| 🟩 Spring: a `.java` file | root `CLAUDE.md`, `follow-up-questions.md` (no `paths:`) | `src-springboot/CLAUDE.md`, `rules/springboot.md` (`paths:` match) |
+
+Everything is **concatenated, broad → specific**. Nothing is overridden.
+
+> **If two files disagree**, there is no ranking: Claude may follow either.
+> Delete one, or scope it with `paths:`.
 
 ---
 
@@ -182,7 +221,7 @@ and write doc comments if you don't tell it not to.
 
 ---
 
-# Before and After: A Real Example
+# Before and After: A Real Example (.NET)
 
 <style scoped>
 section { font-size: 27px; }
@@ -208,6 +247,41 @@ public async Task<TaskDto> Handle(CreateTaskCommand command)
     if (command is null) throw new ArgumentNullException(nameof(command));
     var task = Task.Create(command.Title, command.DueDate);
     // ...
+```
+
+---
+
+# Before and After: A Real Example (Spring Boot)
+
+<style scoped>
+section { font-size: 20px; }
+</style>
+
+**Without CLAUDE.md** — Claude Code produces:
+
+```java
+@Service
+public class TaskService {
+    @Autowired
+    private TaskRepository taskRepository;
+    public Task createTask(String title) {
+        Task task = new Task();
+        task.setTitle(title);
+        System.out.println("Created task " + title);
+        // ...
+```
+
+**With `src-springboot/CLAUDE.md`** — Claude Code produces:
+
+```java
+@Service
+@RequiredArgsConstructor
+public class TaskService {
+    private final TaskRepository taskRepository;
+    public Task createTask(String title) {
+        Task task = Task.create(title);
+        return taskRepository.save(task);
+    }
 ```
 
 ---

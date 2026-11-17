@@ -43,6 +43,10 @@ public string ProcessTask(int id, string data, int type, bool flag)
 
 # Why One-Shot Refactors Fail
 
+<style scoped>
+section { font-size: 25px; }
+</style>
+
 ```
 You: Refactor LegacyTaskProcessor to follow our conventions.
 
@@ -57,7 +61,7 @@ Claude Code:
 **Problems:**
 - No characterization baseline — you don't know what was supposed to pass
 - Hard to review a 150-line rewrite in one diff
-- Context fills up fast on large files
+- **Context** (all Claude can see: messages, files read, command output) fills up fast
 - Mistakes compound
 
 ---
@@ -92,7 +96,7 @@ Phase 4: Clean up
 
 ---
 
-# Characterization Tests
+# Characterization Tests (.NET)
 
 Before you change a line of `LegacyTaskProcessor`, you need tests
 that document what it actually does — not what it should do.
@@ -112,7 +116,26 @@ They're not testing good design — they're testing current behavior.
 
 ---
 
-# The Subtle Bug to Find
+# Characterization Tests (Spring Boot)
+
+Before you change a line of `LegacyTaskProcessor`, you need tests
+that document what it actually does — not what it should do.
+
+```java
+@Test
+void processTask_type1WithFlag_invertsCase() {
+    var processor = new LegacyTaskProcessor();
+    String result = processor.processTask(1, "Hello World", 1, true);
+    assertEquals("hELLO_wORLD", result);
+}
+```
+
+**These tests exist to tell you if you accidentally changed behavior.**
+They're not testing good design — they're testing current behavior.
+
+---
+
+# The Subtle Bug to Find (.NET)
 
 <style scoped>
 section { font-size: 27px; }
@@ -128,7 +151,7 @@ p:nth-of-type(3) { grid-column: 2; grid-row: 4; }
 p:nth-of-type(4) { grid-column: 2; grid-row: 5; }
 </style>
 
-`LegacyTaskProcessor` has a bug in `Chk()` (or `chk()`):
+`LegacyTaskProcessor` has a bug in `Chk()`:
 
 ```csharp
 public bool Chk(string d, int tp)
@@ -153,13 +176,139 @@ A characterization test will expose this. The refactoring should fix it.
 
 ---
 
+# The Subtle Bug to Find (Spring Boot)
+
+<style scoped>
+section { font-size: 27px; }
+</style>
+
+<style scoped>
+section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; align-content: start; }
+h1 { grid-column: 1 / -1; grid-row: 1; }
+p:nth-of-type(1) { grid-column: 1; grid-row: 2; }
+pre { grid-column: 1; grid-row: 3 / span 3; align-self: start; }
+p:nth-of-type(2) { grid-column: 2; grid-row: 2 / span 2; }
+p:nth-of-type(3) { grid-column: 2; grid-row: 4; }
+p:nth-of-type(4) { grid-column: 2; grid-row: 5; }
+</style>
+
+`LegacyTaskProcessor` has a bug in `chk()`:
+
+```java
+public boolean chk(String d, int tp) {
+    if (rdy == true) {
+        // ... returns true in some cases
+    }
+    return false;
+}
+```
+
+`rdy` starts as `false`. `chk()` always returns `false`
+unless you called `init(true)` first.
+
+**The caller (`LegacyBatchImportService`) does call `init(true)` before checking.**
+But `LegacyTaskProcessor` used standalone rejects every input.
+And every rename you make must ripple into `LegacyBatchImportService` —
+that's what makes this a *multi-file* refactor.
+
+A characterization test will expose this. The refactoring should fix it.
+
+---
+
+# What "Minimal Change" Looks Like (.NET)
+
+<style scoped>
+section { font-size: 25px; }
+</style>
+
+**Phase 2 extract: before**
+```csharp
+if (type == 1) {
+    if (flag) {
+        for (int i = 0; i < data.Length; i++) {
+            // 15 lines of case-inverting logic
+        }
+    }
+}
+```
+
+**Phase 2 extract: after**
+```csharp
+if (type == ProcessType.Transform) {
+    return flag
+        ? InvertCase(data)
+        : data.ToUpper();
+}
+```
+
+The logic is identical. The structure is readable. Tests still pass.
+
+---
+
+# What "Minimal Change" Looks Like (Spring Boot)
+
+<style scoped>
+section { font-size: 25px; }
+</style>
+
+**Phase 2 extract: before**
+```java
+if (type == 1) {
+    if (flag) {
+        for (int i = 0; i < data.length(); i++) {
+            // 15 lines of case-inverting logic
+        }
+    }
+}
+```
+
+**Phase 2 extract: after**
+```java
+if (type == ProcessType.TRANSFORM) {
+    return flag
+        ? invertCase(data)
+        : data.toUpperCase();
+}
+```
+
+The logic is identical. The structure is readable. Tests still pass.
+
+---
+
+# Reviewing Phase Diffs
+
+<style scoped>
+section { font-size: 24px; }
+</style>
+
+At each phase boundary, before committing:
+
+```bash
+git status               # new files show as untracked
+git add -A src-dotnet/   # or: src-springboot/
+git diff --staged
+```
+
+For Phase 1 (characterization tests only):
+- The diff should only add test files
+- No changes to `LegacyTaskProcessor.cs` (or `.java`)
+- If you see changes to the implementation, something went wrong
+
+For Phase 2 (rename only):
+- Variable names change
+- Method names change
+- **Logic does not change** — the structure should be identical
+
+---
+
 # Context Management: See It First with `/context`
 
 <style scoped>
 section { font-size: 22px; }
 </style>
 
-A refactoring session builds up a lot of context:
+The context window is Claude's working memory: finite, and everything in it competes for space.
+A refactoring session fills it with:
 - Files read
 - Test output from multiple runs
 - Previous versions of the code
@@ -228,64 +377,10 @@ The characterization tests are passing. Focus on `ProcessTask`."*
 
 ---
 
-# Reviewing Phase Diffs
-
-<style scoped>
-section { font-size: 27px; }
-</style>
-
-At each phase boundary, before committing:
-
-```bash
-git diff
-```
-
-For Phase 1 (characterization tests only):
-- The diff should only add test files
-- No changes to `LegacyTaskProcessor.cs`
-- If you see changes to the implementation, something went wrong
-
-For Phase 2 (rename only):
-- Variable names change
-- Method names change
-- **Logic does not change** — the structure should be identical
-
----
-
-# What "Minimal Change" Looks Like
-
-<style scoped>
-section { font-size: 25px; }
-</style>
-
-**Phase 2 extract: before**
-```csharp
-if (type == 1) {
-    if (flag) {
-        for (int i = 0; i < data.Length; i++) {
-            // 15 lines of case-inverting logic
-        }
-    }
-}
-```
-
-**Phase 2 extract: after**
-```csharp
-if (type == ProcessType.Transform) {
-    return flag
-        ? InvertCase(data)
-        : data.ToUpper();
-}
-```
-
-The logic is identical. The structure is readable. Tests still pass.
-
----
-
 # The Lab 5 Target
 
 <style scoped>
-section { font-size: 22px; }
+section { font-size: 20px; }
 </style>
 
 By the end of Lab 5, `LegacyTaskProcessor` should:
@@ -293,14 +388,14 @@ By the end of Lab 5, `LegacyTaskProcessor` should:
 - Have descriptive parameter names (`data` → `input`, `tp` → `taskType`)
 - Replace magic numbers with a `ProcessType` enum (or equivalent)
 - Extract the case-inversion logic into a focused private method
-- Replace the `Chk()` method with a proper `Validate(string input, int taskType)` method
+- Replace `Chk()`/`chk()` with a proper `Validate(input, taskType)` method
 - Follow Object Calisthenics: one level of indentation, no `else`, no abbreviations
-- Add `ILogger` logging at key points
+- Add logging at key points (`ILogger` on .NET, SLF4J on Spring)
 - Keep `LegacyBatchImportService` compiling and passing against the new names
 - Have all characterization tests passing
 
-Stretch (same targets as the Copilot workshop): `StringBuilder`, no swallowed
-exceptions, file I/O behind an `ITaskOutputWriter`, wrap primitives, first-class collections.
+Stretch targets: `StringBuilder`, no swallowed
+exceptions, file I/O behind a writer (`ITaskOutputWriter` on .NET, `TaskOutputWriter` on Spring), wrap primitives, first-class collections.
 
 **You don't need to fix every problem in 45 minutes.**
 Complete Phase 1 and Phase 2 cleanly. Phase 3 is the extension.

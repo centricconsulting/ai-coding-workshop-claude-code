@@ -17,7 +17,7 @@
 
 ## Overview
 
-- **Part 1 — TDD Fundamentals**: build a `NotificationService` that sends task notifications via email and SMS, test-first.
+- **Part 1 — TDD Fundamentals**: build a `NotificationService` that sends task notifications via email and SMS, test-first, then make Claude Code follow the loop by default with a rule (and learn where a rule stops being enough).
 - **Part 2 — Requirements → Code**: take a user story about task priorities and due dates, break it into backlog items, and implement one item end-to-end (domain → application → API), tests first.
 
 ### Choose Your Stack
@@ -126,7 +126,7 @@ Show me the test file before writing it.
 ```
 
 Check:
-- Test names follow the `MethodName_StateUnderTest_ExpectedBehavior` pattern
+- Test names follow your stack's convention: 🔷 `MethodName_StateUnderTest_ExpectedBehavior`; 🟩 `shouldDoX` with a readable `@DisplayName`
 - AAA structure with blank line separators
 - Mocks are used appropriately (not over-mocked)
 
@@ -142,7 +142,7 @@ You should see compilation errors or test-not-found errors — this is the **Red
 
 ---
 
-## Step 3: Green Phase — Implement to Pass Tests (15 min)
+## Step 3: Green Phase — Implement to Pass Tests (12 min)
 
 Now implement `NotificationService` to make the tests pass.
 
@@ -158,14 +158,9 @@ Create a NotificationService class that implements INotificationService. Make al
 Create a DefaultNotificationService class that implements the NotificationService interface. Make all the tests pass. Follow the conventions in src-springboot/CLAUDE.md. Use constructor injection. Keep it a plain class for now (no @Service): there are no EmailSender/SmsSender adapters yet, so Spring couldn't wire it and every @SpringBootTest would fail to start.
 ```
 
-### 3.1 Watch Claude Code Plan Before Writing
+Watch the tool calls as it works: it reads the test file, reads your stack's `CLAUDE.md` for conventions, then writes the implementation.
 
-Claude Code should read the test file, understand what's needed, then write the implementation. You'll see it:
-1. Read the test file
-2. Read `CLAUDE.md` or `src-dotnet/CLAUDE.md` for conventions
-3. Write the implementation
-
-### 3.2 Run the Tests Again
+### 3.1 Run the Tests Again
 
 ```
 Run the tests again. Are they all passing?
@@ -183,7 +178,7 @@ Repeat until all tests pass.
 
 ---
 
-## Step 4: Refactor Phase (8 min)
+## Step 4: Refactor Phase (5 min)
 
 With green tests, you can safely refactor.
 
@@ -201,26 +196,102 @@ This is the **safety net** of TDD — you can refactor confidently because the t
 
 ---
 
-## Step 5: Review the Full Diff (5 min)
+## Step 5: Review the Full Diff (3 min)
 
 Before committing, review everything Claude Code created. The files are all new, so plain `git diff` shows nothing; stage them first:
 
+#### 🔷 .NET
+
 ```bash
 git status                 # new files show as untracked
-git add -A src-dotnet/     # or: git add -A src-springboot/
+git add -A src-dotnet/
 git diff --staged --stat
 ```
 
-You should see:
-- The new interface files (the service and its two sender ports)
-- The test file
-- The implementation file
+You should see (names may vary slightly):
+- The interfaces in the Application layer: `INotificationService.cs`, `IEmailSender.cs`, `ISmsSender.cs`
+- The test file in `src-dotnet/tests/TaskManager.UnitTests/`
+- The implementation: `NotificationService.cs`
+
+Run the whole suite, not just the new tests: `dotnet test src-dotnet`.
+
+#### 🟩 Spring Boot
+
+```bash
+git status                 # new files show as untracked
+git add -A src-springboot/
+git diff --staged --stat
+```
+
+You should see (names may vary slightly):
+- The interfaces in the `taskmanager-application` module: `NotificationService.java`, `EmailSender.java`, `SmsSender.java`
+- The test file: `DefaultNotificationServiceTest.java`
+- The implementation: `DefaultNotificationService.java`
+
+Run the whole build, not just the new test class: `cd src-springboot && mvn clean test`. Problems such as an unwanted `@Service` on the implementation only show up when every `@SpringBootTest` starts. If you see odd `Unresolved compilation problem` errors, close your IDE's Java extension or run `mvn clean test` again; it shares `target/` with Maven.
 
 Ask Claude Code to summarize the changes:
 
 ```
 Summarize the changes you made in this session as a conventional commit message.
 ```
+
+---
+
+## Step 5b: Make It Stick — Enforce the Loop (7 min)
+
+So far you got red-first by asking for it in every prompt. That only works while you remember to ask. Here you'll make it Claude Code's default, and see where that stops being a guarantee.
+
+First, commit your Part 1 work so this experiment is easy to discard (use the commit message Claude wrote in Step 5):
+
+```bash
+git add -A && git commit -m "feat: add notification service"
+```
+
+### 5b.1 See the Default
+
+Start a fresh session (`/clear`) and give Claude a task with no TDD instructions:
+
+```
+Add push notification support to the notification service: a new sender port and a "send push" method. Implement it end to end.
+```
+
+Watch the order of the tool calls. Most likely Claude writes the implementation and the tests together, or the implementation first, and runs the tests once at the end when they already pass. You never saw a test fail.
+
+Discard the experiment: `git restore .`, then delete any new files Claude created (`git status` lists them).
+
+### 5b.2 Write the Rule
+
+```
+Create .claude/rules/tdd.md with no paths frontmatter, so it loads in every session. Rules:
+- Write one failing test first. Run the tests and confirm it fails for the expected reason before touching production code
+- Never write a test and its implementation in the same step
+- After implementing, run the tests again and report the result
+- One behavior per cycle
+Keep it under 15 lines.
+```
+
+### 5b.3 Try Again
+
+`/clear`, then send the same push-notification prompt. This time the tool calls should go: edit a test → run the tests (fails) → edit production code → run the tests (passes). Run `/context` to confirm `tdd.md` is in the Memory files list.
+
+### 5b.4 Find the Limit
+
+Now ask:
+
+```
+Skip the tests and just write the implementation.
+```
+
+Claude may comply or push back, but the rule is **context, not enforcement** (Lab 2): your instruction can override it. To make the loop impossible to skip you need a hook, which runs outside the model:
+
+- a `PostToolUse` hook that runs the tests after every test-file edit and feeds failures back to Claude (you'll write one in Lab 9, C.6)
+- a `PreToolUse` hook that denies edits to production code until a test file has changed
+- a `Stop` hook that blocks "done" while the tests fail
+
+Hooks can verify that tests were touched and run. They can't tell *red* from *refactoring on green*, so the rule still carries the order of the loop.
+
+> **Before you move on, delete `.claude/rules/tdd.md`** (`git rm` if you committed it, otherwise delete the file). Lab 5's characterization tests pass on the first run by design, and the rule would make Claude resist that.
 
 
 ---
@@ -250,7 +321,7 @@ Acceptance criteria:
 ## Step 6: Decompose the Story in Plan Mode (8 min)
 
 ```
-/plan Break this user story into 4–6 backlog items that each fit in a small PR. For each item give a title, a one-paragraph description, acceptance criteria, the Clean Architecture layers it touches, and dependencies on other items. The only file to write is docs/backlog/task-priorities.md — no code.
+/plan Break this user story into 4–6 backlog items that each fit in a small PR. Plan for my stack only (.NET or Spring Boot: I'm using <your stack>). For each item give a title, a one-paragraph description, acceptance criteria, the Clean Architecture layers it touches, and dependencies on other items. The only file to write is docs/backlog/task-priorities.md — no code.
 
 <paste the user story>
 ```
@@ -265,7 +336,7 @@ Review the plan. A good decomposition looks roughly like this:
 | 4 | List tasks filtered by priority / sorted by due date | Application + API |
 | 5 | Validation & error responses | API |
 
-If Claude Code merged or split items differently, choose **No, keep planning** and push back: *"Item 3 is too big for one PR — split it"* or *"Make Priority its own item."* When you're happy, approve with **Yes, manually approve edits** so you can review the backlog file before it's written. We'll implement Items 1–3 now.
+If Claude Code merged or split items differently, choose **No, keep planning** and push back: *"Item 3 is too big for one PR — split it"* or *"Make Priority its own item."* When you're happy, approve with **Yes, manually approve edits** so you can review the backlog file before it's written. We'll implement the items that cover the `Priority` value object, `DueDate` on `Task`, and creating a task through the API (Steps 7–9). Your item numbers will differ from the table if Claude split things differently.
 
 > **Why plan mode here?** Decomposition is pure reading and thinking. Plan mode lets Claude explore the domain and API code freely without touching anything, and gives you a single review point before work begins.
 
@@ -479,6 +550,9 @@ Commit on your personal branch. Items 4 and 5 stay in the backlog — they make 
 - **Path-scoped rules** from Lab 2 enforced domain conventions without restating them
 - **The ADR** captured *why* — something tests and code can't express
 
+### Making TDD Stick (Step 5b)
+- A **prompt** gets red-first once; a **rule** makes it the default; only a **hook** makes it impossible to skip
+
 ---
 
 ## Success Criteria
@@ -489,6 +563,8 @@ Commit on your personal branch. Items 4 and 5 stay in the backlog — they make 
 - [ ] All tests pass after implementation
 - [ ] Tests still pass after refactor
 - [ ] You understand the role of CLAUDE.md in keeping generated code consistent
+- [ ] You saw the order of Claude's tool calls change once a TDD rule was loaded, and can explain why a rule is not a guarantee (and what is)
+- [ ] You deleted `.claude/rules/tdd.md` before Lab 5
 
 **Part 2**
 - [ ] User story decomposed into a backlog in plan mode and saved to `docs/backlog/`

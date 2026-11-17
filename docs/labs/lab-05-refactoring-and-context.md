@@ -142,7 +142,7 @@ Extract any code blocks longer than 5–6 lines into well-named private methods.
 
 ### Phase 4 (if time permits): Modernize
 
-These are the same targets the GitHub Copilot version of this workshop uses for `LegacyTaskProcessor`:
+These targets are also the ones the GitHub Copilot version of this workshop uses for `LegacyTaskProcessor` (if you took that one):
 
 ```
 Continue refactoring LegacyTaskProcessor:
@@ -204,11 +204,15 @@ This is multi-file coordination — Claude Code handles it naturally because it 
 
 ## Step 5: Review the Complete Diff (5 min)
 
-Before committing, review everything:
+Before committing, review everything. Plain `git diff` shows only modified files and misses the new characterization test files (they're untracked), so stage first:
 
 ```bash
-git diff
+git status                 # new files show as untracked
+git add -A src-dotnet/     # or: git add -A src-springboot/
+git diff --staged
 ```
+
+> 🟩 **Spring Boot**: the characterization tests leave `task_{id}.txt` files in the `taskmanager-infrastructure/` module folder. They show up as untracked; delete them (or unstage them) rather than committing them.
 
 Or ask Claude Code:
 

@@ -14,6 +14,7 @@ For participants who cannot use Dev Containers. If you can use the devcontainer,
 | Java JDK | 21+ | `java -version` |
 | Maven | 3.9+ | `mvn --version` |
 | Git | any recent | `git --version` |
+| GitHub CLI (`gh`) | optional | `gh --version` (only for the optional PR steps in Lab 7, on GitHub) |
 
 You only need **.NET** or **Java** — not both. Pick the stack you'll use for the labs.
 
@@ -226,7 +227,9 @@ code --install-extension marp-team.marp-vscode
 
 ## Step 7: Fork and Clone
 
-The workshop requires a **fork** (not just a clone) because Labs 10, 13, and 15 need a GitHub remote you control.
+The workshop uses a **fork** (not just a clone) because three parts need a GitHub repo you control: Lab 7's optional PR steps, Lab 10 Part C (GitHub MCP server) and Lab 13 D.2 (Claude GitHub Action, github.com repos only). If you use another git host, everything else works there; keep a GitHub fork as well for those parts.
+
+The optional `gh` CLI is preinstalled in the devcontainers. Locally, install it (macOS: `brew install gh`; Windows: `winget install --id GitHub.cli`; Linux: see [cli.github.com](https://cli.github.com)) and run `gh auth login`.
 
 1. Go to [github.com/centricconsulting/ai-coding-workshop-claude-code](https://github.com/centricconsulting/ai-coding-workshop-claude-code)
 2. Click **Fork** → create under your account

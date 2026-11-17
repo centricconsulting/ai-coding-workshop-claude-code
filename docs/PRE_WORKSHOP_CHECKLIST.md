@@ -132,6 +132,16 @@ Pick the stack you'll use during the workshop (.NET or Spring Boot). You don't n
 
 ---
 
+### 8. (Optional) GitHub CLI
+
+Only needed for the optional PR steps in Lab 7, and only on GitHub. The devcontainers already include it.
+
+- [ ] Install `gh` (macOS: `brew install gh`; Windows: `winget install --id GitHub.cli`; Linux: [cli.github.com](https://cli.github.com))
+- [ ] Sign in: `gh auth login`
+- [ ] Verify: `gh auth status`
+
+---
+
 ## Final Smoke Test
 
 Run this sequence to confirm everything works end-to-end:

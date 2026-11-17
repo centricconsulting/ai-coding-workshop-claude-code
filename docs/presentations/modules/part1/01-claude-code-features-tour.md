@@ -115,17 +115,20 @@ Turn 3: "Write tests for it"
 # Essential Slash Commands
 
 <style scoped>
-section { font-size: 24px; }
+section { font-size: 18px; }
 </style>
 
 | Command | When to Use |
 |---|---|
 | `/help` | List all available commands (type `/` to browse) |
-| `/init` · `/memory` | Generate / edit CLAUDE.md project memory |
-| `/model` · `/effort` | Pick the model; set reasoning depth |
+| `/init` | Generate CLAUDE.md project memory |
+| `/memory` | Edit CLAUDE.md project memory |
+| `/model` | Pick the model |
+| `/effort` | Set reasoning depth |
 | `/plan` | Enter plan mode (or `Shift+Tab`) |
 | `/context` | See what's filling the context window |
-| `/compact [focus]` · `/clear` | Summarize history · start a fresh conversation |
+| `/compact [focus]` | Summarize history to free context |
+| `/clear` | Start a fresh conversation |
 | `/rewind` | Undo Claude's edits / conversation (`Esc Esc`) |
 | `/code-review` | Review your diff for bugs (`/review` is an alias) |
 | `/security-review` | Security pass on your branch |

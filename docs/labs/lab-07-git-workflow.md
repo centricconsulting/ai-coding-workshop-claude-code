@@ -18,7 +18,7 @@
 
 - Completed Labs 1–6
 - Labs 3–6 committed on your personal branch, as each lab suggests. Step 1 reviews those commits; Step 2 creates the uncommitted changes you'll stage and commit in Steps 3–4.
-- `gh` CLI installed and authenticated (`gh auth status`) — needed only for the optional PR steps
+- `gh` CLI installed and authenticated (`gh auth status`) — needed only for the optional PR steps, and only on GitHub (see 5.2 for other hosts)
 
 ---
 
@@ -52,9 +52,19 @@ The command takes an effort level, flags, and a target:
 
 Try a couple of variations:
 
+🔷 **.NET**
+
 ```
 /code-review low src-dotnet/src/TaskManager.Infrastructure/Legacy
 ```
+
+🟩 **Spring Boot**
+
+```
+/code-review low src-springboot/taskmanager-infrastructure
+```
+
+Then, on either stack:
 
 ```
 /code-review high
@@ -66,10 +76,8 @@ Try a couple of variations:
 | `medium` … `max` | Broader coverage. With no level, it reuses the last level you typed |
 | `ultra` | Deep multi-agent review in the cloud (limited free runs, then usage credits) — not needed today |
 | `--fix` | Also apply the findings to your working tree (edits go through your permission mode) |
-| `--comment` | Post findings as inline comments on a GitHub PR |
+| `--comment` | Post findings as inline comments on a GitHub PR (or as a note on a GitLab merge request) |
 | target | A PR number, branch, path, or revision range such as `main...my-branch` |
-
-🟩 Spring Boot: use `src-springboot/taskmanager-infrastructure` as the path target.
 
 ### 1.2 Act on the Review
 
@@ -89,7 +97,7 @@ If everything looks good, move to Step 2.
 
 ## Step 2: Document What You Changed (4 min)
 
-Mirroring the documentation step in the Copilot version of this workshop, have Claude Code add doc comments to the public surface you touched:
+Have Claude Code add doc comments to the public surface you touched:
 
 #### 🔷 .NET Prompt
 
@@ -126,6 +134,8 @@ git add src-dotnet/      # .NET changes (src/ and tests/)
 git add src-springboot/  # Spring Boot changes
 ```
 
+> 🟩 **Spring Boot**: the characterization tests leave `task_{id}.txt` files in the `taskmanager-infrastructure/` module folder, and they are not gitignored. Delete them, or unstage them (`git restore --staged <file>`), so they don't end up in your commit.
+
 Ask Claude Code to verify the staged set makes sense:
 
 ```
@@ -149,10 +159,10 @@ Claude Code will read the actual diff and produce a message grounded in what cha
 ```
 docs: document NotificationService and LegacyTaskProcessor
 
-Add XML documentation comments to the public members of NotificationService and the
-refactored LegacyTaskProcessor. Cover the null-task guard clauses, that SendBothAsync
-stops at the first channel that fails, and the 50- and 500-character limits in the
-legacy processor.
+Add documentation comments to the public members of NotificationService and the
+refactored LegacyTaskProcessor. Cover the null-task guard clauses, that the send-both
+method stops at the first channel that fails, and the length limits in the legacy
+processor.
 
 No code changes.
 ```
@@ -162,13 +172,10 @@ The story of the whole branch goes in the PR description in Step 5, which draws 
 Adjust the message if anything is off, then commit:
 
 ```bash
-git commit -m "$(cat <<'EOF'
-docs: document NotificationService and LegacyTaskProcessor
-
-...your message body...
-EOF
-)"
+git commit -m "docs: document NotificationService and LegacyTaskProcessor" -m "Your message body: what changed and why."
 ```
+
+The two `-m` flags make the subject line and the body, and work the same in bash, PowerShell and CMD (a heredoc does not work in PowerShell). Or run `git commit` with no `-m` to write the message in your editor.
 
 ---
 
@@ -195,8 +202,12 @@ A good Claude Code-generated PR description includes:
 Claude Code uses the `gh` CLI for GitHub operations. Push your branch to your fork and ask:
 
 ```
-Save that PR description to pr-body.md, then open a pull request against my fork's main branch with gh pr create --body-file pr-body.md. Show me the command before you run it.
+Save that PR description to pr-body.md, then open a pull request against my fork's main branch with gh pr create --repo YOUR-USERNAME/ai-coding-workshop-claude-code --base main --body-file pr-body.md. Show me the command before you run it.
 ```
+
+> **Why `--repo`?** In a fork, `gh pr create` can default to the *parent* repository (the workshop's `upstream`), so the PR would land on the wrong repo. Naming your fork explicitly keeps it on your fork. Check the command before approving it.
+
+> **Not on GitHub?** Skip the `gh` commands. Push your branch to your host and open the pull request (or merge request) from its web UI, pasting the text from `pr-body.md`. On GitLab, install `glab` and `/code-review --comment` posts the findings to the merge request; on Azure DevOps, `az repos pr create` does the same job as `gh pr create`.
 
 Then review the PR itself and post the findings as inline comments:
 

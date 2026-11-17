@@ -7,46 +7,31 @@ backgroundColor: #fff
 
 # Module 03: TDD with Claude Code
 
-## Tests as a Feedback Loop, Not an Afterthought
+## Make Claude Code follow the loop, and make it stick
 
 ---
 
-# Why TDD Changes with an AI Partner
+# Left Alone, Claude Writes Tests and Code Together
 
-With hand-written code, you skip TDD because writing tests first is slow.
-
-With Claude Code, the speed argument disappears:
+Your team has already chosen TDD. The question is whether Claude Code will follow it.
 
 ```
-You: Write a failing test for NotificationService.SendAsync
-     when the task is already complete.
-
-Claude Code: [writes the test, runs it, confirms it fails]
+You: Write tests and implementation for NotificationService
+Claude Code: [writes both at once]
+             [runs tests — they all pass]
+             [done!]
 ```
 
-**Red is instant.** The discipline of writing failing tests first
-is now the same speed as writing passing code.
+**Problem:** you never saw a test fail, so you don't know the tests test anything.
+Tests written alongside the implementation are shaped by it, not by the spec.
+
+**This module: make the loop the default, then make it stick.**
 
 ---
 
 # The Red-Green-Refactor Loop
 
-```
-RED: Write a failing test
-     ↓
-     Claude Code writes the test
-     Claude Code runs the tests → confirms failure
-     ↓
-GREEN: Make it pass
-     ↓
-     Claude Code writes the implementation
-     Claude Code runs the tests → confirms passing
-     ↓
-REFACTOR: Clean up
-     ↓
-     Claude Code refactors
-     Claude Code runs the tests → confirms still passing
-```
+![w:1100](images/red-green-refactor.png)
 
 **Claude Code runs the tests at every step.** You review the output.
 
@@ -55,33 +40,49 @@ REFACTOR: Clean up
 # What "Directing a Workflow" Means
 
 <style scoped>
-section { font-size: 26px; }
+section { font-size: 24px; }
 </style>
 
-**Wrong approach** (accepting completions):
+**Wrong approach** (no checkpoints):
 ```
 You: Write NotificationService with tests
-Claude Code: [writes both, you accept or reject]
+Claude Code: [writes both at once, you accept or reject]
 ```
 
-**Right approach** (directing a workflow):
+**Right approach** (one checkpoint per phase):
 ```
-You: Write a failing test for the "task not found" case only.
-Claude Code: [writes one test, runs it, it fails]
+You: Write the tests for NotificationService. Don't write the implementation.
+Claude Code: [writes the tests, runs them, they fail]
 
-You: Now make it pass with the minimal implementation.
-Claude Code: [writes minimal code, runs tests, passes]
+You: Now implement it so they pass.
+Claude Code: [writes the code, runs the tests, they pass]
 
-You: Now handle the "task already complete" case — test first.
-Claude Code: [writes the test, runs it, fails]
-...
+You: Refactor, and keep the tests green.
+Claude Code: [refactors, re-runs the tests]
 ```
 
-**Small, precise steps. You control the loop.**
+**You choose the granularity:** the whole class for well-understood behavior, one case at a time when exploring.
 
 ---
 
-# Reviewing Multi-File Diffs
+# Four Ways to Make It Stick
+
+<style scoped>
+section { font-size: 24px; }
+</style>
+
+| Level | How | Guarantee |
+|---|---|---|
+| **Prompt** | You ask for the failing test first, every time | None: depends on you |
+| **`CLAUDE.md` / rule** | "Failing test first" as a standing instruction (Lab 3) | Soft: context, not enforcement |
+| **Skill** | A `/tdd` command that scripts the loop (Lab 11) | Soft: still just instructions |
+| **Hooks** | Run tests after every edit, deny production edits until a test has changed, block "done" while tests fail (Lab 9) | **Hard**: deterministic, can't be talked out of |
+
+Hooks can verify that tests were touched and run. They can't tell *red* from *refactoring on green*, so the first three levels still carry the order of the loop.
+
+---
+
+# Reviewing Multi-File Diffs (.NET)
 
 Claude Code often changes multiple files in one step.
 
@@ -101,7 +102,27 @@ Files modified:
 
 ---
 
-# Tests as a Feedback Loop
+# Reviewing Multi-File Diffs (Spring Boot)
+
+Claude Code often changes multiple files in one step.
+
+```
+Files modified:
+  src-springboot/taskmanager-application/.../DefaultNotificationService.java  (+45 lines)
+  src-springboot/taskmanager-application/.../NotificationService.java  (+8 lines)
+  src-springboot/taskmanager-application/.../DefaultNotificationServiceTest.java  (+62 lines)
+```
+
+**Before accepting:**
+1. Read the test file — does it test what you asked?
+2. Read the implementation — does it match your conventions?
+3. Run `git status`, then stage and `git diff --staged`: new files don't show in plain `git diff`
+
+**Never accept a multi-file change without reviewing all files.**
+
+---
+
+# Tests as a Feedback Loop (.NET)
 
 <style scoped>
 section { font-size: 24px; }
@@ -132,26 +153,38 @@ You review the final state — not every intermediate step.
 
 ---
 
-# The Discipline: Never Skip the Red Phase
+# Tests as a Feedback Loop (Spring Boot)
 
-The most common mistake with AI-assisted TDD:
+<style scoped>
+section { font-size: 24px; }
+</style>
+
+Claude Code fixes its own test failures:
 
 ```
-You: Write tests and implementation for NotificationService
+You: Run the tests
 
-Claude Code: [writes both at once]
-             [runs tests — they all pass]
-             [done!]
+Claude Code:
+  Bash(mvn clean test) → 2 failures
+  
+  Failed: DefaultNotificationServiceTest > shouldThrowExceptionWhenSendingEmailForNullTask
+  Expected: IllegalArgumentException
+  Actual: NullPointerException
+  
+  [reads the implementation]
+  [fixes the null guard]
+  
+  Bash(mvn clean test) → all passing
+  
+  Fixed: added null check before calling the sender.
 ```
 
-**Problem:** You don't know if the tests actually tested anything.
-Tests written alongside the implementation may be shaped by the implementation, not the spec.
-
-**Always ask for the failing test first.**
+**This loop can run 3–4 times before you see the final result.**
+You review the final state — not every intermediate step.
 
 ---
 
-# Naming Tests for Clarity
+# Naming Tests for Clarity (.NET)
 
 Claude Code follows your naming convention from CLAUDE.md.
 Make sure it's there:
@@ -171,6 +204,27 @@ Bad test names are `Test1`, `ShouldWork`, `TestSendAsync`.
 
 ---
 
+# Naming Tests for Clarity (Spring Boot)
+
+Claude Code follows your naming convention from CLAUDE.md.
+Make sure it's there:
+
+```markdown
+## Testing Conventions
+
+Test method naming: `shouldDoX` plus a readable `@DisplayName`
+Group related tests in `@Nested` classes
+Examples:
+  shouldCreateTaskWithTitleOnly
+  shouldThrowExceptionWhenCreatingTaskWithNullTitle
+  shouldSaveTaskToRepositoryWhenCreating
+```
+
+Good test names are documentation.
+Bad test names are `test1`, `testCreate`, `shouldWork`.
+
+---
+
 # What Claude Code Tests Well
 
 | Claude Code excels at | Be more hands-on with |
@@ -186,7 +240,7 @@ You need to think about the cases worth naming.
 
 ---
 
-# Integration Tests vs. Unit Tests
+# Integration Tests vs. Unit Tests (.NET)
 
 <style scoped>
 section { font-size: 27px; }
@@ -208,6 +262,33 @@ var response = await client.PostAsJsonAsync("/tasks", request);
 
 Lab 3 focuses on unit tests (+ MockMvc on Spring).
 The .NET `POST/GET/PUT /tasks` integration stubs are **Lab 5** — characterization tests before refactoring.
+
+---
+
+# Integration Tests vs. Unit Tests (Spring Boot)
+
+<style scoped>
+section { font-size: 25px; }
+</style>
+
+**Unit tests** (most of Lab 3):
+```java
+// Mockito for mocks — fast, isolated
+@Mock private TaskRepository taskRepository;
+when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
+```
+
+**Integration tests** (`@SpringBootTest` + MockMvc, e.g. `TaskApiIntegrationTest`):
+```java
+// Full HTTP stack — slower, catches wiring bugs
+mockMvc.perform(post("/api/tasks")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(requestJson))
+    .andExpect(status().isCreated());
+```
+
+Lab 3 focuses on unit tests (+ MockMvc for the endpoint in Part 2).
+Spring ships real integration tests already; **Lab 5** adds characterization tests before refactoring.
 
 ---
 
@@ -273,7 +354,7 @@ section { font-size: 22px; }
 2. Confirm it fails (`dotnet test` or `mvn test`)
 3. Ask for the minimal implementation to make it pass
 4. Confirm it passes
-5. Repeat for each behavior
+5. Repeat for each behavior, then add a TDD rule and watch it stick
 
 ## Part 2 — Requirements → Code
 
