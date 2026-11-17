@@ -129,6 +129,13 @@ Both days end before 17:00 with about 15 minutes of slack. Day 1 keeps all of La
 - The memory and customization stack: `CLAUDE.md` → `.claude/rules/` → skills → subagents → hooks / permissions → MCP → plugins. Today covers the foundations; tomorrow covers the customization layers.
 - Coming from GitHub Copilot? Show the [mapping table](README.md#relationship-to-the-github-copilot-workshop).
 
+**Likely question (the "What Claude Code Is Not" slide):** *"If it doesn't read the whole codebase, how does it help reverse-engineer an app for modernization?"* Because it reads on demand, you turn it into a staged process and save what it learns:
+- **Build a map**: have it explore and write down modules, entry points, and dependencies.
+- **Document patterns**: capture conventions, smells, and risky areas.
+- **Extract requirements**: turn existing behavior into specs or characterization tests (Lab 5 does this for `LegacyTaskProcessor`).
+- **Save the results to files** (`CLAUDE.md`, `docs/`) so later sessions load the map instead of re-reading the code (Lab 2).
+Lab 4 (plan mode) and Lab 5 touch this workflow; a full modernization module is out of scope for this course.
+
 **Checkpoint:** everyone has `claude doctor` passing and `claude -p "Reply with OK"` working. Anyone who doesn't gets paired up immediately.
 
 ---
@@ -172,17 +179,20 @@ Both days end before 17:00 with about 15 minutes of slack. Day 1 keeps all of La
 
 ### Lab 3: TDD & Requirements → Code (90–100 min, two parts)
 
-**Goal (Part 1):** Run Red → Green → Refactor on a `NotificationService` with Claude writing files directly.
+**Goal (Part 1):** Run Red → Green → Refactor on a `NotificationService` with Claude writing files directly, then make red-first the default with a rule (Step 5b) and see where a rule stops being enough.
 **Goal (Part 2):** Turn a user story into a backlog in plan mode, then implement `Priority`, `DueDate`, and `POST /tasks` test-first across every layer, and record an ADR.
 
 **Talking points**
 - **Make Claude stop at red.** Ask for failing tests only, run them, and confirm they fail for the right reason before implementing.
 - Claude writes and runs tests itself. Review the **diff**, not the chat summary.
+- **Enforce it, don't just ask for it (Step 5b).** A prompt gets red-first once; a `.claude/rules/tdd.md` rule makes it the default; only a hook (Lab 9) makes it hard to skip. A rule is context, not enforcement: have them ask Claude to "skip the tests" to see the limit. Hooks can verify tests were touched and run, not that red came first.
 - Part 2: requirements, not prompts, are the source of truth. The backlog file is the contract; each step references it.
 - This is where the Day 2 shipped subagents come from: `backlog-generator`, `architecture-reviewer`, and `test-strategist` automate exactly what participants do by hand here.
 
 **Common pitfalls**
 - Claude writes the implementation alongside the tests. Restate "tests only — do not implement" and reject the edit.
+- `tdd.md` left in place after Step 5b. Delete it before Lab 5: the characterization tests pass on the first run by design, and the rule makes Claude resist that.
+- Claude plans every backlog item for both stacks (Step 6). The prompt scopes it to one stack; if it still plans both, say "plan for my stack only".
 - **False green**: tests pass against a stub. Ask Claude to show a test failing first.
 - Plan mode can't save the backlog file. Exit plan mode (Shift+Tab) before asking Claude to write it.
 - .NET `CS0104: 'Priority' is an ambiguous reference`: FakeItEasy also has a `Priority` type. Alias it: `using Priority = TaskManager.Domain.Tasks.Priority;`.
@@ -256,10 +266,11 @@ Both days end before 17:00 with about 15 minutes of slack. Day 1 keeps all of La
 **Talking points**
 - **`/code-review`** reviews the current changes before commit (`/review` still works as an alias).
 - Ask for conventional commit messages that explain *why*. The repo's `.claude/settings.json` pre-approves `git add` and `git commit` but **asks before `git push`** and denies force-push and `reset --hard`.
-- Claude can draft the PR description from the branch diff. `gh pr create` works if participants have the GitHub CLI.
+- Claude can draft the PR description from the branch diff. `gh pr create` works on GitHub if participants have the GitHub CLI. In a fork, name the target with `--repo <you>/<your-fork>`: `gh` can default to the parent (upstream) repo. On another git host, open the PR in its web UI from `pr-body.md` (or use `glab` / `az repos`).
 
 **Common pitfalls**
 - Committing to `main`. Remind everyone to work on `workshop/<name>`.
+- PR opened against `upstream` (the workshop repo) instead of the fork: re-run `gh pr create` with `--repo <you>/<your-fork>`, and close the stray PR.
 
 **Checkpoint:** a reviewed commit with a conventional message and a drafted PR description.
 
