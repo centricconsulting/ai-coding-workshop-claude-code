@@ -26,7 +26,7 @@
 - 🔷 **.NET**: .NET 9 SDK (`dotnet --version`)
 - 🟩 **Spring Boot**: Java 21 JDK and Maven 3.9+ (`java -version`, `mvn --version`)
 
-> **Why fork?** Later labs (GitHub MCP in Lab 10, CI workflows in Lab 13, `/security-review` which needs an `origin` remote) require a remote you can push to and query. The fork is the foundation — set it up now.
+> **Why fork?** Later labs (the optional GitHub MCP part of Lab 10, CI workflows in Lab 13, `/security-review` which needs an `origin` remote) require a remote you can push to and query. The fork is the foundation — set it up now.
 
 ---
 

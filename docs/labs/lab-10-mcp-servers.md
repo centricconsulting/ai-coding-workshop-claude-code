@@ -29,7 +29,7 @@ MCP (Model Context Protocol) is an open standard that lets Claude Code communica
 
 - Completed Labs 1–9
 - Node.js 18+ with `npx` (Part B runs the filesystem server via `npx`; nothing is installed globally)
-- For Part C: a GitHub **fine-grained personal access token** with read access to the repositories you want to query (Issues + Pull requests + Contents: read-only is enough for this lab)
+- **Optional, for Part C only:** a GitHub **fine-grained personal access token** with read access to the repositories you want to query (Issues + Pull requests + Contents: read-only is enough for this lab). Part C is GitHub-specific and optional: without a token, or if your team uses another git provider, watch the facilitator's demo instead
 - Optional: Docker, if you prefer running the GitHub MCP server locally instead of using GitHub's hosted endpoint
 
 ---
@@ -96,7 +96,7 @@ See [docs/guides/customization-decision-guide.md](../guides/customization-decisi
 
 ---
 
-## Part B: Add the Filesystem MCP Server (10 min)
+## Part B: Add the Filesystem MCP Server (13 min)
 
 The reference [`@modelcontextprotocol/server-filesystem`](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem) server gives Claude Code structured file operations restricted to the directories you pass it. It's a good first server because it needs no credentials.
 
@@ -140,6 +140,8 @@ claude mcp list            # all configured servers and their status
 claude mcp get filesystem  # details for one server
 ```
 
+Until you approve the server in Claude Code (next paragraph), both commands show it as `⏸ Pending approval` instead of connected. That's expected.
+
 Start Claude Code. Because `filesystem` comes from a project `.mcp.json`, Claude Code asks you to **approve** it the first time — this protects you from servers someone else committed. Approve it, then:
 
 ```
@@ -156,9 +158,20 @@ Using the filesystem MCP tools, show me the directory tree of src-dotnet/ two le
 
 > **Permissions apply to MCP too.** MCP tools are named `mcp__<server>__<tool>` (e.g. `mcp__filesystem__read_text_file`). You can allow or deny them in `.claude/settings.json` just like built-in tools, e.g. `"allow": ["mcp__filesystem__list_directory"]` or `"deny": ["mcp__filesystem__write_file"]`.
 
+### B.4 Resources and Prompts (3 min)
+
+MCP servers can expose more than tools:
+
+- **Resources** — type `@` in the prompt; resources from connected servers appear in the autocomplete alongside files, in the form `@server:protocol://resource/path`. Referenced resources are fetched and attached automatically.
+- **Prompts** — type `/` and look for entries marked `(MCP)`. MCP prompts run as `/mcp__<server>__<prompt> [args]`.
+
+Try `@` and `/` now and note what (if anything) your `filesystem` server exposes. Not every server offers resources or prompts. If you connect GitHub in Part C, check it too.
+
 ---
 
-## Part C: Connect GitHub's Official MCP Server (12 min)
+## Part C: Connect GitHub's Official MCP Server (Optional, 12 min)
+
+> **Optional, GitHub only.** This part needs a GitHub token and a github.com repository. If you don't have a token, or your team hosts code somewhere else (GitLab, Azure DevOps, Bitbucket), watch the facilitator's demo or skip to Part D — you've already met the core ideas in Parts A and B. The same pattern works with any provider's MCP server: you'd add that provider's server with `claude mcp add`, authenticate it, and ask the same kinds of questions about your own backlog.
 
 > ⚠️ The old `@modelcontextprotocol/server-github` npm package is **archived and no longer maintained**. Use GitHub's official server ([github/github-mcp-server](https://github.com/github/github-mcp-server)) instead — either GitHub's hosted endpoint (recommended) or its Docker image.
 
@@ -170,7 +183,7 @@ Create a [fine-grained personal access token](https://github.com/settings/person
 export GITHUB_MCP_PAT=github_pat_xxxxxxxx
 ```
 
-> If you don't have a token, skip to Part D — the exercises can be observed from a facilitator demo.
+> No token? Skip to Part D, or follow along with the facilitator's demo.
 
 ### C.2 Option 1 (recommended): GitHub's Hosted Remote Server over HTTP
 
@@ -212,7 +225,7 @@ Restart Claude Code (or run `/mcp` and choose **reconnect**). In `/mcp`, the `gi
 Ask Claude Code to turn GitHub issues into a backlog:
 
 ```
-Using the GitHub MCP tools, search for issues in the centricconsulting/ai-coding-workshop repository labeled "enhancement". For each one, generate a user story in the format: "As a [role], I want to [capability], so that [benefit]."
+Using the GitHub MCP tools, search for issues in the centricconsulting/ai-coding-workshop-claude-code repository labeled "enhancement". For each one, generate a user story in the format: "As a [role], I want to [capability], so that [benefit]."
 ```
 
 Claude Code will call the GitHub MCP's search tool, receive structured JSON results, and use them to generate the user stories — without you copying/pasting anything from GitHub. Notice the permission prompt for `mcp__github__...` tools the first time each one runs.
@@ -220,19 +233,12 @@ Claude Code will call the GitHub MCP's search tool, receive structured JSON resu
 ### C.5 Cross-Reference Code with Issues
 
 ```
-Using the GitHub MCP, find the most recently closed issues in this repository. For each one, see if there's relevant code in this repo that implements the fix mentioned in the issue comments.
+Using the GitHub MCP, find the most recently closed issues in centricconsulting/ai-coding-workshop-claude-code. For each one, see if there's relevant code in this repo that implements the fix mentioned in the issue comments.
 ```
 
 This demonstrates how MCP lets Claude Code reason across multiple data sources simultaneously.
 
-### C.6 Resources and Prompts (Optional, 3 min)
-
-MCP servers can expose more than tools:
-
-- **Resources** — type `@` in the prompt; resources from connected servers appear in the autocomplete alongside files, in the form `@server:protocol://resource/path`. Referenced resources are fetched and attached automatically.
-- **Prompts** — type `/` and look for entries marked `(MCP)`. MCP prompts run as `/mcp__<server>__<prompt> [args]`.
-
-Try `@` and `/` now and note what (if anything) each of your servers exposes — not every server offers resources or prompts.
+> **Why name the upstream repo?** GitHub disables Issues on new forks, so "this repository" (your fork) has none to query. The workshop repo is public, so any valid GitHub token can read its issues, even one scoped to only your fork.
 
 ---
 
@@ -285,20 +291,20 @@ This is a design judgment exercise — there's no single right answer, and the r
 - [ ] You can explain what MCP is and how it differs from hooks and skills
 - [ ] You added at least one MCP server with `claude mcp add` and verified it in `/mcp`
 - [ ] You can explain the difference between local, project, and user scope
-- [ ] You used an MCP-backed tool in a real workflow
+- [ ] You used an MCP-backed tool (`filesystem`, or GitHub if you did Part C) in a real workflow
 - [ ] You can articulate when to build a custom MCP server vs. other extension mechanisms
 
 ---
 
 ## Extension Exercise
 
-With the GitHub MCP connected, generate a sprint plan:
+*(Requires Part C.)* With the GitHub MCP connected, generate a sprint plan:
 
 ```
-Using GitHub MCP, find the 5 most recent open issues in this repository. Estimate a relative effort (S/M/L) for each based on the issue description. Group them into a 2-week sprint that fits within a hypothetical 20-point capacity.
+Using GitHub MCP, find the 5 most recent open issues in centricconsulting/ai-coding-workshop-claude-code. Estimate a relative effort (S/M/L) for each based on the issue description. Group them into a 2-week sprint that fits within a hypothetical 20-point capacity.
 ```
 
-Then lock it down: add a deny rule to `.claude/settings.local.json` so the GitHub MCP can never write (for example, deny `mcp__github__create_issue` and `mcp__github__merge_pull_request`), and confirm in `/permissions`.
+Then lock it down: add a deny rule to `.claude/settings.local.json` so the GitHub MCP can never write (for example, deny `mcp__github__issue_write`, which creates and updates issues, plus `mcp__github__create_pull_request` and `mcp__github__merge_pull_request`), and confirm in `/permissions`. Open `/mcp`, select `github`, and check the real tool names there: server versions occasionally rename tools, and a deny rule for a name that doesn't exist blocks nothing.
 
 ---
 

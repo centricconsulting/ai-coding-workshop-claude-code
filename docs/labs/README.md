@@ -6,6 +6,17 @@ Each lab includes clear learning objectives, step-by-step instructions with prom
 
 ---
 
+## Pre-Workshop
+
+### [Lab 0: Non-Technical Crash Course (Terminal, VS Code, Git, GitHub)](lab-00-non-technical-crash-course.md)
+**Duration**: 60 min — pre-workshop session 1 (live), for non-engineering participants
+
+Open a terminal and move around, navigate VS Code, practice the core Git loop in a throwaway repo, then fork the workshop repo, clone your fork, and push your own `workshop/your-name` branch. Keep the [terminology glossary](../terminology.md) open as a reference.
+
+**Key Concept**: Just enough tooling literacy to follow along. Claude Code install and build checks happen in pre-workshop session 2 (a walkthrough of the [Local Setup Guide](../LOCAL_SETUP.md), or the [devcontainer guide](../../.devcontainer/README.md)).
+
+---
+
 ## Day 1: Fundamentals
 
 ### [Lab 1: First Contact](lab-01-first-contact.md)
@@ -94,7 +105,7 @@ Understand permission rules (allow / ask / deny), settings scopes, and permissio
 ### [Lab 10: MCP Servers](lab-10-mcp-servers.md)
 **Duration**: 30–35 min
 
-Understand MCP (Model Context Protocol) and why it exists. Add servers with `claude mcp add`, choose a scope (local / project / user), and connect GitHub's MCP server to your fork. Use MCP-backed tools in real workflows.
+Understand MCP (Model Context Protocol) and why it exists. Add servers with `claude mcp add`, choose a scope (local / project / user), and use the filesystem server in a real workflow. An optional part connects GitHub's MCP server to your fork (or you watch a facilitator demo).
 
 **Key Concept**: MCP adds new tool capabilities; hooks add side effects on existing tools — they're complementary, not competing.
 

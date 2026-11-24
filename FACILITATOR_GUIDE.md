@@ -37,8 +37,13 @@ This guide is for facilitators running the 2-day, 15-lab Claude Code workshop. I
 - [ ] **Decide on environment: devcontainer or local.**
   - **Devcontainer / Codespaces** (recommended for mixed groups): `.NET` and `Spring Boot` participant containers install Claude Code with the native installer and have `jq` and `gh`. Containers don't share your host login, so participants run `/login` inside the container, or forward `ANTHROPIC_API_KEY` / `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`). See [.devcontainer/README.md](.devcontainer/README.md).
   - **Local**: participants follow [docs/LOCAL_SETUP.md](docs/LOCAL_SETUP.md): the native installer (`curl -fsSL https://claude.ai/install.sh | bash`, or `irm https://claude.ai/install.ps1 | iex` on Windows), plus .NET 9 SDK or JDK 21 + Maven, `git`, and `jq`.
-- [ ] **Decide on Lab 10 MCP prerequisites.** Part B runs the filesystem server with `npx`, so it needs **Node.js 18+**. All three devcontainers include Node.js LTS; local-install participants need Node 18+ (or you demo Part B yourself). Part C needs a GitHub fine-grained personal access token (read-only Issues, Pull requests, Contents).
+- [ ] **Decide on Lab 10 MCP prerequisites.** Part B runs the filesystem server with `npx`, so it needs **Node.js 18+**. All three devcontainers include Node.js LTS; local-install participants need Node 18+ (or you demo Part B yourself). Part C (GitHub MCP) is **optional**: it needs a GitHub fine-grained personal access token (read-only Issues, Pull requests, Contents), so participants without a token, or whose team uses another git provider, watch your demo instead. Have your own token ready for the demo.
 - [ ] **Send the [Pre-Workshop Checklist](docs/PRE_WORKSHOP_CHECKLIST.md).** Ask participants to complete it and reply with the output of `claude doctor` and `dotnet test` / `mvn test`.
+
+### Pre-workshop sessions (the week before)
+
+- [ ] **Session 1 — non-technical primer (60 min, live).** For BAs, PMs, and anyone new to the terminal, Git, or VS Code. Run [Lab 0](docs/labs/lab-00-non-technical-crash-course.md) with the [companion slides](docs/presentations/modules/pre-workshop/00-non-technical-crash-course.md). It ends with each participant's fork cloned and their `workshop/<name>` branch pushed. Claude Code install and builds are *not* covered here.
+- [ ] **Session 2 — setup verification (everyone).** Walk the group through [docs/LOCAL_SETUP.md](docs/LOCAL_SETUP.md) step by step, except participants who can use devcontainers, who follow [.devcontainer/README.md](.devcontainer/README.md) instead. Cover Claude Code install and sign-in, the stack build, Node.js and `jq` (Step 8), the Day 2 preparation (`origin/HEAD` check and the optional GitHub token for Lab 10 Part C), and the fork/clone/branch step (Step 7, already done for anyone who attended session 1). Finish by having everyone run the [verification commands](#verify-a-participant-environment-2-minutes) below and tick off the [Pre-Workshop Checklist](docs/PRE_WORKSHOP_CHECKLIST.md).
 
 ### 1 week before
 
@@ -335,7 +340,7 @@ Recap Day 1 in one slide: memory → TDD → requirements → code → plan → 
 
 ### Lab 10: MCP Servers (30–35 min)
 
-**Goal:** Add MCP servers with the right scope; connect GitHub's official server.
+**Goal:** Add MCP servers with the right scope. Part C (connecting GitHub's official server) is optional.
 
 **Talking points**
 - MCP adds **capabilities** (tools) Claude doesn't have built in. Transports: `stdio` (local process) and `http` (remote, recommended); `sse` is deprecated.
@@ -349,7 +354,7 @@ Recap Day 1 in one slide: memory → TDD → requirements → code → plan → 
 - GitHub 401/403: PAT scope or expiry. Fine-grained tokens must include the target repositories.
 - Absolute paths committed to `.mcp.json`: use `${VAR}` expansion instead.
 
-**Checkpoint:** `claude mcp list` shows connected servers, and Claude answered a question using a GitHub MCP tool.
+**Checkpoint:** `claude mcp list` shows the `filesystem` server connected, and Claude answered a question using an MCP tool. (Part C, optional: it also answered using a GitHub MCP tool.)
 
 ---
 
@@ -512,7 +517,7 @@ Deck: [`part2/08-wrapup-day2.md`](docs/presentations/modules/part2/08-wrapup-day
 | Skip **Lab 3 Part 2, Step 10** (the ADR) and assign it as homework | ~5 min on Day 1 | Keeps the user-story-to-endpoint arc intact. Try this first. |
 | Demo **Lab 6** instead of hands-on | ~15 min | Show `/rewind` live, then discuss the decision table. |
 | Shorten **Lab 7**: skip the PR description | ~10 min | Keep `/code-review` and the conventional commit. |
-| Demo **Lab 10 Part B**; participants do Part C only | ~10 min | Also avoids the Node prerequisite in devcontainers. |
+| Demo **Lab 10 Part C** (GitHub MCP) instead of hands-on, or skip it | ~12 min | Part C is optional. It's also the fallback when participants have no GitHub token or use another git provider. |
 | Shorten **Lab 13** to Parts A, B, and E | ~10 min | Keep the safety discussion; skip session persistence and CI. |
 | Capstone: build **either** a subagent **or** a skill, and present in a gallery walk | ~15 min | |
 
