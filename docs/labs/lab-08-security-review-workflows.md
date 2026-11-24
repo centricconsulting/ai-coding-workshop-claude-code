@@ -241,7 +241,7 @@ Commit the fix, then:
 /security-checklist
 ```
 
-The multi-tenant finding should be gone. Then run the generic baseline once more:
+The original finding, the missing ownership check on the assign path, should be gone. The skill reports every rule match, so it may still list related items. In a validation run it noted that the organization comes from a client-supplied header, and that returning 403 for another organization's task but 404 for a missing one lets a caller tell which task IDs exist. Those are design trade-offs, not the original gap; decide which are worth fixing and which are known limits of today's lab. Then run the generic baseline once more:
 
 ```
 /security-review
@@ -285,7 +285,7 @@ If `/plugin install` reports `Marketplace "claude-plugins-official" not found`, 
 - [ ] You can state the difference between `/code-review` and `/security-review` in one sentence
 - [ ] You introduced the cross-tenant assignment gap and can explain why `/security-review` did (or didn't) report it
 - [ ] `.claude/skills/security-checklist/SKILL.md` exists with `disable-model-invocation: true`, references real TaskManager fields, and found the gap via `/security-checklist`
-- [ ] You fixed the underlying authorization gap (not just a surface patch), and both `/security-checklist` and `/security-review` came back clean
+- [ ] You fixed the underlying authorization gap (not just a surface patch): `/security-checklist` no longer reports the missing ownership check, and `/security-review` reports no high-confidence findings
 - [ ] You can explain where security review fits relative to `/code-review` in the PR-prep flow, and name one team/CI option (plugin or GitHub Action)
 
 ---
