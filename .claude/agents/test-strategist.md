@@ -24,7 +24,7 @@ Note: the .NET test projects start with skipped stub tests (`[Fact(Skip = "Lab 3
 |---|---|---|
 | Framework | xUnit v3 (`[Fact]`, `[Theory]`) | JUnit 5 (`@Test`, `@ParameterizedTest`, `@DisplayName`) |
 | Mocking | FakeItEasy (`A.Fake<T>()`) | Mockito (`@ExtendWith(MockitoExtension.class)`) |
-| Naming | `MethodName_StateUnderTest_ExpectedBehavior` | `methodName_stateUnderTest_expectedBehavior` |
+| Naming | `MethodName_StateUnderTest_ExpectedBehavior` | `shouldDoX` with a readable `@DisplayName` |
 | Integration | `WebApplicationFactory<Program>` | `@SpringBootTest` + `MockMvc`, Testcontainers where already used |
 | Structure | Arrange / Act / Assert with blank lines | Arrange / Act / Assert with blank lines |
 

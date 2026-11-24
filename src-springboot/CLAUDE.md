@@ -36,7 +36,7 @@ Each layer is a Maven module: `taskmanager-domain`, `taskmanager-application`, `
 - JUnit 5 with `@Test`, `@ParameterizedTest`
 - Mockito with `@ExtendWith(MockitoExtension.class)`
 - Arrange / Act / Assert sections with blank line separators
-- Test method naming: `methodName_stateUnderTest_expectedBehavior`
+- Test method naming: `shouldDoX` (for example `shouldRejectBlankTitle`) with a readable `@DisplayName`, grouped in `@Nested` classes
 - Never test implementation details — test observable behavior
 - Integration tests use `@SpringBootTest` with `MockMvc`
 

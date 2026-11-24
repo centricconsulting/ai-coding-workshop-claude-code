@@ -227,7 +227,7 @@ I want to add a method to the Domain Task entity that calls the Infrastructure r
 
 Confirm the skill actually activates. Claude Code's response should follow the SKILL.md instructions: it names the layers, cites the inward-only rule, and flags the violation. If it doesn't fire, see Troubleshooting.
 
-Test a case that should NOT be flagged, to confirm the skill doesn't object to everything:
+Test a case that should NOT be flagged, to confirm the skill doesn't object to everything. The skill should still activate, because the prompt asks for an architecture review, but it should report a pass:
 
 ```
 I want to add a method to the Application layer that calls an ITaskRepository interface defined in Domain. Review whether this respects our architecture boundaries.
@@ -279,7 +279,7 @@ Where should the line be between "this belongs in CLAUDE.md or a rule" and "this
 - [ ] You found `test-data-generator` in `/skills` and ran it with arguments for at least one stack
 - [ ] You saw Claude load `test-data-generator` automatically from a plain-language request
 - [ ] `.claude/skills/clean-architecture-boundary-check/SKILL.md` exists with a name, description, argument-hint, and full instruction body that uses `$ARGUMENTS`
-- [ ] The skill activates on a matching prompt without a restart, and does NOT falsely trigger on a compliant change
+- [ ] The skill activates on a matching prompt without a restart, flags the violating change, and reports a pass (not a false violation) for the compliant change
 - [ ] You can explain where Skills sit relative to CLAUDE.md, rules, hooks, MCP, and subagents
 
 ---

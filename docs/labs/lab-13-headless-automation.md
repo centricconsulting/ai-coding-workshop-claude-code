@@ -63,6 +63,8 @@ if [ "$ISSUES" != "NONE" ]; then
 fi
 ```
 
+> **In scripts and CI:** if `claude -p` runs where stdin is open but empty (a CI step, `cron`, a script launched from another tool), it waits about 3 seconds and prints "no stdin data received". Add `< /dev/null` to skip the wait.
+
 ### A.3 Structured Output
 
 Use `--output-format` to control the response shape:
@@ -379,6 +381,8 @@ Headless mode removes the human-in-the-loop — which means the safety responsib
 
 5. **Know what loads** — without `--bare`, a `-p` run executes the project's hooks and connects its `.mcp.json` servers *without* the trust/approval prompts you'd see interactively. Only run headless against repositories you trust, or use `--bare` and pass exactly the settings/MCP config you want.
 
+   There is one exception in the safe direction: in a directory you've never trusted interactively (a fresh CI checkout, for example), `-p` **ignores the project's `permissions.allow` rules** and prints a warning saying so. Hooks and `.mcp.json` servers still load. So in CI, don't rely on `.claude/settings.json` to grant permissions; pass them explicitly with `--allowedTools` (explicit flags still apply).
+
 6. **Audit logs are mandatory in CI** — the hook from Lab 9 belongs in your CI `.claude/settings.json`.
 
 7. **Test headless scripts locally first** — run them with `--permission-mode plan` (read-only planning, no changes) before wiring them to CI.
@@ -426,6 +430,7 @@ Write a shell script that:
 **Run ends with a max-turns error**
 
 - Raise `--max-turns`, or narrow the task so it needs fewer steps
+- In `--output-format json`, a run that hit the limit has `"subtype": "error_max_turns"` and no `result` (so `jq -r '.result'` prints `null`), and `claude -p` exits with a non-zero status. `--max-budget-usd` behaves the same way with `error_max_budget_usd`, and it can overshoot the limit slightly
 
 **CI pipeline times out or costs too much**
 

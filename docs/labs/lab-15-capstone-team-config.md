@@ -321,7 +321,7 @@ One sentence.
 Create .claude/skills/<your-skill-name>/SKILL.md for [procedure]. Use .claude/skills/test-data-generator/SKILL.md as a format reference. Include name, description (when to use it), argument-hint, and allowed-tools in the frontmatter. Use $ARGUMENTS for the input. Set disable-model-invocation: true only if it should run exclusively when a human types the command. Here are my success criteria: [paste E.2]. Show me the file before writing it.
 ```
 
-> New agent or skill files are picked up when Claude Code starts. If yours doesn't appear, restart the session. (`/agents` just reminds you where agent files live — you create them as files, as above.)
+> New agent and skill files are picked up while Claude Code is running; no restart is needed. The exception is a `.claude/agents/` or `.claude/skills/` folder that didn't exist when the session started: restart the session (or run `/reload-skills` for skills). (`/agents` just reminds you where agent files live — you create them as files, as above.)
 
 ### E.4 Test It
 
