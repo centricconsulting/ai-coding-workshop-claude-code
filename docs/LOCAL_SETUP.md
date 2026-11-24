@@ -14,11 +14,13 @@ For participants who cannot use Dev Containers. If you can use the devcontainer,
 | Java JDK | 21+ | `java -version` |
 | Maven | 3.9+ | `mvn --version` |
 | Git | any recent | `git --version` |
+| Node.js (with `npx`) | 18+ | `node --version` (Lab 10 runs an MCP server via `npx`) |
+| `jq` | any recent | `jq --version` (Labs 9 and 13 parse JSON with it) |
 | GitHub CLI (`gh`) | optional | `gh --version` (only for the optional PR steps in Lab 7, on GitHub) |
 
 You only need **.NET** or **Java** — not both. Pick the stack you'll use for the labs.
 
-Claude Code runs on macOS 13+, Windows 10 1809+ (natively or under WSL), and Ubuntu 20.04+, Debian 10+, or Alpine 3.19+ with 4 GB+ RAM. **Node.js is not required** unless you choose the npm install option.
+Claude Code runs on macOS 13+, Windows 10 1809+ (natively or under WSL), and Ubuntu 20.04+, Debian 10+, or Alpine 3.19+ with 4 GB+ RAM. **Node.js is not needed to install Claude Code** (unless you choose the npm option), but Lab 10 needs it for `npx` — see Step 8.
 
 ---
 
@@ -41,7 +43,7 @@ irm https://claude.ai/install.ps1 | iex
 curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
 ```
 
-> On native Windows, [Git for Windows](https://git-scm.com/downloads/win) is recommended (Claude Code uses Git Bash when available, otherwise PowerShell). WSL 2 is also supported — run the Linux command inside your WSL shell.
+> On native Windows, install [Git for Windows](https://git-scm.com/downloads/win). Claude Code uses Git Bash when available, otherwise PowerShell, and Lab 9's hook scripts only run in Git Bash. WSL 2 is also supported — run the Linux command inside your WSL shell.
 
 ### Alternatives
 
@@ -227,7 +229,9 @@ code --install-extension marp-team.marp-vscode
 
 ## Step 7: Fork and Clone
 
-The workshop uses a **fork** (not just a clone) because three parts need a GitHub repo you control: Lab 7's optional PR steps, Lab 10 Part C (GitHub MCP server) and Lab 13 D.2 (Claude GitHub Action, github.com repos only). If you use another git host, everything else works there; keep a GitHub fork as well for those parts.
+> **Attended pre-workshop session 1 (the primer)?** You already did this step. Confirm with `git remote -v` (you should see `origin` and `upstream`) and `git branch` (you should be on `workshop/your-name`), then skip ahead.
+
+The workshop uses a **fork** (not just a clone) because several parts need a GitHub repo you control: Lab 7's optional PR steps, Lab 8 (`/security-review` needs an `origin` remote), Lab 10 Part C (optional GitHub MCP server) and Lab 13 D.2 (Claude GitHub Action, github.com repos only). If you use another git host, everything else works there; keep a GitHub fork as well for those parts.
 
 The optional `gh` CLI is preinstalled in the devcontainers. Locally, install it (macOS: `brew install gh`; Windows: `winget install --id GitHub.cli`; Linux: see [cli.github.com](https://cli.github.com)) and run `gh auth login`.
 
@@ -254,6 +258,21 @@ git checkout -b workshop/your-name
 
 ---
 
+## Step 8: Node.js and jq (all participants)
+
+These are small tools the Day 2 labs rely on. The devcontainers already include them.
+
+- **Node.js 18+ with `npx`** — Lab 10 runs the filesystem MCP server with `npx`. macOS: `brew install node`; Windows: `winget install OpenJS.NodeJS.LTS`; Linux: see [nodejs.org](https://nodejs.org). Verify: `node --version` and `npx --version`.
+- **`jq`** — Lab 9 hooks, Lab 13 JSON parsing, and the Lab 15 hook script. macOS: `brew install jq`; Windows: `winget install jqlang.jq`; Debian/Ubuntu: `sudo apt install jq`. Verify: `jq --version`. Without it the shipped hooks fail with a non-blocking `jq: command not found`.
+- **Python 3** *(optional)* — the `security-guidance` plugin in Lab 8 Part F needs it. Verify: `python3 --version`.
+
+### Day 2 preparation
+
+- **Default branch check (Lab 8):** `/security-review` compares your branch with `origin`'s default branch. Run `git rev-parse --abbrev-ref origin/HEAD` after cloning; it should print `origin/main`. If it fails: `git fetch origin && git remote set-head origin --auto`.
+- **GitHub token (Lab 10 Part C, optional):** only if you use GitHub and want to do Part C hands-on, create a [fine-grained personal access token](https://github.com/settings/personal-access-tokens) scoped to **your fork only**, with read-only **Issues**, **Pull requests**, and **Contents**. Keep it out of version control. If you skip it, or your team uses another git provider, you'll watch the facilitator demo that part.
+
+---
+
 ## Verification Checklist
 
 Before the workshop, confirm all of these pass:
@@ -274,12 +293,17 @@ java -version
 mvn --version
 cd src-springboot && mvn clean test
 
+# Day 2 tools
+node --version   # 18+
+jq --version
+git rev-parse --abbrev-ref origin/HEAD   # origin/main (Lab 8)
+
 # Git
 git remote -v   # should show both origin (your fork) and upstream
 git branch      # should show workshop/your-name as current
 ```
 
-If anything fails, see the troubleshooting section below or ask in the workshop Slack channel before the session.
+If anything fails, see the troubleshooting section below or contact your facilitator before the session.
 
 ---
 
@@ -310,5 +334,5 @@ If anything fails, see the troubleshooting section below or ask in the workshop 
 - Java 21 is required: `java -version` must show 21
 
 **Port already in use when running the API**
-- The API defaults to port 8080 (Spring Boot) or 5000 (.NET)
-- Kill the existing process or set a different port in `appsettings.json` / `application.properties`
+- The API defaults to port 8080 (Spring Boot) or 5215 over HTTP / 7208 over HTTPS (.NET, from `launchSettings.json`)
+- Kill the existing process or change the port (`server.port` in `application.yml` for Spring Boot; `--urls http://localhost:PORT` for .NET)

@@ -2,9 +2,11 @@
 
 Complete everything on this list **before** the workshop session. Each item takes 2–15 minutes. Arriving with these done means you spend the workshop learning, not troubleshooting setup.
 
-If you get stuck, ask in the workshop Slack channel or email the facilitator. Do not wait until the day of the session.
+If you get stuck, contact your facilitator. Do not wait until the day of the session.
 
 ---
+
+> **Two pre-workshop sessions:** session 1 is a primer for people new to the terminal, Git, and VS Code ([Lab 0](labs/lab-00-non-technical-crash-course.md)). Session 2 is for everyone: we walk through the [Local Setup Guide](LOCAL_SETUP.md) (or the [devcontainer guide](../.devcontainer/README.md)), and this checklist is how you confirm you're ready. If you attended session 1, items 1, 2, and 7 (fork, upstream remote, personal branch) are already done: just confirm with `git remote -v` and `git branch`. Unfamiliar word? See the [terminology glossary](terminology.md).
 
 ## The Checklist
 
@@ -17,7 +19,7 @@ If you get stuck, ask in the workshop Slack channel or email the facilitator. Do
   git clone git@github.com:YOUR-USERNAME/ai-coding-workshop-claude-code.git
   ```
 
-> **Why a fork?** Labs 10, 13, and 15 need a GitHub remote you can push to and query via the GitHub MCP server.
+> **Why a fork?** Lab 7 (PRs), Lab 8 (`/security-review` needs an `origin` remote), Lab 10 Part C (optional GitHub MCP server), Lab 13 (CI workflows) and Lab 15 (capstone) all need a GitHub remote you can push to and query.
 
 ---
 
@@ -92,7 +94,7 @@ Pick the stack you'll use during the workshop (.NET or Spring Boot). You don't n
   ```bash
   dotnet test src-dotnet
   ```
-  Expected: `Skipped: 11, Failed: 0`
+  Expected: 1 passed, 11 skipped, 0 failed (the skipped tests are stubs you implement in the labs)
 
 **Option B — Spring Boot:**
 - [ ] Java 21 installed: `java -version` prints `21.x.x`
@@ -102,7 +104,7 @@ Pick the stack you'll use during the workshop (.NET or Spring Boot). You don't n
   cd src-springboot
   mvn clean test
   ```
-  Expected: `BUILD SUCCESS`
+  Expected: `BUILD SUCCESS` with about 100 tests, all passing
 
 ---
 
@@ -132,7 +134,31 @@ Pick the stack you'll use during the workshop (.NET or Spring Boot). You don't n
 
 ---
 
-### 8. (Optional) GitHub CLI
+### 8. Node.js and jq (Day 2 labs)
+
+Skip this item if you're using a Dev Container — both are preinstalled.
+
+- [ ] Node.js 18+ with `npx` (Lab 10): `node --version`
+- [ ] `jq` (Labs 9 and 13): `jq --version` (macOS: `brew install jq`; Windows: `winget install jqlang.jq`; Debian/Ubuntu: `sudo apt install jq`)
+
+---
+
+### 9. Day 2 preparation
+
+Day 2 labs reach outside your laptop, so set these up now rather than on the day.
+
+- [ ] **Confirm your fork has a default branch Claude Code can compare against** (Lab 8 `/security-review`):
+  ```bash
+  git rev-parse --abbrev-ref origin/HEAD   # should print origin/main
+  ```
+  If it fails, run `git fetch origin && git remote set-head origin --auto`.
+- [ ] **Optional — GitHub only: create a fine-grained personal access token** (Lab 10 Part C, GitHub MCP server). Skip this if your team uses another git provider or you'd rather watch the demo. At [github.com/settings/personal-access-tokens](https://github.com/settings/personal-access-tokens), choose **Only select repositories → your fork**, and grant read-only access to **Issues**, **Pull requests**, and **Contents**. Copy it somewhere safe; don't commit it. If you skip this, you'll watch the facilitator demo that part.
+- [ ] **Windows only:** confirm **Git for Windows** (which includes Git Bash) is installed. Lab 9's hook scripts run in Git Bash.
+- [ ] **Optional:** Python 3 (`python3 --version`) for the `security-guidance` plugin in Lab 8 Part F, and network access to GitHub for installing plugins.
+
+---
+
+### 10. (Optional) GitHub CLI
 
 Only needed for the optional PR steps in Lab 7, and only on GitHub. The devcontainers already include it.
 
@@ -164,7 +190,7 @@ If this works, you're ready for the workshop.
 
 See [docs/LOCAL_SETUP.md](LOCAL_SETUP.md) for detailed installation instructions and a troubleshooting section.
 
-For issues you can't resolve yourself, post in the workshop Slack channel with:
+For issues you can't resolve yourself, contact your facilitator with:
 - The command you ran
 - The full error output
 - Your OS and terminal

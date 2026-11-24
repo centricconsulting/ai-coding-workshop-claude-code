@@ -4,6 +4,16 @@ Presentations use [Marp](https://marp.app/) format. View with the [Marp VS Code 
 
 ---
 
+## Pre-Workshop: Non-Technical Crash Course (1 hour)
+
+| Module | File | Duration | Labs Covered |
+|---|---|---|---|
+| 00 Terminal, VS Code, Git & GitHub Basics | [00-non-technical-crash-course.md](modules/pre-workshop/00-non-technical-crash-course.md) | 60 min | [Lab 0](../labs/lab-00-non-technical-crash-course.md) |
+
+**For:** BAs, PMs, and other non-engineering participants with no prior tooling experience. Run live in pre-workshop session 1, the week before the workshop.
+
+---
+
 ## Day 1: Fundamentals (~6 hours)
 
 | Module | File | Duration | Labs Covered |

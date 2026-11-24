@@ -45,6 +45,9 @@ Master advanced Claude Code capabilities: a dedicated security review gate, the 
   - Amazon Bedrock, Google Vertex AI, or Microsoft Foundry access (see the [authentication docs](https://code.claude.com/docs/en/authentication))
 - **Visual Studio Code** (optional but recommended): 1.94+, with the Claude Code extension (`anthropic.claude-code`)
 - **Git**: Basic familiarity with git commands, and a GitHub account to fork this repo
+- **Node.js 18+** (for `npx`, used in Lab 10) and **`jq`** (Labs 9, 13, and 15) — preinstalled in the devcontainers
+- **Optional: a GitHub fine-grained personal access token** (read-only Issues, Pull requests, Contents) for Lab 10 Part C's GitHub MCP server; without one you watch a facilitator demo — see [Day 2 preparation](docs/LOCAL_SETUP.md#day-2-preparation)
+- **Windows:** Git for Windows (Git Bash), which Lab 9's hooks require
 
 > **Devcontainer users**: The containers install Claude Code for you. Sign in inside the container with `/login`, or set `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`) or `ANTHROPIC_API_KEY` on your host before opening it — both are forwarded automatically. See [`.devcontainer/README.md`](.devcontainer/README.md).
 
@@ -65,6 +68,8 @@ Master advanced Claude Code capabilities: a dedicated security review gate, the 
 # Claude Code
 claude --version
 claude doctor       # Install & settings diagnostics
+node --version      # 18+ (Lab 10)
+jq --version        # Labs 9 and 13
 
 # .NET Track
 dotnet --version    # Should show 9.x.x
@@ -167,7 +172,7 @@ Module numbers here match each module's lab number exactly (Module 9 pairs with 
 
 - **[Lab 8: Security Review Workflows](docs/labs/lab-08-security-review-workflows.md)** (30–35 min) — `/security-review`, a project-specific security skill
 - **[Lab 9: Permissions, Safety & Hooks](docs/labs/lab-09-permissions-and-hooks.md)** (25–30 min) — Permission rules and modes, `.claude/settings.json`, hooks
-- **[Lab 10: MCP Servers](docs/labs/lab-10-mcp-servers.md)** (30–35 min) — Configure and use MCP servers (including GitHub's) with Claude Code
+- **[Lab 10: MCP Servers](docs/labs/lab-10-mcp-servers.md)** (30–35 min) — Configure and use MCP servers with Claude Code (GitHub's server is an optional part)
 - **[Lab 11: Skills](docs/labs/lab-11-skills.md)** (30–35 min) — SKILL.md, progressive disclosure, the shipped `test-data-generator` skill, building your own
 - **[Lab 12: Custom Subagents & Agent Workflows](docs/labs/lab-12-sub-agents.md)** (35–40 min) — Built-in subagents, the shipped `.claude/agents/`, chaining backlog → architecture review → test strategy
 - **[Lab 13: Headless & Automation Mode](docs/labs/lab-13-headless-automation.md)** (25–30 min) — `-p`, output formats, piping, CI integration with GitHub Actions
@@ -184,6 +189,8 @@ Presentations use [Marp](https://marp.app/) format. View in VS Code with the [Ma
 
 ### Participant Guides
 
+- **[Lab 0: Non-Technical Crash Course](docs/labs/lab-00-non-technical-crash-course.md)** (60 min, pre-workshop session 1) — Terminal, VS Code, Git, and GitHub basics, ending with your fork cloned and your branch pushed. [Companion slides](docs/presentations/modules/pre-workshop/00-non-technical-crash-course.md)
+- **[Terminology Glossary](docs/terminology.md)** — Plain-language definitions of the tools, Git, and Claude Code terms used in the workshop
 - **[Local Setup Guide](docs/LOCAL_SETUP.md)** — For participants who cannot use devcontainers
 - **[Pre-Workshop Checklist](docs/PRE_WORKSHOP_CHECKLIST.md)** — Everything to complete before the session
 - **[Customization Decision Guide](docs/guides/customization-decision-guide.md)** — CLAUDE.md vs. rules vs. skills vs. subagents vs. hooks vs. MCP vs. plugins: when to use which
@@ -269,9 +276,11 @@ This workshop is the Claude Code counterpart to Centric's GitHub Copilot worksho
 
 ## Getting Started
 
+> **Two pre-workshop sessions run the week before.** Session 1 is a primer for anyone new to the terminal, Git, or VS Code ([Lab 0](docs/labs/lab-00-non-technical-crash-course.md)); it ends with your fork cloned and branch created. Session 2 is for everyone: install Claude Code and verify your setup by walking through the [Local Setup Guide](docs/LOCAL_SETUP.md) (or the [devcontainer guide](.devcontainer/README.md) if you can use devcontainers), then confirm with the [Pre-Workshop Checklist](docs/PRE_WORKSHOP_CHECKLIST.md).
+
 1. **Fork this repository** on GitHub (click **Fork** in the top-right corner).
 
-   > Forking is required — not optional. Labs 8 (`/security-review` needs an `origin` remote), 10 (GitHub MCP), 13 (headless/CI), and 15 (the capstone) all work against your own remote. You'll push commits, trigger workflows, and query your fork's issues during the workshop.
+   > Forking is required — not optional. Labs 8 (`/security-review` needs an `origin` remote), 10 (the optional GitHub MCP part), 13 (headless/CI), and 15 (the capstone) all work against your own remote. You'll push commits, trigger workflows, and query your fork's issues during the workshop.
 
 2. **Clone your fork**:
 
