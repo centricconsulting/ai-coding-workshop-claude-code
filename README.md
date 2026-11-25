@@ -33,6 +33,12 @@ Master advanced Claude Code capabilities: a dedicated security review gate, the 
 
 ## Prerequisites
 
+> [!IMPORTANT]
+> **Start with the setup guides.** The lists below are a summary; the guides walk you through every install step by step.
+>
+> - **New to the terminal, Git, or VS Code?** Start with [Lab 0: Non-Technical Crash Course](docs/labs/lab-00-non-technical-crash-course.md) (pre-workshop session 1). It covers just enough to follow along and ends with your fork cloned and your branch created. Keep the [terminology glossary](docs/terminology.md) handy for unfamiliar terms.
+> - **Everyone:** set up your machine with the [Local Setup Guide](docs/LOCAL_SETUP.md), or the [Dev Container guide](.devcontainer/README.md) if you can use Docker and VS Code Dev Containers (pre-workshop session 2). Then confirm you're ready with the [Pre-Workshop Checklist](docs/PRE_WORKSHOP_CHECKLIST.md).
+
 ### Universal Prerequisites
 
 - **Claude Code**: Installed with the native installer (recommended — auto-updates, no Node.js needed):
