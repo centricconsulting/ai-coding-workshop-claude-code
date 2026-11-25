@@ -76,7 +76,7 @@ section { font-size: 24px; }
 | **Prompt** | You ask for the failing test first, every time | None: depends on you |
 | **`CLAUDE.md` / rule** | "Failing test first" as a standing instruction (Lab 3) | Soft: context, not enforcement |
 | **Skill** | A `/tdd` command that scripts the loop (Lab 11) | Soft: still just instructions |
-| **Hooks** | Run tests after every edit, deny production edits until a test has changed, block "done" while tests fail (Lab 9) | **Hard**: deterministic, can't be talked out of |
+| **Hooks** | Run tests whenever a test file changes (Lab 9); stretch: block "done" while tests fail | **Hard**: deterministic, can't be talked out of |
 
 Hooks can verify that tests were touched and run. They can't tell *red* from *refactoring on green*, so the first three levels still carry the order of the loop.
 

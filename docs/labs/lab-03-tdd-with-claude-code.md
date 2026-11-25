@@ -287,7 +287,7 @@ Claude may comply or push back, but the rule is **context, not enforcement** (La
 
 - a `PostToolUse` hook that runs the tests after every test-file edit and feeds failures back to Claude (you'll write one in Lab 9, C.6)
 - a `PreToolUse` hook that denies edits to production code until a test file has changed
-- a `Stop` hook that blocks "done" while the tests fail
+- a `Stop` hook that blocks "done" while the tests fail (a Lab 9 stretch exercise)
 
 Hooks can verify that tests were touched and run. They can't tell *red* from *refactoring on green*, so the rule still carries the order of the loop.
 

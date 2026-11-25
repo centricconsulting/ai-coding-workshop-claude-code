@@ -16,7 +16,7 @@ backgroundColor: #fff
 | Lab | Skill | Key Takeaway |
 |---|---|---|
 | Lab 8 | Security review | A dedicated security gate, plus a skill with your domain's risks |
-| Lab 9 | Permissions & hooks | The deny list matters as much as the allow list; hooks are guarantees (including the test-run hook that enforces Day 1's TDD rule) |
+| Lab 9 | Permissions & hooks | The deny list matters as much as the allow list; hooks are guarantees (including the test-run hook that backs Day 1's TDD rule) |
 | Lab 10 | MCP servers | MCP adds capabilities Claude doesn't have; hooks add side effects |
 | Lab 11 | Skills | A packaged, on-demand procedure — not always-on context |
 
