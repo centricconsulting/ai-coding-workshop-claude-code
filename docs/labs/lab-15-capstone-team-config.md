@@ -525,7 +525,7 @@ Discuss with your partner or the group:
 
 ## Reflection: Configuration *and* Agents
 
-The GitHub Copilot version of this workshop ends with "build an agent." Claude Code's model lets you do both — and they reinforce each other:
+If you took the Copilot workshop, it ends with "build an agent." Claude Code's model lets you do both — and they reinforce each other:
 
 - **Ambient configuration** (CLAUDE.md, rules, permissions, hooks, output styles) shapes *every* interaction without deliberate invocation — like training an employee with good defaults and guardrails.
 - **Specialists** (subagents, skills) are invoked by name or delegated to automatically for a specific workflow — like building a focused tool.

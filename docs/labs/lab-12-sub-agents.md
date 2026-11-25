@@ -16,7 +16,7 @@
 
 A **subagent** is a specialized assistant with its own context window, system prompt, tool allowlist, and (optionally) model. Claude delegates a task to it, the subagent works independently, and only its **final result** comes back to your conversation. The file reads, searches, and dead ends stay out of your context.
 
-Lab 11 packaged *procedures* as skills that run in your conversation. This lab packages *roles* as subagents that run beside it. This repo ships three role-based subagents in `.claude/agents/`, ported from the GitHub Copilot version of this workshop:
+Lab 11 packaged *procedures* as skills that run in your conversation. This lab packages *roles* as subagents that run beside it. This repo ships three role-based subagents in `.claude/agents/`, ported from the Copilot workshop's custom agents (if you took that workshop):
 
 | Subagent | Role | Tools | Model |
 |---|---|---|---|
@@ -123,7 +123,7 @@ The `architecture-reviewer` description says "use proactively after changes that
 
 ## Part B: Chain a Feature Workflow (12 min)
 
-In the Copilot version of this workshop, agents pass work to each other with "handoff" buttons. In Claude Code, **the main conversation is the orchestrator**: each subagent returns its result to Claude, and Claude passes the relevant context to the next one. Files such as `docs/backlog/*.md` act as durable handoff artifacts.
+If you took the Copilot workshop: agents there pass work to each other with "handoff" buttons. In Claude Code, **the main conversation is the orchestrator**: each subagent returns its result to Claude, and Claude passes the relevant context to the next one. Files such as `docs/backlog/*.md` act as durable handoff artifacts.
 
 ```
 backlog-generator ──► architecture-reviewer ──► test-strategist ──► (you implement, TDD)
