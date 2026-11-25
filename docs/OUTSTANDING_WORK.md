@@ -18,9 +18,9 @@ _Status as of 2026-11-05 (updated after #57). Pick up from here in a new session
 4. ~~**Lab 5 .NET integration tests** (#45)~~ ✅ merged as #50: `Microsoft.AspNetCore.Mvc.Testing` 9.0.22 approved and added, plus a passing `/health` example test. Fresh checkout now reports 1 passed, 11 skipped, 0 failed.
 5. ~~**Day 2 wrap-up deck** (#14)~~ ✅ merged as #51: `part2/08-wrapup-day2.md` (13 slides), linked from the capstone deck and indexes.
 6. **Validate each lab end to end** in a live Claude Code session:
-   - Day 1 .NET pass done 2026-11-03 (code steps + headless checks): report in `docs/validation/day1-dotnet.md`, fixes merged in #52. Still to do: interactive 🖐 items, Spring Boot track, Day 2. 
-   - Day 2 .NET pass done 2026-11-03: report in `docs/validation/day2-dotnet.md` (one blocker: Lab 8 `/security-review` doesn't report the planted bug). Fixes, including the Lab 8 restructure, merged in #53. 
-   - Spring Boot pass done 2026-11-03 in the `springboot-participant` dev container: report in `docs/validation/spring.md`, fixes merged in #55. Remaining: the interactive 🖐 items in all three reports (dry run, #37).
+   - Day 1 .NET pass done 2026-11-03 (code steps + headless checks): fixes merged in #52 (the report was removed; see git history). Still to do: interactive 🖐 items, Spring Boot track, Day 2. 
+   - Day 2 .NET pass done 2026-11-03: one blocker: Lab 8 `/security-review` doesn't report the planted bug. Fixes, including the Lab 8 restructure, merged in #53 (the report was removed; see git history). 
+   - Spring Boot pass done 2026-11-03 in the `springboot-participant` dev container: fixes merged in #55 (the report was removed; see git history). Remaining: the interactive 🖐 items in all three reports (dry run, #37).
    - [ ] Day 1: #22 Lab 1, #23 Lab 2, #24 Lab 3, #39 Lab 4, #25 Lab 5, #40 Lab 6, #26 Lab 7
    - [ ] Day 2: #41 Lab 8, #27 Lab 9, #28 Lab 10 (also confirm GitHub MCP server tool names), #42 Lab 11 (also confirm the `/skills` `t` sort key), #29 Lab 12, #30 Lab 13, #43 Lab 14 (self-study), #31 Lab 15
 7. **Full dry run** (#37): facilitator runs all 15 labs end to end in the dev containers (.NET and Spring Boot).
