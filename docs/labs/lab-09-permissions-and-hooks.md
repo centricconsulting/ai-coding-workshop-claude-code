@@ -25,6 +25,7 @@ Claude Code's permissions model is a safety boundary between "Claude Code can su
 - Completed Day 1 (Labs 1–7) and Lab 8
 - Familiar with the permission prompts from Lab 1
 - **`jq` installed** — every hook in this lab parses its JSON input with `jq`. Check with `jq --version`. If it's missing: `brew install jq` (macOS), `sudo apt-get install -y jq` (Debian/Ubuntu/dev container), or `winget install jqlang.jq` (Windows). Without `jq`, the hooks fail with a non-blocking `jq: command not found` error and do nothing.
+- **Windows**: command hooks run in Git Bash (installed with Git for Windows), so the bash scripts in this lab work unchanged. Without Git Bash, Claude Code falls back to PowerShell and they won't run.
 
 ---
 
@@ -36,7 +37,7 @@ A **permission mode** sets the overall level of autonomy for a session. Press **
 
 | Mode | What runs without asking | Typical use |
 |---|---|---|
-| `manual` (shown as **Manual**; older alias `default`) | Reads only — everything else prompts | Reviewing every action, sensitive work |
+| `manual` (shown as **Manual**; config value `default`) | Reads only — everything else prompts | Reviewing every action, sensitive work |
 | `acceptEdits` | Reads, file edits, and common filesystem commands (`mkdir`, `mv`, `cp`…) in the working directory | Iterating on code you're reviewing |
 | `plan` | Reads and read-only exploration; no source edits | Exploring before changing (Lab 4) |
 | `auto` | Everything, with a background safety classifier reviewing actions | Long tasks, less prompt fatigue |
@@ -101,7 +102,7 @@ Rules are written as `Tool` or `Tool(specifier)`:
 "deny": [
   "Bash(git push --force*)",  ← never force-push
   "Bash(rm -rf *)",           ← never recursive-delete
-  "Read(./.env)"              ← never read secrets (also blocks editing them)
+  "Read(./.env)"              ← never read secrets (add an Edit(./.env) rule to block edits too)
 ]
 ```
 
@@ -111,7 +112,7 @@ A few gotchas worth knowing:
 - `Bash(dotnet:*)` is the older spelling of `Bash(dotnet *)` — both work; the space form is preferred.
 - Use `Edit(path)` / `Read(path)` for file rules. `Write(path)` rules are accepted but **never match** anything.
 - Read-only commands like `ls`, `cat`, `grep`, `find`, and read-only `git` already run without a prompt — you don't need allow rules for them.
-- Bash rules match command text, so they're a convenience boundary, not a security sandbox. For OS-level isolation of shell commands, see `/sandbox` (macOS, Linux, WSL2).
+- Bash rules match command text, so they're a convenience boundary, not a security sandbox. For OS-level isolation of shell commands, see `/sandbox` (macOS, Linux and WSL2; native Windows runs commands unsandboxed).
 
 **Key principle**: Deny the genuinely dangerous operations (force push, hard reset, destructive delete, migrations, secrets), `ask` for the irreversible-but-legitimate ones (push), and allow the noisy-but-safe ones (build, test). Don't try to allow-list everything upfront — you'll miss things.
 
@@ -141,7 +142,7 @@ Settings files are watched, so the change applies to the running session — no 
 List the open pull requests in this repo using the gh CLI.
 ```
 
-This time there should be no permission prompt for `gh pr list` — Claude Code runs it directly. (If `gh` isn't authenticated, the command itself fails; that's fine — what matters is that you weren't prompted.)
+This time there should be no permission prompt for `gh pr list` — Claude Code runs it directly. (If `gh` isn't installed or authenticated, the command itself fails; that's fine — what matters is that you weren't prompted.)
 
 ### B.3 Ask vs. Deny
 
@@ -249,7 +250,7 @@ jq .hooks .claude/settings.json
 The `PreToolUse` hook on `Bash` reads the command from stdin and appends it to `.claude/audit.log` (git-ignored by `*.log`); the `PostToolUse` hook on `Edit|Write` logs each changed file. Test it:
 
 ```
-Run "dotnet --version", then create a file named hook-test.txt in the repo root containing "hook test".
+Run "git --version", then create a file named hook-test.txt in the repo root containing "hook test".
 ```
 
 Then check the audit log:
@@ -258,7 +259,7 @@ Then check the audit log:
 cat .claude/audit.log
 ```
 
-You should see a `Bash: dotnet --version` line and a `Write: …/hook-test.txt` line. Delete `hook-test.txt` when you're done.
+You should see a `Bash: git --version` line and a `Write: …/hook-test.txt` line. Delete `hook-test.txt` when you're done.
 
 Now type `/hooks`. It opens a **read-only browser** of every configured hook, labeled with where it comes from (user, project, local settings, plugin, or session). Select a hook to see its full command and source file. To change hooks, edit the settings file (or ask Claude to) — changes are picked up automatically.
 
@@ -389,6 +390,8 @@ exit 0
 
 Passing tests exit 0; a failing test exits 2 and Claude sees the assertion message. `-am` also builds the modules it depends on, so expect each run to take several seconds.
 
+> **How this relates to Day 1's TDD rule.** This hook makes sure the tests run every time a test file changes, so Claude always *sees* red. It can't tell whether red was expected: when you add a brand-new failing test, Claude is told the tests failed (that is the red phase, not a mistake), so keep the `tdd.md` rule from Lab 3 alongside it. It also doesn't run when only production code changes, so green isn't verified automatically. The stretch exercise below closes that gap.
+
 ---
 
 ## Part D: When NOT to Automate (3 min)
@@ -441,6 +444,14 @@ Add a `Stop` hook that logs a line each time Claude Code finishes responding. (`
 ```
 
 Then run a few prompts and check `.claude/sessions.log` to see the session timeline.
+
+**Stretch (TDD gate)**: add a `Stop` hook that stops Claude from finishing while the unit tests fail. Ask Claude Code:
+
+```
+Add a Stop hook that runs the unit tests for my stack and, if they fail, exits 2 with the failure summary on stderr so Claude keeps working. It must read stop_hook_active from the stdin JSON and exit 0 when it is true, so it can't loop forever. Show me the script and the settings change before writing.
+```
+
+Exit code 2 on `Stop` prevents Claude from stopping and sends your stderr back as the reason. The `stop_hook_active` check matters: Claude Code overrides a `Stop` hook after it blocks eight times in a row, so a hook that never lets go is both pointless and noisy. Use it for tasks where you expect green; mid-TDD, stopping at red is legitimate.
 
 **Stretch**: add a `Notification` hook with matcher `permission_prompt|idle_prompt` that triggers a desktop notification (`osascript -e 'display notification "Claude Code needs you"'` on macOS, `notify-send` on Linux) so you can switch windows while Claude works.
 

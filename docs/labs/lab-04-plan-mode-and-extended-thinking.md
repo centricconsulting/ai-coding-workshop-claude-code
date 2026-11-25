@@ -41,7 +41,7 @@ Along the way you'll learn the two dials that shape *every* Claude Code session:
 
 | Claude Code mode | Status bar | What runs without asking | Copilot analogue | Use it for |
 |---|---|---|---|---|
-| `manual` (shown as **Manual**; older alias `default`) | `⏸ manual mode on` | Reads only — every edit and command asks first | **Ask** (but Claude can still act once you approve) | Unfamiliar code, sensitive work |
+| `manual` (shown as **Manual**; config value `default`) | `⏸ manual mode on` | Reads only — every edit and command asks first | **Ask** (but Claude can still act once you approve) | Unfamiliar code, sensitive work |
 | `plan` | `⏸ plan mode on` | Reads and exploration; **source edits are blocked** until you approve a plan | **Plan** | Multi-step or risky changes |
 | `acceptEdits` | `⏵⏵ accept edits on` | Reads, file edits, and common filesystem commands in the working directory | **Agent** (edits auto-applied) | Iterating on code you're reviewing as it lands |
 | `auto` | `⏵⏵ auto mode on` | Everything, with a background safety classifier blocking risky actions | **Agent** (fully autonomous) | Long tasks you trust; the built-in starting mode in recent versions |

@@ -51,7 +51,7 @@ section { font-size: 22px; }
 
 | Mode | Runs without asking | Use for |
 |---|---|---|
-| `manual` (alias `default`) | Reads only | Reviewing every action |
+| `manual` (config value `default`) | Reads only | Reviewing every action |
 | `acceptEdits` | Reads + file edits + `mkdir`/`mv`/`cp` | Iterating on code you review |
 | `plan` | Read-only exploration | Plan before you change (Lab 4) |
 | `auto` | Everything, checked by a safety classifier | Long tasks, less prompt fatigue |
@@ -313,7 +313,7 @@ f=$(jq -r '.tool_input.file_path // empty'); case "$f" in */tests/TaskManager.Un
   cd "$CLAUDE_PROJECT_DIR" && dotnet test src-dotnet/tests/TaskManager.UnitTests/ --nologo -v q >&2 || exit 2;; esac
 ```
 Spring: same pattern in `.claude/hooks/run-java-tests.sh` (you write it in Lab 9, C.6): it maps the changed test file to its Maven module and runs `mvn -q -pl <module> -am test`.
-**This is the hook that gives Day 1's TDD rule teeth:** a failing test goes straight back to Claude.
+**This hook backs Day 1's TDD rule:** tests run whenever a test file changes, so Claude always sees red. It can't tell red from refactoring, so keep the rule.
 
 ---
 
