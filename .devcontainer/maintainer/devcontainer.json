@@ -81,13 +81,13 @@
         "CLAUDE_CODE_OAUTH_TOKEN": "${localEnv:CLAUDE_CODE_OAUTH_TOKEN}"
     },
 
-    "forwardPorts": [5000, 5001, 8080, 8443],
+    "forwardPorts": [5215, 7208, 8080, 8443],
     "portsAttributes": {
-        "5001": {
+        "7208": {
             "protocol": "https",
             "label": ".NET HTTPS"
         },
-        "5000": {
+        "5215": {
             "label": ".NET HTTP"
         },
         "8080": {

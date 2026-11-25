@@ -81,10 +81,12 @@ Try one now:
 ```
 
 ```
-Add a guard clause to TaskService so a completed task can't be completed twice.
+Add a one-line summary doc comment to each public method in TaskService (src-dotnet/ or src-springboot/, whichever stack you use). Don't build or run tests.
 ```
 
-Note the `Insight` blocks, then switch back with `/output-style default` and discard the change (`/rewind` or `git checkout .`).
+Note the `★ Insight` blocks. Some methods may already have doc comments, in which case Claude will say so and only touch the rest. Then switch back with `/output-style default` and discard the change (`/rewind` or `git checkout .`).
+
+> Pick a small, unambiguous edit like this one. A prompt about business rules (for example, "add a guard so a task can't be completed twice") often draws clarifying questions instead of an edit, because the Spring starter already enforces that rule and the .NET starter has no complete operation yet.
 
 ### A.4 Team Use Cases
 

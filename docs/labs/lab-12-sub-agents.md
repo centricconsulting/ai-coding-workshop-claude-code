@@ -91,7 +91,7 @@ The body is the subagent's **entire** system prompt. It does not receive Claude 
 Use the architecture-reviewer subagent to review src-dotnet/src/TaskManager.Domain and src-springboot/taskmanager-domain for layer violations and primitive obsession.
 ```
 
-Read the report. It should follow the agent's output format (Summary → ✅ Strengths → ⚠️ Concerns → 🚫 Violations → Recommendations → Suggested Handoffs) and cite real files.
+Read the report. It should follow the agent's output format (Summary → ✅ Strengths → ⚠️ Concerns → 🚫 Violations → Recommendations → Suggested Handoffs) and cite real files. Claude may condense the report when it relays it to you; run `/tasks` and open the subagent's transcript to see the full report as the subagent wrote it.
 
 > `architecture-reviewer` has no Bash, so it can't run `git diff`. To review your recent changes, say "Review the files changed in `git diff --name-only main`". The main conversation runs git and passes the list along.
 
@@ -115,7 +115,7 @@ Now ask without naming any agent:
 I'm about to add a dependency from TaskService in the Application layer to a new EmailSender class in Infrastructure. Is that OK?
 ```
 
-The `architecture-reviewer` description says "use proactively after changes that add a reference or import between layers", so Claude may delegate on its own.
+The `architecture-reviewer` description says "use proactively after changes that add a reference or import between layers", so Claude may delegate on its own. Delegation is a judgment call, not a guarantee: in a validation run with no Lab 11 skill present, Claude answered this simple question itself from `CLAUDE.md` and did not call the subagent at all.
 
 > **Expect a surprise:** if you built `clean-architecture-boundary-check` in Lab 11, Claude will often run that **skill** instead. In a validation run it did exactly that. Both descriptions claim the same trigger, so Claude picks one. That's the overlap problem from Troubleshooting below. Compare the two descriptions, decide which should own this question (see C.3), and use `@agent-architecture-reviewer` when you want the subagent for sure.
 
@@ -144,6 +144,8 @@ Wait for each subagent to finish before starting the next, and give me a one-par
 ```
 
 The chain takes several minutes; in a validation run it took about 7 minutes and roughly $1.50 of usage. Keep working or watch `/tasks` while it runs.
+
+> **Approve the write:** `backlog-generator` is the only agent with `Write`, and `.claude/settings.json` has no rule allowing writes, so Claude Code asks permission before it saves `docs/backlog/<feature-slug>.md`. Approve it. If you deny it, or run the chain non-interactively (`claude -p`), the stories exist only in the agent's report and no file is created, and the later steps still work from that report.
 
 ### B.2 Inspect the Handoffs
 
@@ -261,6 +263,10 @@ Research the Domain, Application, and API layers of src-springboot/ in parallel 
 **The subagent can't do something it needs to**
 
 - It only has the tools in its `tools:` list. Add the minimum missing tool, or have the main conversation do that step (for example, run `git diff`) and pass the result in
+
+**`docs/backlog/` wasn't created**
+
+- The write needs your approval. Re-run step 1 and approve the permission prompt, or switch to Accept edits mode (Shift+Tab) for the lab
 
 **The chain loses information between steps**
 
