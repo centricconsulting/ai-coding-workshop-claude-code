@@ -135,13 +135,22 @@ cd ..        # Move up one folder level
 
 ### 4.2 Hands-On: A Practice Repo
 
-Practice on a throwaway folder first so nothing you do affects the workshop repo:
+First, tell Git who you are. Do this once per computer. Use the email address on your GitHub account:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+> If you skip this, Git may guess a name and email from your computer (on a Mac, something like `you@MacBook.local`), or refuse to commit with "Please tell me who you are". Either way, set it now.
+
+Then practice on a throwaway folder so nothing you do affects the workshop repo:
 
 ```bash
 cd ~/Desktop
 mkdir git-practice
 cd git-practice
-git init                          # Turn this folder into a repo
+git init -b main                  # Turn this folder into a repo, with a branch called main
 echo "hello" > notes.txt          # Create a file
 git status                        # "What has changed since my last save?"
 git add notes.txt                 # Stage the file for the next commit
@@ -149,11 +158,7 @@ git commit -m "Add notes file"    # Save a snapshot with a description
 git log --oneline                 # See the history
 ```
 
-> If `git commit` complains "Please tell me who you are", run these once (use your own details), then retry:
-> ```bash
-> git config --global user.name "Your Name"
-> git config --global user.email "you@example.com"
-> ```
+> If `git init -b main` reports an error about `-b`, your Git is older than 2.28. Run `git init` and then `git branch -m main` instead.
 
 Run each command one at a time and discuss what happened. `push` and `pull` need a GitHub repo, so you'll try them in Step 5.
 
@@ -162,7 +167,7 @@ Run each command one at a time and discuss what happened. `push` and `pull` need
 ```bash
 git checkout -b my-experiment     # Create a new branch and switch to it
 git branch                        # List branches (* marks the current one)
-git checkout main                 # Switch back (the default branch may be called master in a new practice repo)
+git checkout main                 # Switch back to the main line of work
 ```
 
 - Working on your own branch means you can't break anyone else's work
@@ -280,6 +285,10 @@ Open VS Code, press `Cmd+Shift+P` / `Ctrl+Shift+P`, run **Shell Command: Install
 ### "Please tell me who you are" on commit
 
 Run the two `git config --global` commands from Step 4.2.
+
+### `cd ~/Desktop` says the path doesn't exist
+
+Some Windows setups move the Desktop folder into OneDrive. Run `cd ~` instead and create `git-practice` there. Any folder works.
 
 ### Typed a command wrong or lost in the terminal
 
