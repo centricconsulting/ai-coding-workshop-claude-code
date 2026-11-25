@@ -163,7 +163,9 @@ git push                 # Upload commits to GitHub
 git pull                 # Download latest commits
 ```
 
-**Practice first** in a throwaway folder: `git init`, create a file, `status`, `add`, `commit`, `log`.
+**First, once:** tell Git who you are with `git config --global user.name` and `user.email` (use your GitHub email).
+
+**Then practice** in a throwaway folder: `git init -b main`, create a file, `status`, `add`, `commit`, `log`.
 
 ---
 
